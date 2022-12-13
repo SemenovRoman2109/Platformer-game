@@ -9,7 +9,9 @@ def run_game():
     drawSurfaces()
     #y передвигающийся плаформы
     #Основной цыкл игры
+    shooting_lvl(screen,100,False)
     while dict_argument["game"]:
+        
         for event1 in event.get(): # Получаем значение события из "списка событий" 
             # и записываем в переменную event1 
             mouse_cor = mouse.get_pos() #Включаем поддержку действия мыши
@@ -71,11 +73,12 @@ def run_game():
                 sprite1.can_move_left() #Возможность идти влево (тоже колизия)
                 sprite1.can_move_right() #Возможность идти вправо (тоже колизия)
                 sprite1.can_move_up() #Возможность прыгнуть вверх (тоже колизия)
+                sprite1.ladder() #Лестница
             else:
                 sprite1.fly_up = False
             sprite1.spring()
             sprite1.shield(screen)
-            sprite1.ladder() #Лестница
+            
             
             direction_move_map = sprite1.finish_lvl()
             if direction_move_map != "False":
@@ -94,9 +97,7 @@ def run_game():
                 drawSurfaces()
             # шипы
             spike()
-            if dict_argument["index_location"] == 0:
-                #Создаем дверь и кнопку
-                door_and_button(4,7,None,None,"Д","д",sprite1)
+            
             # Облоко подсказка
             # help_function(2.5,2,3,2.5,"TEXT;TEXT","red")
             
@@ -125,6 +126,9 @@ def run_game():
             black_fon.show_image(screen)
             sprite1.statistic_person() #Статистика игрока
             sprite1.ghost(screen)
+            if dict_argument["index_location"] == 0:
+                #Создаем дверь и кнопку
+                door_and_button(4,7,None,None,"Д","д",sprite1)
             # bird() #Включает метод птицы
             
             

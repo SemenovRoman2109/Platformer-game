@@ -1,3 +1,1 @@
-a = "ПКРКПАГКПР"
-a = a.lower()
-print(a)
+import pygame

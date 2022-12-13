@@ -828,3 +828,23 @@ def move_map(direction):
     # Обновляем матрицу
     drawSurfaces()
 
+def shooting_lvl(screen,min_count_point,barriers):
+    game = True
+    # mouse.set_visible(False)
+   
+    while game:
+        screen.fill("black")
+        Background_shooting.show_image(screen)
+        aim.show_image(screen)
+        # mouse.set_pos([SCREEN_W//2,SCREEN_H//2]ИЗМЕНЯТЬ
+        for event1 in event.get(): # Получаем значение события из "списка событий" 
+            
+            if event1.type == QUIT:
+                game = False
+            if event1.type == MOUSEMOTION:
+                Background_shooting.X += int(event1.rel[0])
+                print(event1.rel)
+                Background_shooting.Y += int(event1.rel[1])
+        clock.tick(FPS)
+        print(clock.get_fps())
+        display.update()

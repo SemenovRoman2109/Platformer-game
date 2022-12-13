@@ -10,6 +10,8 @@ SCREEN_H = display.Info().current_h
 SCREEN_W = 1280
 SCREEN_H = 720
 FPS = 30
+flags = SCALED
+
 #Создаем список контуров
 list_border_cor_cracking = list()
 list_border_cor_key_and_door = list()
@@ -121,7 +123,7 @@ dict_spawn_and_finish_point = {
     "lvl1_location_1":[[SCREEN_W//80,SCREEN_H-SCREEN_H//10*2.5],Rect(0,-SCREEN_W/40,SCREEN_W//20,1),"up"],
     "lvl1_location_2":[[SCREEN_W//80,SCREEN_H-SCREEN_H//10*2.5],Rect(SCREEN_W-SCREEN_W//80,SCREEN_H//5.53,1,SCREEN_H//5.53),"right"],
     "lvl1_location_3":[[SCREEN_W//80,SCREEN_H//5.5],Rect(SCREEN_W-SCREEN_W//80,SCREEN_H//45,1,SCREEN_H//6.31),"right"],
-    "lvl1_location_4":[[SCREEN_W//80,SCREEN_H-SCREEN_H//10*2.5],None,None]
+    "lvl1_location_4":[[SCREEN_W//80,SCREEN_H-SCREEN_H//10*2.5],Rect(SCREEN_W-SCREEN_W//80,SCREEN_H//2.48,1,SCREEN_H//7.2),None]
 }
 #Словари аргументов и ломания платформ
 broken_cracking_platform = dict()
