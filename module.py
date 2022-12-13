@@ -830,21 +830,35 @@ def move_map(direction):
 
 def shooting_lvl(screen,min_count_point,barriers):
     game = True
-    # mouse.set_visible(False)
+    mouse.set_visible(False)
    
     while game:
         screen.fill("black")
         Background_shooting.show_image(screen)
         aim.show_image(screen)
-        # mouse.set_pos([SCREEN_W//2,SCREEN_H//2]ИЗМЕНЯТЬ
+        falg_motion = False
         for event1 in event.get(): # Получаем значение события из "списка событий" 
-            
+            nouse_cor = mouse.get_pos()
             if event1.type == QUIT:
                 game = False
             if event1.type == MOUSEMOTION:
+                
                 Background_shooting.X += int(event1.rel[0])
                 print(event1.rel)
                 Background_shooting.Y += int(event1.rel[1])
-        clock.tick(FPS)
-        print(clock.get_fps())
+                falg_motion = True
+                if Background_shooting.X > 0:
+                    Background_shooting.X = 0
+                if Background_shooting.Y > 0:
+                    Background_shooting.Y = 0
+                if Background_shooting.X < SCREEN_W - Background_shooting.WIDTH:
+                    Background_shooting.X = SCREEN_W - Background_shooting.WIDTH
+                if Background_shooting.Y < SCREEN_H - Background_shooting.HEIGHT:
+                    Background_shooting.Y = SCREEN_H - Background_shooting.HEIGHT
+        if nouse_cor[0]<= SCREEN_W//4 or nouse_cor[0]>= SCREEN_W - SCREEN_W//4 or nouse_cor[1]<= SCREEN_H//4 or nouse_cor[1]>= SCREEN_H - SCREEN_H//4:
+            mouse.set_pos([SCREEN_W//2,SCREEN_H//2])
+        if not falg_motion:
+            mouse.set_pos([SCREEN_W//2,SCREEN_H//2])
+        clock.tick(FPS*2)
+        # print(clock.get_fps())
         display.update()
