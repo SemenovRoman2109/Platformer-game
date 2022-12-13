@@ -9,8 +9,8 @@ init() #Инициализируем pygame
 #Создаем спрайт и его настройки для создание графических елементов
 sprite1 = Sprite(
                     name_image="1", #Имя картинки
-                    sprite_x = 0, #Горизонтальное расположение спрайта
-                    sprite_y = SCREEN_H-SCREEN_H//10*2.5, #Вертикальное расположение спрайта
+                    sprite_x = dict_spawn_and_finish_point["lvl1_location_1"][0][0], #Горизонтальное расположение спрайта
+                    sprite_y = dict_spawn_and_finish_point["lvl1_location_1"][0][1], #Вертикальное расположение спрайта
                     sprite_speed = SCREEN_W//100, #Скорость спрайта
                     sprite_width = SCREEN_W//20, #Ширина спрайта
                     sprite_height = SCREEN_H//11*1.66, #Высота спрайта

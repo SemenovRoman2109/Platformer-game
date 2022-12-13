@@ -41,8 +41,7 @@ def run_game():
                 i[-2].show_image(screen)
             for i in dict_list_border["list_border_cor_ladder"]:
                 i[-2].show_image(screen)
-            for i in dict_list_border["list_border_cor_spring"]:
-                i[-2].show_image(screen)
+            
             for i in dict_list_border["list_border_cor_cracking"]:
                 i[-2].show_image(screen)
 
@@ -126,6 +125,8 @@ def run_game():
             black_fon.show_image(screen)
             sprite1.statistic_person() #Статистика игрока
             sprite1.ghost(screen)
+            for i in dict_list_border["list_border_cor_spring"]:
+                i[-2].show_image(screen)
             if dict_argument["index_location"] == 0:
                 #Создаем дверь и кнопку
                 door_and_button(4,7,None,None,"Д","д",sprite1)

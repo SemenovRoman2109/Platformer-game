@@ -64,15 +64,15 @@ class Sprite:
 
     # Отображает статистику персонажа
     def statistic_person(self):
-        x_health = 0
-        health_img = Graphic_elements(0,0,SCREEN_W//30,SCREEN_W/40,"image/Health.png")
+        x_health = SCREEN_W-SCREEN_W/5
+        health_img = Graphic_elements(0,SCREEN_H-SCREEN_H//15,SCREEN_W//30,SCREEN_W/40,"image/Health.png")
         for i in range(3):
             health_img.path = "image/Slot_Health.png"
             health_img.X = x_health
             health_img.image_load()
             health_img.show_image(screen)
             x_health += SCREEN_W//25
-        x_health = 0
+        x_health = SCREEN_W-SCREEN_W/5
         for i in range(self.health):
             health_img.path = "image/Health.png"
             health_img.X = x_health
@@ -134,7 +134,7 @@ class Sprite:
     # Функция которая отвечает за анимации персонажа
     def sprite_move(self):  
         keys = key.get_pressed()        
-        if keys[self.List_layout[self.index_layout][0]] and self.image_sprite.X > 5 and self.move_left:
+        if keys[self.List_layout[self.index_layout][0]] and self.image_sprite.X > SCREEN_W//80 and self.move_left:
             self.image_sprite.X -= self.speed
             self.flag = "L"
             if self.index == 7:
@@ -146,7 +146,7 @@ class Sprite:
                 self.index2 = 0
             self.index2 += 1
             
-        elif keys[self.List_layout[self.index_layout][1]] and self.image_sprite.X < self.border_width - self.image_sprite.WIDTH and self.move_right:
+        elif keys[self.List_layout[self.index_layout][1]] and self.image_sprite.X < self.border_width - self.image_sprite.WIDTH - SCREEN_W//80 and self.move_right:
             self.image_sprite.X += self.speed
             self.flag = "R"  
             if self.index == 7:
@@ -192,12 +192,10 @@ class Sprite:
                     self.image_sprite.image_load()
                 self.image_sprite.Y -= self.jummp_boost//15
                 self.count += 1
-                if self.move_up == False:
+                if self.move_up == False or self.count == 15 or self.image_sprite.Y <= SCREEN_W//80:
                     self.fly_up = False
                     self.count = 0
-                if self.count == 15:
-                    self.fly_up = False
-                    self.count = 0                
+
     # Гравитация  смена индексов и картинок   
     def sprite_gravity(self): 
         if self.double_jump != None:
@@ -304,6 +302,7 @@ class Sprite:
             self.flag_spring -= 1
         for i in dict_list_border["list_border_cor_spring"]:
             if i[-1] == "П": 
+                
                 rect = i[-2].RECT   
                 rect = Rect(rect.x + rect.width//8,rect.y - rect.width//10,rect.width - rect.width//4,1)
                 rect_sprite = Rect(self.image_sprite.X,self.image_sprite.Y,self.image_sprite.WIDTH,self.image_sprite.HEIGHT)
@@ -355,7 +354,7 @@ class Sprite:
             if self.move_up == False:
                 self.fly_up_spring = False
                 self.count = 0
-            if self.count == 15:
+            if self.count == 10:
                 self.fly_up_spring = False
                 self.count = 0                
     # Проверка движения в право    

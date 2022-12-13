@@ -862,3 +862,4 @@ def shooting_lvl(screen,min_count_point,barriers):
         clock.tick(FPS*2)
         # print(clock.get_fps())
         display.update()
+    mouse.set_visible(True)

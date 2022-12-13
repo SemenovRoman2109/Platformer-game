@@ -19,15 +19,14 @@ list_surface_lvl1_location_1 = [
                 list('Л0000000000000000000'),
                 list('ъ0000000000000000000'),
                 list('bbb00000000000000000'),
-                list('bbb00ccc000000bbЪ000'),
-                list('bbb0000000Д000000000'),
+                list('bbb00000000000bbЪ000'),
+                list('bbb00ccc00Д000000000'),
                 list('00000000000000000000'),
                 list('00000000000s00000cc0'),
                 list('0000000PPppppppp0000'),
                 list('00bbb000000000000000'),
                 list('000000000000000шшшшш'),
                 list('bbbbbbbbbbbbbbbbbbbb'),
-                list('00000000000000000000')
 ]
 #Матрица для второй локации первого уровня
 list_surface_lvl1_location_2 = [
@@ -42,7 +41,6 @@ list_surface_lvl1_location_2 = [
                 list('000bb000000000000000'),
                 list('00000000000000000000'),
                 list('bbbbbbbbbbbbbbbbbbbb'),
-                list('00000000000000000000')
 ]
 #Матрица для третий локации первого уровня
 list_surface_lvl1_location_3 = [
@@ -57,7 +55,6 @@ list_surface_lvl1_location_3 = [
                 list('000l000000c000000000'),
                 list('00000000000000000000'),
                 list('bbbbbbbbbbbbbbbbbbbb'),
-                list('00000000000000000000')
 ]
 #Матрица для четвертой локации первого уровня
 list_surface_lvl1_location_4 = [
@@ -72,7 +69,6 @@ list_surface_lvl1_location_4 = [
                 list('000bb000000b00000ъ00'),
                 list('00000000000b00000000'),
                 list('bbbbbbbbbbbbbbbbbbbb'),
-                list('00000000000000000000')
 ]
 #Список локаций первого уровня
 list_surface_lvl1 = [list_surface_lvl1_location_1,list_surface_lvl1_location_2,list_surface_lvl1_location_3,list_surface_lvl1_location_4]
