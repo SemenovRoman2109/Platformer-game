@@ -831,12 +831,48 @@ def move_map(direction):
 def shooting_lvl(screen,min_count_point,barriers):
     game = True
     mouse.set_visible(False)
-   
+    count_point = 0 
+    
+    left_side_stand_for_manniquens = Graphic_elements(0,0,SCREEN_W//20,SCREEN_H//11*2.269,"image/left_side_stand_for_mannequins.png")
+    right_side_stand_for_manniquens = Graphic_elements(0,0,SCREEN_W//20,SCREEN_H//11*2.269,"image/right_side_stand_for_mannequins.png")
+    middle_stand_for_manniquens = Graphic_elements(0,0,0,right_side_stand_for_manniquens.HEIGHT//9.83,"image/middle_stand_stand_for_mannequins.png")
+    list_down_stand_for_manniquens = [left_side_stand_for_manniquens,right_side_stand_for_manniquens,middle_stand_for_manniquens]
+    list_midle_stand_for_manniquens = []
+    list_up_stand_for_manniquens = []
+    for i in list_down_stand_for_manniquens:
+        list_midle_stand_for_manniquens.append(i)
+        list_up_stand_for_manniquens.append(i)
+    list_stand = [
+        list_down_stand_for_manniquens,
+        list_midle_stand_for_manniquens,
+        list_up_stand_for_manniquens
+    ]
+    
+    statstic = Font("font/pixel_font.ttf",SCREEN_W//30,"black",str(count_point) +"/" + str(min_count_point),SCREEN_W-SCREEN_W//7,0,1,True)
     while game:
         screen.fill("black")
         Background_shooting.show_image(screen)
-        aim.show_image(screen)
+        
         falg_motion = False
+        
+        #Задаем координаты стойкам
+        list_y_stand = [Background_shooting.Y + Background_shooting.HEIGHT - SCREEN_H//2,Background_shooting.Y + Background_shooting.HEIGHT//2,Background_shooting.Y + SCREEN_H//2]
+        for obj in range(len(list_stand)):
+            list_s = list_stand[obj]
+            list_s[0].X = Background_shooting.X + SCREEN_W//2
+            list_s[1].X = Background_shooting.X + Background_shooting.WIDTH - SCREEN_W//2 - list_s[1].WIDTH
+            list_s[2].X = list_s[0].X + list_s[0].WIDTH 
+            
+            list_s[2].WIDTH = -1 * ((list_s[0].X + list_s[0].WIDTH) - list_s[1].X)
+            list_s[2].image_load()
+            
+            list_s[0].Y = list_y_stand[obj]
+            list_s[1].Y = list_s[0].Y
+            list_s[2].Y = list_s[0].Y
+            for i in list_s:
+                i.show_image(screen)
+            
+        #
         for event1 in event.get(): # Получаем значение события из "списка событий" 
             nouse_cor = mouse.get_pos()
             if event1.type == QUIT:
@@ -859,7 +895,10 @@ def shooting_lvl(screen,min_count_point,barriers):
             mouse.set_pos([SCREEN_W//2,SCREEN_H//2])
         if not falg_motion:
             mouse.set_pos([SCREEN_W//2,SCREEN_H//2])
+        aim.show_image(screen)
+        statstic.show_text(screen)
         clock.tick(FPS*2)
         # print(clock.get_fps())
         display.update()
     mouse.set_visible(True)
+

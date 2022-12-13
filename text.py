@@ -19,9 +19,9 @@ class Font():
         self.start_y = self.font_y
         if self.font_content != None and index != 1:
             self.font_content = self.font_content.split(';')
-        self.font_content = list(self.font_content)
+        self.font_content = [self.font_content]
         self.index = len(self.font_content)
-    #Метод для отображения show_text show_text
+    #Метод для отображения show_text 
     def show_text(self,win):
         # Цикл чтоб разделить текст на столько строк, чему равно значение index.
         for i in range(len(self.font_content)):

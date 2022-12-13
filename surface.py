@@ -60,7 +60,7 @@ list_surface_lvl1_location_3 = [
 list_surface_lvl1_location_4 = [
                 list('000000000000000000R0'),
                 list('00000000000000000000'),
-                list('0000PPpppppb00000000'),
+                list('00ppPPpppppb00000000'),
                 list('bb000000000b00000000'),
                 list('000cc000000b00000000'),
                 list('00000000000bcc000000'),
