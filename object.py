@@ -32,7 +32,7 @@ invisible_block_icon = Graphic_elements(SCREEN_W-SCREEN_W//10,SCREEN_H-SCREEN_H/
 Rope_with_saw = Graphic_elements(SCREEN_W//2,SCREEN_H//15,SCREEN_W//15,SCREEN_W//20*10,"image/Rope_with_saw.png")
 Hook = Graphic_elements(SCREEN_W//2,SCREEN_H//15,SCREEN_W//30,SCREEN_W//20*10,"image/Hook.png")
 button = Graphic_elements(0,0,SCREEN_W//20,SCREEN_W//20//3.3846,"image/button.png")
-Background_shooting = Graphic_elements(-SCREEN_W,-SCREEN_H,SCREEN_W*3,SCREEN_H*2,"image/фон.bmp")
+Background_shooting = Graphic_elements(-SCREEN_W,-SCREEN_H,SCREEN_W*3,SCREEN_H*2,"image/Fon.jpg")
 aim = Graphic_elements(SCREEN_W//2-SCREEN_W//40,SCREEN_H//2-SCREEN_W//40,SCREEN_W//20,SCREEN_W//20,"image/aim.png")
 #Создаем список графических елементов шипов
 list_spikes = []

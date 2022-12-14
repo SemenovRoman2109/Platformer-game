@@ -22,13 +22,12 @@ class Sprite:
         self.start_speed = sprite_speed
         self.border_width = border_width
         self.border_height = border_height
-        self.list_animation = [[],[]]
+        self.list_animation = []
         self.number_lock = 0
         self.open_door = False
-        for i in range(7):
-            i += 1
-            self.list_animation[0].append("image/Персонажи/Двойной_прижок/"+str(i)+".png")
-            self.list_animation[1].append("image/Персонажи/Двойной_прижок/left_"+str(i)+".png")
+        for i in range(10):
+
+            self.list_animation.append("image/Персонажи/Двойной_прижок/"+str(i+1)+".png")
         self.health = health
         self.flag_sprite = 0 # счетчик изменения костюмов
         self.index = 0 # счетчик индексов списка list_images
@@ -137,11 +136,11 @@ class Sprite:
         if keys[self.List_layout[self.index_layout][0]] and self.image_sprite.X > SCREEN_W//80 and self.move_left:
             self.image_sprite.X -= self.speed
             self.flag = "L"
-            if self.index == 7:
+            if self.index == 10:
                 self.index = 0
-            self.image_sprite.path = self.list_animation[1][self.index]
-            self.image_sprite.image_load()
-            if self.index2 >= 5:
+            self.image_sprite.path = self.list_animation[self.index]
+            self.image_sprite.image_load(rotate_x=True)
+            if self.index2 >= 2:
                 self.index += 1
                 self.index2 = 0
             self.index2 += 1
@@ -149,11 +148,11 @@ class Sprite:
         elif keys[self.List_layout[self.index_layout][1]] and self.image_sprite.X < self.border_width - self.image_sprite.WIDTH - SCREEN_W//80 and self.move_right:
             self.image_sprite.X += self.speed
             self.flag = "R"  
-            if self.index == 7:
+            if self.index == 10:
                 self.index = 0
             
             
-            self.image_sprite.path = self.list_animation[0][self.index]
+            self.image_sprite.path = self.list_animation[self.index]
             self.image_sprite.image_load()
             if self.index2 >= 3:
                 self.index += 1
@@ -188,14 +187,12 @@ class Sprite:
                     self.image_sprite.path = "image/Персонажи/Двойной_прижок/1.png"
                     self.image_sprite.image_load()
                 elif self.flag == "L":
-                    self.image_sprite.path = "image/Персонажи/Двойной_прижок/left_1.png"
-                    self.image_sprite.image_load()
+                    self.image_sprite.image_load(rotate_x=True)
                 self.image_sprite.Y -= self.jummp_boost//15
                 self.count += 1
                 if self.move_up == False or self.count == 15 or self.image_sprite.Y <= SCREEN_W//80:
                     self.fly_up = False
                     self.count = 0
-
     # Гравитация  смена индексов и картинок   
     def sprite_gravity(self): 
         if self.double_jump != None:
@@ -207,8 +204,7 @@ class Sprite:
                     self.image_sprite.path = "image/Персонажи/Двойной_прижок/1.png"
                     self.image_sprite.image_load()
                 elif self.flag == "L":
-                    self.image_sprite.path = "image/Персонажи/Двойной_прижок/left_1.png"
-                    self.image_sprite.image_load()
+                    self.image_sprite.image_load(rotate_x=True)
             elif self.fly_up == False:
                 self.jump_now = 0  
                 self.double_jump = True     
@@ -220,8 +216,7 @@ class Sprite:
                     self.image_sprite.path = "image/Персонажи/Двойной_прижок/1.png"
                     self.image_sprite.image_load()
                 elif self.flag == "L":
-                    self.image_sprite.path = "image/Персонажи/Двойной_прижок/left_1.png"
-                    self.image_sprite.image_load()
+                    self.image_sprite.image_load(rotate_x=True)
             elif self.fly_up == False:
                 self.jump_now = 0    
     # Гравитация колизия   
@@ -347,16 +342,13 @@ class Sprite:
                 self.image_sprite.path = "image/Персонажи/Двойной_прижок/1.png"
                 self.image_sprite.image_load()
             elif self.flag == "L":
-                self.image_sprite.path = "image/Персонажи/Двойной_прижок/left_1.png"
-                self.image_sprite.image_load()
+                self.image_sprite.image_load(rotate_x=True)
             self.image_sprite.Y -= (self.jummp_boost//8 + self.gravity_speed)
             self.count += 1
-            if self.move_up == False:
+            if self.move_up == False or self.count == 10 or self.image_sprite.Y <= SCREEN_W//80:
                 self.fly_up_spring = False
                 self.count = 0
-            if self.count == 10:
-                self.fly_up_spring = False
-                self.count = 0                
+            
     # Проверка движения в право    
     def can_move_right(self):
         for i in dict_list_border["list_border_cor"]:

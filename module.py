@@ -6,7 +6,9 @@ import random
 from graphic_elements import Graphic_elements
 from constant import *
 from object import *
+from sounds import *
 from text import *
+import copy
 # Инициализируем настройки pygame
 init()
 
@@ -399,6 +401,7 @@ def rope_angle(index,direction,angle):
 # Функция для любых веревок
 def rope(index,graphic_elements,angle,width,height):    
     # Создаем копию веревки даюы удобно поворачивать её относительно основной картинки
+    graphic_elements.image_load()
     Rope_copy = transform.rotate(graphic_elements.IMG, int(dict_argument_angle[angle]))
     # Задаем x и y для нашего наконечника дабы засечь косание с ним
     x = graphic_elements.X-graphic_elements.WIDTH//2+int(list_cor_Rope[dict_argument_angle[index]][0])
@@ -449,6 +452,7 @@ def door_and_button(index_button_x_1,index_button_y_1,index_button_x_2,index_but
 
     # Делаем все тоже самое для второй кнопки
     if not Rect.colliderect(sprite1.image_sprite.RECT,graphik_element_button_2.RECT):
+
         graphik_element_button_2.show_image(screen)
     else:
         graphik_element_button_2.path = "image/button_pressed.png"
@@ -607,6 +611,7 @@ def saw_function():
         # КОСТЫЛЬ
         saw.Y += SCREEN_H//11
         # крутим пилу
+        saw.image_load()
         saw_copy = transform.rotate(saw.IMG, int(dict_argument_angle["angle_saw"]))
         # Создаем рект обект пилы
         rect_saw = Rect(saw.X - saw.WIDTH//2, saw.Y - saw.HEIGHT//2,saw.WIDTH,saw.HEIGHT)
@@ -832,31 +837,33 @@ def shooting_lvl(screen,min_count_point,barriers):
     game = True
     mouse.set_visible(False)
     count_point = 0 
-    
+
     left_side_stand_for_manniquens = Graphic_elements(0,0,SCREEN_W//20,SCREEN_H//11*2.269,"image/left_side_stand_for_mannequins.png")
     right_side_stand_for_manniquens = Graphic_elements(0,0,SCREEN_W//20,SCREEN_H//11*2.269,"image/right_side_stand_for_mannequins.png")
     middle_stand_for_manniquens = Graphic_elements(0,0,0,right_side_stand_for_manniquens.HEIGHT//9.83,"image/middle_stand_stand_for_mannequins.png")
-    list_down_stand_for_manniquens = [left_side_stand_for_manniquens,right_side_stand_for_manniquens,middle_stand_for_manniquens]
-    list_midle_stand_for_manniquens = []
-    list_up_stand_for_manniquens = []
-    for i in list_down_stand_for_manniquens:
-        list_midle_stand_for_manniquens.append(i)
-        list_up_stand_for_manniquens.append(i)
+    list_down_stand_for_manniquens = [left_side_stand_for_manniquens,right_side_stand_for_manniquens,middle_stand_for_manniquens,[[Graphic_elements(None,0,SCREEN_W//10,SCREEN_W//10*1.693,None),"right"],[Graphic_elements(None,0,SCREEN_W//10,SCREEN_W//10*1.693,None),"right"]]]
+    list_midle_stand_for_manniquens = copy.deepcopy(list_down_stand_for_manniquens)
+    list_up_stand_for_manniquens = copy.deepcopy(list_down_stand_for_manniquens)
+
+    
+
     list_stand = [
         list_down_stand_for_manniquens,
         list_midle_stand_for_manniquens,
         list_up_stand_for_manniquens
     ]
-    
+
+    count_gun = 0
+    gun = Sounds("sounds/gun.wav",100)
+    coin = Sounds("sounds/coins.wav",100)
     statstic = Font("font/pixel_font.ttf",SCREEN_W//30,"black",str(count_point) +"/" + str(min_count_point),SCREEN_W-SCREEN_W//7,0,1,True)
     while game:
         screen.fill("black")
         Background_shooting.show_image(screen)
         
-        falg_motion = False
+        falg_motion = False  
         
-        #Задаем координаты стойкам
-        list_y_stand = [Background_shooting.Y + Background_shooting.HEIGHT - SCREEN_H//2,Background_shooting.Y + Background_shooting.HEIGHT//2,Background_shooting.Y + SCREEN_H//2]
+        list_y_stand = [Background_shooting.Y + Background_shooting.HEIGHT - SCREEN_H//1.5,Background_shooting.Y + Background_shooting.HEIGHT//2,Background_shooting.Y + SCREEN_H//1.5] 
         for obj in range(len(list_stand)):
             list_s = list_stand[obj]
             list_s[0].X = Background_shooting.X + SCREEN_W//2
@@ -865,14 +872,44 @@ def shooting_lvl(screen,min_count_point,barriers):
             
             list_s[2].WIDTH = -1 * ((list_s[0].X + list_s[0].WIDTH) - list_s[1].X)
             list_s[2].image_load()
+
+            
             
             list_s[0].Y = list_y_stand[obj]
             list_s[1].Y = list_s[0].Y
             list_s[2].Y = list_s[0].Y
-            for i in list_s:
-                i.show_image(screen)
+
             
-        #
+            for i in list_s[-1]:
+                object = i[0]
+                direction = i[1]
+                object.Y = list_s[2].Y - object.HEIGHT//2
+                if object.X == None:
+                    object.path = "image/mannequen.png"
+                    object.image_load()
+                    object.NAME = random.randint(SCREEN_W//200,SCREEN_W//70)
+                    object.start_x = random.randint(0,list_s[2].WIDTH - object.WIDTH)
+                
+                if direction == "left":
+                    object.start_x -= object.NAME
+                    if object.start_x <= 0:
+                        i[1] = "right"
+                if direction == "right":
+                    object.start_x += object.NAME
+                    if object.start_x >= list_s[2].WIDTH - object.WIDTH:
+                        i[1] = "left"
+                
+                
+                object.X = list_s[2].X + object.start_x
+                
+            
+            for i in list_s:
+                if type(i) != type([]):
+                    i.show_image(screen)
+                else:
+                    for object in i:
+                        object[0].show_image(screen)
+
         for event1 in event.get(): # Получаем значение события из "списка событий" 
             nouse_cor = mouse.get_pos()
             if event1.type == QUIT:
@@ -880,7 +917,6 @@ def shooting_lvl(screen,min_count_point,barriers):
             if event1.type == MOUSEMOTION:
                 
                 Background_shooting.X += int(event1.rel[0])
-                print(event1.rel)
                 Background_shooting.Y += int(event1.rel[1])
                 falg_motion = True
                 if Background_shooting.X > 0:
@@ -891,6 +927,23 @@ def shooting_lvl(screen,min_count_point,barriers):
                     Background_shooting.X = SCREEN_W - Background_shooting.WIDTH
                 if Background_shooting.Y < SCREEN_H - Background_shooting.HEIGHT:
                     Background_shooting.Y = SCREEN_H - Background_shooting.HEIGHT
+            if event1.type == MOUSEBUTTONDOWN:      
+                if event1.button == 1:
+                    if count_gun == 0:
+                        gun.play_sound()
+                        count_gun = 60
+                        for l_s in list_stand:
+                            for obj in l_s[-1]:
+                                if obj[0].check_mouse_cor((SCREEN_W//2,SCREEN_H//2)):
+                                    coin.play_sound()
+                                    count_point += 1 * int(obj[0].NAME//(SCREEN_W//400))
+                                    statstic.font_content = [str(count_point) +"/" + str(min_count_point)]
+                                    print("Ты попал! На тебе", 1 * int(obj[0].NAME//(SCREEN_W//400)), "монет!")
+                                    break
+                                    
+        if count_gun > 0:
+            count_gun -= 1
+        
         if nouse_cor[0]<= SCREEN_W//4 or nouse_cor[0]>= SCREEN_W - SCREEN_W//4 or nouse_cor[1]<= SCREEN_H//4 or nouse_cor[1]>= SCREEN_H - SCREEN_H//4:
             mouse.set_pos([SCREEN_W//2,SCREEN_H//2])
         if not falg_motion:
@@ -901,4 +954,13 @@ def shooting_lvl(screen,min_count_point,barriers):
         # print(clock.get_fps())
         display.update()
     mouse.set_visible(True)
+
+
+
+
+
+
+
+
+
 

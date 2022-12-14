@@ -14,16 +14,21 @@ class Graphic_elements():
         self.start_width = width
         self.NAME = name
         self.path = path
+        self.loading = False
+
         
-        if path != None:#
-            self.image_load()#
-            
-        self.RECT = Rect(self.X,self.Y,self.WIDTH,self.HEIGHT) #
+
+        if self.X != None and self.Y != None and self.WIDTH != None and self.HEIGHT != None:
+            self.RECT = Rect(self.X,self.Y,self.WIDTH,self.HEIGHT) #
+        
     #Метод для отображения картинки
     def show_image(self,screen_object):
         #переопределяем rect обект нашего елемента
         self.RECT = Rect(self.X,self.Y,self.WIDTH,self.HEIGHT)
         #Проверка картинки
+        if self.loading == False:
+            if self.path != None:
+                self.image_load()#
         if self.path != None:
             #Отображаем елемент
             screen_object.blit(self.IMG, (self.X,self.Y))
@@ -34,6 +39,7 @@ class Graphic_elements():
         self.IMG = image.load(self.IMG)
         self.IMG = transform.scale(self.IMG, (self.WIDTH,int(self.HEIGHT)))
         self.IMG = transform.flip(self.IMG,rotate_x,rotate_y)
+        self.loading = True
     #Метод наведения мышкой на объект
     def check_mouse_cor(self,mouse_cor):
         #Условие наведения мышкой на объект
