@@ -9,7 +9,7 @@ def run_game():
     drawSurfaces()
     #y передвигающийся плаформы
     #Основной цыкл игры
-    shooting_lvl(screen,100,False)
+    shooting_lvl(screen,100,3)
     while dict_argument["game"]:
         
         for event1 in event.get(): # Получаем значение события из "списка событий" 
