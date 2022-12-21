@@ -833,15 +833,23 @@ def move_map(direction):
     # Обновляем матрицу
     drawSurfaces()
 
-def shooting_lvl(screen,min_count_point,barriers = 3):
+def shooting_lvl(screen,min_count_point,ammo_count,barriers):
     game = True
     mouse.set_visible(False)
     count_point = 0 
-    list_variations_barriers = [Graphic_elements(0,0,SCREEN_W//10,SCREEN_W//10 // 1.76,"image/barrier_down.png"),Graphic_elements(0,0,SCREEN_W//10,SCREEN_W//10,"image/barrier_down_big.png"),Graphic_elements(0,0,SCREEN_W//10,SCREEN_W//10*1.67,"image/barrier_up.png"),Graphic_elements(0,0,SCREEN_W//10*1.21,SCREEN_W//10*1.83,"image/barrier_up_liana.png")]
 
+    list_variations_barriers = [Graphic_elements(0,0,SCREEN_W//10,SCREEN_W//10 // 1.76,"image/barrier_down.png"),Graphic_elements(0,0,SCREEN_W//10,SCREEN_W//10,"image/barrier_down_big.png"),Graphic_elements(0,0,SCREEN_W//10,SCREEN_W//10*1.67,"image/barrier_up.png"),Graphic_elements(0,0,SCREEN_W//10*1.21,SCREEN_W//10*1.83,"image/barrier_up_liana.png")]
+    obj_barier_position_flag = True
+    
+    if barriers > 5:
+        barriers = 5
+
+    ammo_img = Graphic_elements(SCREEN_W//100,SCREEN_W//100,SCREEN_W//20,SCREEN_W//20//1.14,"image/ammo.png")
+    
     left_side_stand_for_manniquens = Graphic_elements(0,0,SCREEN_W//20,SCREEN_H//11*2.269,"image/left_side_stand_for_mannequins.png")
     right_side_stand_for_manniquens = Graphic_elements(0,0,SCREEN_W//20,SCREEN_H//11*2.269,"image/right_side_stand_for_mannequins.png")
     middle_stand_for_manniquens = Graphic_elements(0,0,0,right_side_stand_for_manniquens.HEIGHT//9.83,"image/middle_stand_stand_for_mannequins.png")
+    
     list_down_stand_for_manniquens = [left_side_stand_for_manniquens,right_side_stand_for_manniquens,middle_stand_for_manniquens,[[Graphic_elements(None,0,SCREEN_W//10,SCREEN_W//10*1.693,None),"right",[]],[Graphic_elements(None,0,SCREEN_W//10,SCREEN_W//10*1.693,None),"right",[]]],[]]                 
     list_midle_stand_for_manniquens = copy.deepcopy(list_down_stand_for_manniquens)
     list_up_stand_for_manniquens = copy.deepcopy(list_down_stand_for_manniquens)
@@ -853,11 +861,14 @@ def shooting_lvl(screen,min_count_point,barriers = 3):
     if barriers != False:
         for obj in list_stand:
             for i in range(random.randint(1,barriers)):
-                obj[-1].append(random.choice(copy.deepcopy(list_variations_barriers)))
+                obj[-1].append(copy.deepcopy(random.choice(list_variations_barriers)))
+    
+
     count_gun = 0
     gun = Sounds("sounds/gun.wav",100)
     coin = Sounds("sounds/coins.wav",100)
     statstic = Font("font/pixel_font.ttf",SCREEN_W//30,"black",str(count_point) +"/" + str(min_count_point),SCREEN_W-SCREEN_W//7,0,1,True)
+    ammo_statistic = Font('font/pixel_font.ttf',SCREEN_W//30,"black",str(ammo_count),0 + SCREEN_W//15,SCREEN_W//100,1,True)
     while game:
         screen.fill("black")
         Background_shooting.show_image(screen)
@@ -880,6 +891,39 @@ def shooting_lvl(screen,min_count_point,barriers = 3):
             list_s[1].Y = list_s[0].Y
             list_s[2].Y = list_s[0].Y
 
+            if barriers != False:
+                if obj_barier_position_flag:
+                    for obj_barier in list_s[-1]:
+                        obj_barier.start_x = random.randint(0,int(list_s[2].WIDTH - obj_barier.WIDTH))
+                        
+                    if len(list_s[-1]) > 1:
+                        for obj_barier in list_s[-1]:
+                            
+                            obj_barier_another_flag = True
+                            # print("Входит в цикл вайл")
+                            while obj_barier_another_flag:
+                                # print("Входит в цикл фор")
+                                for obj_barier_another in list_s[-1]:
+                                    if list_s[-1].index(obj_barier_another) != list_s[-1].index(obj_barier):
+                                        # print("зашло в цикл с индексом ",list_s[-1].index(obj_barier_another))
+                                        if obj_barier.start_x <= obj_barier_another.start_x and obj_barier.start_x >= obj_barier_another.start_x - obj_barier_another.WIDTH *1.5:
+                                            obj_barier.start_x = random.randint(0,int(list_s[2].WIDTH - obj_barier.WIDTH)) 
+                                            obj_barier_another_flag = True
+                                            # print("Меняем")
+                                            break
+                                        elif obj_barier.start_x >= obj_barier_another.start_x and obj_barier.start_x <= obj_barier_another.start_x - obj_barier_another.WIDTH *1.5:
+                                            obj_barier.start_x = random.randint(0,int(list_s[2].WIDTH - obj_barier.WIDTH))
+                                            obj_barier_another_flag = True
+                                            # print("Меняем")
+                                            break
+                                        else:
+                                            # print(" НЕ Меняем")
+                                            obj_barier_another_flag = False
+                    
+                        
+                    
+                
+
             
             for i in list_s[-2]:
                 list_barier_obj = list_s[-1]
@@ -887,6 +931,7 @@ def shooting_lvl(screen,min_count_point,barriers = 3):
                 direction = i[1]
                 object.Y = list_s[2].Y - object.HEIGHT//2
                 for obj_barier in list_barier_obj:
+                    
                     if obj_barier.path == "image/barrier_down.png" or obj_barier.path == "image/barrier_down_big.png":
                         obj_barier.Y = object.Y + object.HEIGHT - obj_barier.HEIGHT
                     else:
@@ -894,6 +939,8 @@ def shooting_lvl(screen,min_count_point,barriers = 3):
 
                     
                 
+
+
                 if object.X == None:
                     
                     object.path = "image/mannequen.png"
@@ -901,26 +948,18 @@ def shooting_lvl(screen,min_count_point,barriers = 3):
                     object.NAME = random.randint(SCREEN_W//200,SCREEN_W//70)
                     object.start_x = random.randint(0,list_s[2].WIDTH - object.WIDTH)
                     object.X = list_s[2].X + object.start_x
-                    for obj_barier in list_barier_obj:
+                    
 
-                        obj_barier.start_x = random.randint(0,int(list_s[2].WIDTH - obj_barier.WIDTH))
-                        obj_barier.X = list_s[2].X + obj_barier.start_x
-                        
-                        for obj_barier2 in list_barier_obj:
-                            print("3")
-                            if list_barier_obj.index(obj_barier2) != list_barier_obj.index(obj_barier):
-                                
-                                while True:
-                                    print("4")
-                                    if obj_barier.start_x <= obj_barier2.start_x and obj_barier.start_x >= obj_barier2.start_x - obj_barier2.WIDTH *1.5:
-                                        obj_barier.start_x = random.randint(0,int(list_s[2].WIDTH - obj_barier.WIDTH))
-
-                                        
-                                    elif obj_barier.start_x >= obj_barier2.start_x and obj_barier.start_x <= obj_barier2.start_x - obj_barier2.WIDTH *1.5:
-                                        obj_barier.start_x = random.randint(0,int(list_s[2].WIDTH - obj_barier.WIDTH))
-                                    else:
                                     
-                                        break
+                        # for obj_barier_another in list_barier_obj:
+                        #     if list_barier_obj.index(obj_barier_another) != list_barier_obj.index(obj_barier):
+                        #         while True:
+                        #             if obj_barier.start_x <= obj_barier_another.start_x and obj_barier.start_x >= obj_barier_another.start_x - obj_barier_another.WIDTH *1.5:
+                        #                 obj_barier.start_x = random.randint(0,int(list_s[2].WIDTH - obj_barier.WIDTH)) 
+                        #             elif obj_barier.start_x >= obj_barier_another.start_x and obj_barier.start_x <= obj_barier_another.start_x - obj_barier_another.WIDTH *1.5:
+                        #                 obj_barier.start_x = random.randint(0,int(list_s[2].WIDTH - obj_barier.WIDTH))
+                        #             else:
+                        #                 break
                                             
                     #Мы не можем это в цикле создать потому что разные координаты у каждой зоны
                     i[2].append(Rect(object.X+object.WIDTH//2.578,object.Y+object.HEIGHT//16.6,object.WIDTH//3.769,object.WIDTH//3.769)) #Белая зона головы
@@ -968,10 +1007,11 @@ def shooting_lvl(screen,min_count_point,barriers = 3):
             for object in list_s[-1]:
                 object.show_image(screen)
             
-
-
+        obj_barier_position_flag = False
+        
+        mouse_cor = mouse.get_pos()
         for event1 in event.get(): # Получаем значение события из "списка событий" 
-            nouse_cor = mouse.get_pos()
+            
             if event1.type == QUIT:
                 game = False
             if event1.type == MOUSEMOTION:
@@ -990,6 +1030,7 @@ def shooting_lvl(screen,min_count_point,barriers = 3):
             if event1.type == MOUSEBUTTONDOWN:      
                 if event1.button == 1:
                     if count_gun == 0:
+                        ammo_count -= 1
                         gun.play_sound()
                         count_gun = 60
                         for l_s in list_stand:
@@ -1007,7 +1048,7 @@ def shooting_lvl(screen,min_count_point,barriers = 3):
                                 if SCREEN_W//2 > rect_barier.x and SCREEN_W//2 < rect_barier.x + rect_barier.width and SCREEN_H//2 > rect_barier.y and SCREEN_H//2 < rect_barier.y + rect_barier.height:
                                     flag_barier = True
                                     break
-
+                                
                             for obj in l_s[-2]:
                                 if not flag_barier:
                                     if obj[0].check_mouse_cor((SCREEN_W//2,SCREEN_H//2)):
@@ -1020,24 +1061,27 @@ def shooting_lvl(screen,min_count_point,barriers = 3):
                                             else:
                                                 if SCREEN_W//2 > i.x and SCREEN_W//2 < i.x + i.width and SCREEN_H//2 > i.y and SCREEN_H//2 < i.y + i.height:
                                                     factor_zone = 2
-
                                         coin.play_sound()
                                         count_point += factor_zone * int(obj[0].NAME//(SCREEN_W//400))
                                         statstic.font_content = [str(count_point) +"/" + str(min_count_point)]
                                         print("Ты попал! На тебе", factor_zone * int(obj[0].NAME//(SCREEN_W//400)), "монет!")
                                         break
-                                    
         if count_gun > 0:
             count_gun -= 1
         
-        if nouse_cor[0]<= SCREEN_W//4 or nouse_cor[0]>= SCREEN_W - SCREEN_W//4 or nouse_cor[1]<= SCREEN_H//4 or nouse_cor[1]>= SCREEN_H - SCREEN_H//4:
+        if mouse_cor[0]<= SCREEN_W//4 or mouse_cor[0]>= SCREEN_W - SCREEN_W//4 or mouse_cor[1]<= SCREEN_H//4 or mouse_cor[1]>= SCREEN_H - SCREEN_H//4:
             mouse.set_pos([SCREEN_W//2,SCREEN_H//2])
         if not falg_motion:
             mouse.set_pos([SCREEN_W//2,SCREEN_H//2])
         aim.show_image(screen)
+        ammo_img.show_image(screen)
+        ammo_statistic.font_content = [str(ammo_count)]
+        ammo_statistic.show_text(screen)
         statstic.show_text(screen)
         clock.tick(FPS*2)
         # print(clock.get_fps())
+        if ammo_count <= 0:
+            return count_point
         display.update()
     mouse.set_visible(True)
 

@@ -56,7 +56,7 @@ list_cor_Rope = [
 ]
 #Задаем разрешение и ограничение кадров. Настраиваем название окна
 screen = display.set_mode((SCREEN_W, SCREEN_H))
-display.set_caption("Игра на pygame")
+display.set_caption("platformer_game")
 clock = time.Clock()        
 
 #Список пилы, верёвок и так далее

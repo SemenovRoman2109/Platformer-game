@@ -9,7 +9,7 @@ def run_game():
     drawSurfaces()
     #y передвигающийся плаформы
     #Основной цыкл игры
-    shooting_lvl(screen,100,3)
+    
     while dict_argument["game"]:
         
         for event1 in event.get(): # Получаем значение события из "списка событий" 
@@ -79,7 +79,7 @@ def run_game():
             sprite1.shield(screen)
             
             
-            direction_move_map = sprite1.finish_lvl()
+            direction_move_map = sprite1.finish_lvl(shooting_lvl)
             if direction_move_map != "False":
                 move_map(direction_move_map)
                 black_fon.path = "image/lvl"+str(dict_argument["index_location"]+1)+".png"

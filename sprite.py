@@ -543,7 +543,7 @@ class Sprite:
                         self.open_door = True
                         return "door"
     # Функция колизии с финишом 
-    def finish_lvl(self):
+    def finish_lvl(self,shooting_lvl):
         index_lvl = dict_argument["index_lvl"]
         index_location = dict_argument["index_location"]
         key = "lvl"+str(index_lvl+1)+"_location_"+str(index_location+1)
@@ -555,5 +555,31 @@ class Sprite:
                 self.image_sprite.Y = dict_spawn_and_finish_point[key_next][0][1]
                 self.image_sprite.start_y = dict_spawn_and_finish_point[key_next][0][1]
                 return dict_spawn_and_finish_point[key][2]
+        else:
+            self.image_sprite.X = 0
+            self.image_sprite.start_x = 0
+            self.image_sprite.Y = 0
+            self.image_sprite.start_y = 0
+            if Rect.colliderect(dict_spawn_and_finish_point[key][1],self.image_sprite.RECT):
+                flag_first_shooting_lvl_point = shooting_lvl(screen,100,20,False)
+                
+                while True:
+                    
+                    if flag_first_shooting_lvl_point >= 100:
+                        break
+                    
+                    else:
+                        print("У тебя не получилось пройти первый уровень вот тебе еще попытка")
+                        flag_first_shooting_lvl_point = shooting_lvl(screen,100,20,False)
+                flag_second_shooting_lvl_point = shooting_lvl(screen,150,30,3)
+                while True:
+                    
+                    if flag_second_shooting_lvl_point >= 150:
+                        break
+                    
+                    else:
+                        print("У тебя не получилось пройти второй уровень вот тебе еще попытка")
+                        flag_second_shooting_lvl_point = shooting_lvl(screen,150,30,3)
         return "False"
                     
+        
