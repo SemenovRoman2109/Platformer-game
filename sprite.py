@@ -53,7 +53,7 @@ class Sprite:
         self.image_sprite = Graphic_elements(self.sprite_x,self.sprite_y,self.image_width,self.image_height,self.image_path)   
         self.List_layout = [[K_LEFT,K_RIGHT,K_UP,K_DOWN],[K_a,K_d,K_w,K_s],[K_RIGHT,K_LEFT,K_DOWN,K_UP],[K_d,K_a,K_s,K_w]]
         self.flag_spring = 0
-        self.ghost_img = Graphic_elements(0,0,SCREEN_W//20,SCREEN_W//20*1.86,"image/ghost_1.png")
+        self.ghost_img = Graphic_elements(0,0,BLOCK_WIDTH,BLOCK_WIDTH*1.86,"image/ghost_1.png")
         self.count_pressing_ghost = 0
         self.shield_img = Graphic_elements(0,0,self.image_sprite.WIDTH * 1.68,self.image_sprite.HEIGHT * 1.50,"image/shield.png")
         self.count_duration_shield = dict_argument["duration_shield"]
@@ -80,13 +80,13 @@ class Sprite:
             x_health += SCREEN_W//25
         
         if len(self.collected_key) > 0:
-            key_img = Graphic_elements(SCREEN_W//5,-SCREEN_W//20//3,SCREEN_W//15,SCREEN_W//18,"image/Key.png")
+            key_img = Graphic_elements(SCREEN_W//5,-BLOCK_WIDTH//3,SCREEN_W//15,SCREEN_W//18,"image/Key.png")
             key_img.show_image(screen)
             if len(self.collected_key) > 1:
-                number_key = Font("font/pixel_font.ttf",SCREEN_W//30,(255,0,0),"X"+str(len(self.collected_key)),SCREEN_W//5.1,SCREEN_W//45-SCREEN_W//20//3)
+                number_key = Font("font/pixel_font.ttf",SCREEN_W//30,(255,0,0),"X"+str(len(self.collected_key)),SCREEN_W//5.1,SCREEN_W//45-BLOCK_WIDTH//3)
                 number_key.show_text(screen)
         if self.number_lock > 0:        
-            lock_img = Graphic_elements(SCREEN_W//1-SCREEN_W//30,0,SCREEN_W//30,SCREEN_W//20,"image/Lock.png")
+            lock_img = Graphic_elements(SCREEN_W//1-SCREEN_W//30,0,SCREEN_W//30,BLOCK_WIDTH,"image/Lock.png")
             lock_img.show_image(screen)
             if self.number_lock > 1:
                 number_lock = Font("font/pixel_font.ttf",SCREEN_W//40,(255,0,0),"X"+str(self.number_lock),SCREEN_W//1-SCREEN_W//25,SCREEN_W/30)
@@ -233,7 +233,7 @@ class Sprite:
                     else:
                         self.gravity = True
                 else:
-                    if self.image_sprite.X + self.image_sprite.WIDTH >= i[4] + SCREEN_W//20//5 and self.image_sprite.X <= i[5] - SCREEN_W//20//5:
+                    if self.image_sprite.X + self.image_sprite.WIDTH >= i[4] + BLOCK_WIDTH//5 and self.image_sprite.X <= i[5] - BLOCK_WIDTH//5:
                         if self.image_sprite.Y + self.image_sprite.HEIGHT >= i[0]:
                             if self.image_sprite.Y + self.image_sprite.HEIGHT <= i[0] + self.gravity_speed*2:
                                 self.gravity = False#гравитация отключается
@@ -248,7 +248,7 @@ class Sprite:
                         self.gravity = True
         if self.gravity == True:
             for i in dict_list_border["list_border_cor_cracking"]:  
-                if self.image_sprite.X + self.image_sprite.WIDTH >= i[4] + SCREEN_W//20//5 and self.image_sprite.X <= i[5] - SCREEN_W//20//5:
+                if self.image_sprite.X + self.image_sprite.WIDTH >= i[4] + BLOCK_WIDTH//5 and self.image_sprite.X <= i[5] - BLOCK_WIDTH//5:
                     if self.image_sprite.Y + self.image_sprite.HEIGHT >= i[0]:
                         if self.image_sprite.Y + self.image_sprite.HEIGHT <= i[0] + self.gravity_speed*2:
                             self.gravity = False#гравитация отключается
@@ -382,7 +382,7 @@ class Sprite:
     def can_move_up(self):
         for i in dict_list_border["list_border_cor"]:
             if i[-1] != "K":
-                i_rect = Rect(i[4]+ SCREEN_W//20//5,i[1] + SCREEN_H//500,i[5]-i[4]- SCREEN_W//20//2.5,1)
+                i_rect = Rect(i[4]+ BLOCK_WIDTH//5,i[1] + SCREEN_H//500,i[5]-i[4]- BLOCK_WIDTH//2.5,1)
                 rect_sprite = Rect(self.image_sprite.X,self.image_sprite.Y,self.image_sprite.WIDTH,self.image_sprite.HEIGHT)
                 if Rect.colliderect(rect_sprite,i_rect): 
                     self.move_up = False
@@ -393,7 +393,7 @@ class Sprite:
                 self.move_up = True
         if self.move_up == True:
             for i in dict_list_border["list_border_cor_cracking"]:
-                i_rect = Rect(i[4]+ SCREEN_W//20//5,i[1] + SCREEN_H//500,i[5]-i[4]- SCREEN_W//20//2.5,1)
+                i_rect = Rect(i[4]+ BLOCK_WIDTH//5,i[1] + SCREEN_H//500,i[5]-i[4]- BLOCK_WIDTH//2.5,1)
                 rect_sprite = Rect(self.image_sprite.X,self.image_sprite.Y,self.image_sprite.WIDTH,self.image_sprite.HEIGHT)
                 if Rect.colliderect(rect_sprite,i_rect): 
                     self.move_up = False
@@ -424,7 +424,7 @@ class Sprite:
             
             self.can_move = False
             if self.image_sprite.Y <= SCREEN_H//2:
-                self.ghost_img.Y = SCREEN_H - SCREEN_H//11
+                self.ghost_img.Y = SCREEN_H - BLOCK_HEIGHT
             elif self.image_sprite.Y > SCREEN_H//2:
                 self.ghost_img.Y = self.image_sprite.Y
     # Функция призрака
@@ -556,10 +556,7 @@ class Sprite:
                 self.image_sprite.start_y = dict_spawn_and_finish_point[key_next][0][1]
                 return dict_spawn_and_finish_point[key][2]
         else:
-            self.image_sprite.X = 0
-            self.image_sprite.start_x = 0
-            self.image_sprite.Y = 0
-            self.image_sprite.start_y = 0
+            
             if Rect.colliderect(dict_spawn_and_finish_point[key][1],self.image_sprite.RECT):
                 flag_first_shooting_lvl_point = shooting_lvl(screen,100,20,False)
                 
@@ -580,6 +577,10 @@ class Sprite:
                     else:
                         print("У тебя не получилось пройти второй уровень вот тебе еще попытка")
                         flag_second_shooting_lvl_point = shooting_lvl(screen,150,30,3)
+                self.image_sprite.X = 0
+                self.image_sprite.start_x = 0
+                self.image_sprite.Y = 0
+                self.image_sprite.start_y = 0
         return "False"
                     
         

@@ -9,6 +9,9 @@ SCREEN_W = display.Info().current_w
 SCREEN_H = display.Info().current_h
 SCREEN_W = 1280
 SCREEN_H = 720
+
+BLOCK_WIDTH = SCREEN_W//30
+BLOCK_HEIGHT = SCREEN_H//16
 FPS = 30
 flags = SCALED
 
@@ -120,7 +123,7 @@ dict_list_border = {
 }
 
 dict_spawn_and_finish_point = {
-    "lvl1_location_1":[[SCREEN_W//80,SCREEN_H-SCREEN_H//10*2.5],Rect(0,-SCREEN_W/40,SCREEN_W//20,1),"up"],
+    "lvl1_location_1":[[SCREEN_W//80,SCREEN_W//80],Rect(0,-SCREEN_W/40,BLOCK_WIDTH,1),"up"],
     "lvl1_location_2":[[SCREEN_W//80,SCREEN_H-SCREEN_H//10*2.5],Rect(SCREEN_W-SCREEN_W//80,SCREEN_H//5.53,1,SCREEN_H//5.53),"right"],
     "lvl1_location_3":[[SCREEN_W//80,SCREEN_H//5.5],Rect(SCREEN_W-SCREEN_W//80,SCREEN_H//45,1,SCREEN_H//6.31),"right"],
     "lvl1_location_4":[[SCREEN_W//80,SCREEN_H-SCREEN_H//10*2.5],Rect(SCREEN_W-SCREEN_W//80,SCREEN_H//2.48,1,SCREEN_H//7.2),None]

@@ -78,7 +78,6 @@ def run_game():
             sprite1.spring()
             sprite1.shield(screen)
             
-            
             direction_move_map = sprite1.finish_lvl(shooting_lvl)
             if direction_move_map != "False":
                 move_map(direction_move_map)
@@ -122,7 +121,7 @@ def run_game():
                 dict_argument_block["count_motion_block"] = 0
             dict_argument_block["count_motion_block"] += 1
             
-            black_fon.show_image(screen)
+            # black_fon.show_image(screen) #ФОНННННННННННННННННННННННННННННННННННННННННННННННННННННННННННННННННННННННННННННННН
             sprite1.statistic_person() #Статистика игрока
             sprite1.ghost(screen)
             for i in dict_list_border["list_border_cor_spring"]:
