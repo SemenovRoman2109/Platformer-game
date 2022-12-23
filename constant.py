@@ -10,8 +10,8 @@ SCREEN_H = display.Info().current_h
 SCREEN_W = 1280
 SCREEN_H = 720
 
-BLOCK_WIDTH = SCREEN_W//30
-BLOCK_HEIGHT = SCREEN_H//16
+BLOCK_WIDTH = round(SCREEN_W/30)
+BLOCK_HEIGHT = round(SCREEN_H/16)
 FPS = 30
 flags = SCALED
 
@@ -67,6 +67,9 @@ list_saw = []
 list_hook = []
 list_Rope_with_saw = []
 
+#Список шипов вышедших за карту
+list_spikes_outside = []
+
 #Словарь аргументов блоков
 dict_argument_block = {
     "flag_move_cloud": 1,
@@ -99,6 +102,7 @@ dict_argument = {
     "X_MAP":0,
     "Y_MAP":0,
     "duration_shield":60,
+    "list_spikes_outside":list_spikes_outside
 
 
 }

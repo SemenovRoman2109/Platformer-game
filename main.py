@@ -53,7 +53,7 @@ def run_game():
                 rect_rope = rope("index_Hook",hook,"angle_Hook",20,30)
                 list_rect.append(rect_rope)
                 sprite1.Hook(rect_rope) 
-            
+            invisibility_block("i","I",sprite1)
             rope_angle("index_Rope_with_saw","angle_Rope_with_saw_direction","angle_Rope_with_saw")  #функция наклона веревки
             #перебираем все вереаки с пилами 
             for Rope_with_saw in list_Rope_with_saw:
@@ -126,7 +126,7 @@ def run_game():
             sprite1.ghost(screen)
             for i in dict_list_border["list_border_cor_spring"]:
                 i[-2].show_image(screen)
-            if dict_argument["index_location"] == 0:
+            if dict_argument["index_location"] == 0 and dict_argument["index_lvl"] == 0:
                 #Создаем дверь и кнопку
                 door_and_button(4,7,None,None,"Д","д",sprite1)
             # bird() #Включает метод птицы

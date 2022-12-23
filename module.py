@@ -73,17 +73,17 @@ def drawSurfaces():
                 NAME_LIST = "list_border_cor_cracking"
                 number_cracking += 1
             elif dict_argument["list_surface"][i][j] == "R":
-                list_Rope_with_saw.append(Graphic_elements(X+SCREEN_W//44-SCREEN_W//10,Y,SCREEN_W//15,BLOCK_WIDTH*10,"image/Rope_with_saw.png"))
+                list_Rope_with_saw.append(Graphic_elements(X+BLOCK_WIDTH//2,Y,BLOCK_WIDTH*1.36,BLOCK_WIDTH*10,"image/Rope_with_saw.png"))
             elif dict_argument["list_surface"][i][j] == "H":
                 list_hook.append(Graphic_elements(X+SCREEN_W//44-SCREEN_W//60,Y,BLOCK_WIDTH,BLOCK_HEIGHT*10,"image/Hook.png"))
             elif dict_argument["list_surface"][i][j] == "К":
-                list_spikes.append(Graphic_elements(X,Y+(BLOCK_HEIGHT-SCREEN_H//30),BLOCK_WIDTH,SCREEN_H//30,"image/spikes.png"))
+                list_spikes.append(Graphic_elements(X,Y+(BLOCK_HEIGHT-BLOCK_HEIGHT//3),BLOCK_WIDTH,BLOCK_HEIGHT//3,"image/spikes.png"))
             elif dict_argument["list_surface"][i][j] == "к":
-                obj = Graphic_elements(X,Y,BLOCK_WIDTH,SCREEN_H//30,"image/spikes.png")
+                obj = Graphic_elements(X,Y,BLOCK_WIDTH,BLOCK_HEIGHT//3,"image/spikes.png")
                 obj.image_load(rotate_y=True)
                 list_spikes.append(obj)
             elif dict_argument["list_surface"][i][j] == "ш":
-                list_spikes.append(Graphic_elements(X,Y+(BLOCK_HEIGHT-SCREEN_H//25),BLOCK_WIDTH,SCREEN_H//25,"image/spikes.png"))    
+                list_spikes.append(Graphic_elements(X,Y+(BLOCK_HEIGHT-BLOCK_HEIGHT//3),BLOCK_WIDTH,BLOCK_HEIGHT//3,"image/spikes.png"))    
 
 
 
@@ -127,7 +127,7 @@ def drawSurfaces():
                 NAME_LIST = "list_border_cor_spring"
                 number_spring += 1
             elif dict_argument["list_surface"][i][j] == "s":
-                list_saw.append(Graphic_elements(X+(SCREEN_W//13-BLOCK_WIDTH),Y+(SCREEN_H//7.1-BLOCK_HEIGHT),SCREEN_W//13,SCREEN_H//7.1,"image/saw.png"))
+                list_saw.append(Graphic_elements(X+(BLOCK_WIDTH*1.53-BLOCK_WIDTH),Y+(BLOCK_HEIGHT*1.54-BLOCK_HEIGHT),BLOCK_WIDTH*1.53,BLOCK_HEIGHT*1.54,"image/saw.png"))
             
             elif dict_argument["list_surface"][i][j] == "D":
                 PATH = "image/Door.png"
@@ -223,164 +223,165 @@ def drawSurfaces():
 
 # Функция для движения платформы вправо влево
 def block_motion_right_left(list_surface,dict_argument_block,platform_length,sprite,block_size_y = BLOCK_HEIGHT,block_size_x = BLOCK_WIDTH):
-    # Индексы клетки
-    index_y = 0
-    index_x = 0
-    # Перебираем матрицу
-    index_vertically = 0 
-    for obj in dict_argument["list_surface"]:
-        if index_vertically == 0 :
-            for i in obj:
-                if i == "P":
-                    index_vertically = dict_argument["list_surface"].index(obj)
-                    break
-            # Увеличиваем index для нахождения клетки с платформой
-            index_x += 1
-        # Увеличиваем index для нахождения клетки с платформой
-        index_y += 1
-        index_x = 0
-    # Индексы клетки            
-    index_x = 0
-    
-    #Перебираем цыкл столько раз сколько длина платформа
-    for obj in range(platform_length):
-        # Проверяем направление платформы
-        if dict_argument_block["flag_directory_motion_block_left_right"] == "R":
-            # Перебираем список ряда
-            for block in dict_argument["list_surface"][index_vertically]:
-                # Находим платформу
-                if block == "P":
-                    # Если следующая келтка путь для платформы
-                    if dict_argument["list_surface"][index_vertically][index_x + 1] == "p":
-                        # Добавляем ряд в отдельный список
-                        list1 = dict_argument["list_surface"][index_vertically]
-                        list1 = list(list1)
-                        # Меняем буквы местами
-                        list1[index_x + 1] = "P"
-                        list1[index_x] = "p"
-                        # Добавляем наш ряд в основную матрицу
-                        dict_argument["list_surface"][index_vertically] = list(''.join(list1))
-                        # Проверяем колизию персонажа дабы перемещать его когда он стоит на платформе
-                        block = [index_vertically*block_size_y,index_vertically*block_size_y+block_size_y,index_x*block_size_x-block_size_x,index_x*block_size_x]
-                        if sprite.image_sprite.Y + sprite.image_sprite.HEIGHT >= block[0] and sprite.image_sprite.X + sprite.image_sprite.WIDTH >= block[2] + BLOCK_WIDTH//3 and sprite.image_sprite.X <= block[3] - BLOCK_WIDTH//3 and sprite.image_sprite.Y + sprite.image_sprite.HEIGHT <= block[0] + sprite.gravity_speed :
-                            sprite.image_sprite.X += block_size_y
-                        # Останавливаем цыкл
-                        break
-                    # Если следующая келтка не путь для платформы
-                    elif dict_argument["list_surface"][index_vertically][index_x + 1] in ["0","b"] and obj == 0:
-                        # Меняем направление
-                        dict_argument_block["flag_directory_motion_block_left_right"] = "L"
-                        # Останавливаем цыкл
-                        break
-                        
-                index_x += 1
-            index_x = 0
-        # Проверяем направление платформы
-        if dict_argument_block["flag_directory_motion_block_left_right"] == "L":
-            index_x_2 = len(dict_argument["list_surface"][0])
-            # Перебираем список ряда в обратном порядке
-            for block in dict_argument["list_surface"][index_vertically][::-1]:
-                # Находим платформу
-                if block == "P":
-                    # Если следующая келтка путь для платформы
-                    if dict_argument["list_surface"][index_vertically][::-1][index_x + 1] == "p":
-                        # Добавляем ряд в отдельный список
-                        list1 = dict_argument["list_surface"][index_vertically][::-1]
-                        list1 = list(list1)
-                        # Меняем буквы местами
-                        list1[index_x + 1] = "P"
-                        list1[index_x] = "p"
-                        # Добавляем наш ряд в основную матрицу
-                        dict_argument["list_surface"][index_vertically] = list(''.join(list1[::-1]))  
-                        # Проверяем колизию персонажа дабы перемещать его когда он стоит на платформе
-                        block = [index_vertically*block_size_y,index_vertically*block_size_y+block_size_y,index_x_2*block_size_x-block_size_x,index_x_2*block_size_x]
-                        if sprite.image_sprite.Y + sprite.image_sprite.HEIGHT >= block[0] and sprite.image_sprite.X + sprite.image_sprite.WIDTH >= block[2] + BLOCK_WIDTH//3 and sprite.image_sprite.X <= block[3] - BLOCK_WIDTH//3 and sprite.image_sprite.Y + sprite.image_sprite.HEIGHT <= block[0] + sprite.gravity_speed :
-                                sprite.image_sprite.X -= block_size_y
-                        # Останавливаем цыкл
-                        break
-                    # Если следующая келтка не путь для платформы
-                    elif dict_argument["list_surface"][index_vertically][::-1][index_x + 1] in ["0","b"] and obj == 1:
-                        # Меняем направление
-                        dict_argument_block["flag_directory_motion_block_left_right"] = "R"
-                        # Останавливаем цыкл
-                        break
-                # Увеличиваем index
-                index_x_2 -= 1
-                index_x += 1
 
-            index_x = 0
+    # Перебираем матрицу
+    list_index_vertically = [] 
+    for obj in range(len(dict_argument["list_surface"])):
+        for i in range(len(dict_argument["list_surface"][obj])):
+            if dict_argument["list_surface"][obj][i] == "P":
+                list_index_vertically.append(obj)
+                break
+
+    
+    for index_vertically in list_index_vertically:
+        # Индексы клетки            
+        index_x = 0
+        
+        #Перебираем цыкл столько раз сколько длина платформа
+        for obj in range(platform_length):
+            # Проверяем направление платформы
+            if dict_argument_block["flag_directory_motion_block_left_right"] == "R":
+                # Перебираем список ряда
+                for block in dict_argument["list_surface"][index_vertically]:
+                    # Находим платформу
+                    if block == "P":
+                        # Если следующая келтка путь для платформы
+                        if dict_argument["list_surface"][index_vertically][index_x + 1] == "p":
+                            # Добавляем ряд в отдельный список
+                            list1 = dict_argument["list_surface"][index_vertically]
+                            list1 = list(list1)
+                            # Меняем буквы местами
+                            list1[index_x + 1] = "P"
+                            list1[index_x] = "p"
+                            # Добавляем наш ряд в основную матрицу
+                            dict_argument["list_surface"][index_vertically] = list(''.join(list1))
+                            # Проверяем колизию персонажа дабы перемещать его когда он стоит на платформе
+                            block = [index_vertically*block_size_y,index_vertically*block_size_y+block_size_y,index_x*block_size_x-block_size_x,index_x*block_size_x]
+                            if sprite.image_sprite.Y + sprite.image_sprite.HEIGHT >= block[0] and sprite.image_sprite.X + sprite.image_sprite.WIDTH >= block[2] + BLOCK_WIDTH//3 and sprite.image_sprite.X <= block[3] - BLOCK_WIDTH//3 and sprite.image_sprite.Y + sprite.image_sprite.HEIGHT <= block[0] + sprite.gravity_speed :
+                                sprite.image_sprite.X += block_size_y
+                            # Останавливаем цыкл
+                            break
+                        # Если следующая келтка не путь для платформы
+                        elif dict_argument["list_surface"][index_vertically][index_x + 1] in ["0","b"] and obj == 0:
+                            # Меняем направление
+                            dict_argument_block["flag_directory_motion_block_left_right"] = "L"
+                            # Останавливаем цыкл
+                            break
+                            
+                    index_x += 1
+                index_x = 0
+            # Проверяем направление платформы
+            if dict_argument_block["flag_directory_motion_block_left_right"] == "L":
+                index_x_2 = len(dict_argument["list_surface"][0])
+                # Перебираем список ряда в обратном порядке
+                for block in dict_argument["list_surface"][index_vertically][::-1]:
+                    # Находим платформу
+                    if block == "P":
+                        # Если следующая келтка путь для платформы
+                        if dict_argument["list_surface"][index_vertically][::-1][index_x + 1] == "p":
+                            # Добавляем ряд в отдельный список
+                            list1 = dict_argument["list_surface"][index_vertically][::-1]
+                            list1 = list(list1)
+                            # Меняем буквы местами
+                            list1[index_x + 1] = "P"
+                            list1[index_x] = "p"
+                            # Добавляем наш ряд в основную матрицу
+                            dict_argument["list_surface"][index_vertically] = list(''.join(list1[::-1]))  
+                            # Проверяем колизию персонажа дабы перемещать его когда он стоит на платформе
+                            block = [index_vertically*block_size_y,index_vertically*block_size_y+block_size_y,index_x_2*block_size_x-block_size_x,index_x_2*block_size_x]
+                            if sprite.image_sprite.Y + sprite.image_sprite.HEIGHT >= block[0] and sprite.image_sprite.X + sprite.image_sprite.WIDTH >= block[2] + BLOCK_WIDTH//3 and sprite.image_sprite.X <= block[3] - BLOCK_WIDTH//3 and sprite.image_sprite.Y + sprite.image_sprite.HEIGHT <= block[0] + sprite.gravity_speed :
+                                    sprite.image_sprite.X -= block_size_y
+                            # Останавливаем цыкл
+                            break
+                        # Если следующая келтка не путь для платформы
+                        elif dict_argument["list_surface"][index_vertically][::-1][index_x + 1] in ["0","b"] and obj == 1:
+                            # Меняем направление
+                            dict_argument_block["flag_directory_motion_block_left_right"] = "R"
+                            # Останавливаем цыкл
+                            break
+                    # Увеличиваем index
+                    index_x_2 -= 1
+                    index_x += 1
+
+                index_x = 0
 
 # Функция для движения платформы вверх вниз
 def block_motion_down_up(list_surface,dict_argument_block,sprite,block_size_y = BLOCK_HEIGHT,block_size_x = BLOCK_WIDTH):
-    # Индексы клетки
-    index_y = 0
-    index_x = 0
     # Перебираем матрицу
-    for obj in dict_argument["list_surface"]:
-        for i in obj:
+    list_index_horizontal = [] 
+    for obj in range(len(dict_argument["list_surface"])):
+        for i in range(len(dict_argument["list_surface"][obj])):
+            if dict_argument["list_surface"][obj][i] == "L":
+                list_index_horizontal.append(i)
+                
+   
+    
+    # Перебираем матрицу
+    for index_x in list_index_horizontal:
+        index_y = 0
+        stop = False
+        for obj in dict_argument["list_surface"]:
             # Находим платформу
-            if i == "L":
-                # Если направление в верх 
-                if dict_argument_block["flag_directory_motion_block_up_down"] == "U":
-                    # Если в низ может двигаться
-                    if dict_argument["list_surface"][index_y - 1][index_x] == "l":
-                        # Создаем список с рядом  в котором клетка на которую нужно двигаться
-                        list_down = dict_argument["list_surface"][index_y - 1]
-                        # Создаем список с рядом  в котором клетка передвижения
-                        list_up = dict_argument["list_surface"][index_y]
-                        list_up = list(list_up)
-                        list_down = list(list_down)
-                        # Меняем платформу и путь местами в наших списках
-                        list_down[index_x] = "L"
-                        list_up[index_x] = "l"
-                        # заменяем ряд в матрице на ряд в котором мы изменили буквы
-                        dict_argument["list_surface"][index_y] = list(''.join(list_up))  
-                        dict_argument["list_surface"][index_y - 1] = list(''.join(list_down))  
-                        # Проверяем колизию блока и если персонаж на нем двигаем его
-                        block = [index_y*block_size_y,index_y*block_size_y+block_size_y,index_x*block_size_x,index_x*block_size_x+block_size_x]
-                        if sprite.image_sprite.Y + sprite.image_sprite.HEIGHT >= block[0] and sprite.image_sprite.X + sprite.image_sprite.WIDTH >= block[2] and sprite.image_sprite.X <= block[3] and sprite.image_sprite.Y + sprite.image_sprite.HEIGHT <= block[0] + sprite.gravity_speed :
-                            sprite.image_sprite.Y -= block_size_y
-                        # Останавливаем функцию
-                        return "stop function"
-                    # Если в низ нельзя двигаться    
-                    elif dict_argument["list_surface"][index_y - 1][index_x] == "0":
-                        # Меняем направления
-                        dict_argument_block["flag_directory_motion_block_up_down"] = "D"
-                        # Останавливаем функцию
-                        return "stop function"
-                # Если направление в низ        
-                if dict_argument_block["flag_directory_motion_block_up_down"] == "D":
-                    # Если в верх может двигаться
-                    if dict_argument["list_surface"][index_y + 1][index_x] == "l":
-                        # Создаем список с рядом  в котором клетка на которую нужно двигаться
-                        list_down = dict_argument["list_surface"][index_y + 1]
-                        # Создаем список с рядом  в котором клетка передвижения
-                        list_up = dict_argument["list_surface"][index_y]
-                        list_up = list(list_up)
-                        list_down = list(list_down)
-                        # Меняем платформу и путь местами в наших списках
-                        list_down[index_x] = "L"
-                        list_up[index_x] = "l"
-                        # заменяем ряд в матрице на ряд в котором мы изменили буквы
-                        dict_argument["list_surface"][index_y] = list(''.join(list_up))  
-                        dict_argument["list_surface"][index_y + 1] = list(''.join(list_down))  
-                        # Проверяем колизию блока и если персонаж на нем двигаем его
-                        block = [index_y*block_size_y,index_y*block_size_y+block_size_y,index_x*block_size_x,index_x*block_size_x+block_size_x]
-                        if sprite.image_sprite.Y + sprite.image_sprite.HEIGHT >= block[0] and sprite.image_sprite.X + sprite.image_sprite.WIDTH >= block[2] and sprite.image_sprite.X <= block[3] and sprite.image_sprite.Y + sprite.image_sprite.HEIGHT <= block[0] + sprite.gravity_speed :
-                            sprite.image_sprite.Y += block_size_y
-                        # Останавливаем функцию
-                        return "stop function"
-                    # Если в верх нельзя двигаться   
-                    elif dict_argument["list_surface"][index_y + 1][index_x] == "0":
-                        dict_argument_block["flag_directory_motion_block_up_down"] = "U"
-                        # Останавливаем функцию
-                        return "stop function"
+            if stop == False:
+                if dict_argument["list_surface"][index_y][index_x] == "L":
+                    # Если направление в верх 
+                    if dict_argument_block["flag_directory_motion_block_up_down"] == "U":
+                        # Если в низ может двигаться
+                        if dict_argument["list_surface"][index_y - 1][index_x] == "l":
+                            # Создаем список с рядом  в котором клетка на которую нужно двигаться
+                            list_down = dict_argument["list_surface"][index_y - 1]
+                            # Создаем список с рядом  в котором клетка передвижения
+                            list_up = dict_argument["list_surface"][index_y]
+                            list_up = list(list_up)
+                            list_down = list(list_down)
+                            # Меняем платформу и путь местами в наших списках
+                            list_down[index_x] = "L"
+                            list_up[index_x] = "l"
+                            # заменяем ряд в матрице на ряд в котором мы изменили буквы
+                            dict_argument["list_surface"][index_y] = list(''.join(list_up))  
+                            dict_argument["list_surface"][index_y - 1] = list(''.join(list_down))  
+                            # Проверяем колизию блока и если персонаж на нем двигаем его
+                            block = [index_y*block_size_y,index_y*block_size_y+block_size_y,index_x*block_size_x,index_x*block_size_x+block_size_x]
+                            if sprite.image_sprite.Y + sprite.image_sprite.HEIGHT >= block[0] and sprite.image_sprite.X + sprite.image_sprite.WIDTH >= block[2] and sprite.image_sprite.X <= block[3] and sprite.image_sprite.Y + sprite.image_sprite.HEIGHT <= block[0] + sprite.gravity_speed :
+                                sprite.image_sprite.Y -= block_size_y
+                            # Останавливаем функцию
+                            stop = True
+                        # Если в низ нельзя двигаться    
+                        elif dict_argument["list_surface"][index_y - 1][index_x] == "0":
+                            # Меняем направления
+                            dict_argument_block["flag_directory_motion_block_up_down"] = "D"
+                            # Останавливаем функцию
+                            stop = True
+                    # Если направление в низ        
+                    if dict_argument_block["flag_directory_motion_block_up_down"] == "D":
+                        # Если в верх может двигаться
+                        if dict_argument["list_surface"][index_y + 1][index_x] == "l":
+                            # Создаем список с рядом  в котором клетка на которую нужно двигаться
+                            list_down = dict_argument["list_surface"][index_y + 1]
+                            # Создаем список с рядом  в котором клетка передвижения
+                            list_up = dict_argument["list_surface"][index_y]
+                            list_up = list(list_up)
+                            list_down = list(list_down)
+                            # Меняем платформу и путь местами в наших списках
+                            list_down[index_x] = "L"
+                            list_up[index_x] = "l"
+                            # заменяем ряд в матрице на ряд в котором мы изменили буквы
+                            dict_argument["list_surface"][index_y] = list(''.join(list_up))  
+                            dict_argument["list_surface"][index_y + 1] = list(''.join(list_down))  
+                            # Проверяем колизию блока и если персонаж на нем двигаем его
+                            block = [index_y*block_size_y,index_y*block_size_y+block_size_y,index_x*block_size_x,index_x*block_size_x+block_size_x]
+                            if sprite.image_sprite.Y + sprite.image_sprite.HEIGHT >= block[0] and sprite.image_sprite.X + sprite.image_sprite.WIDTH >= block[2] and sprite.image_sprite.X <= block[3] and sprite.image_sprite.Y + sprite.image_sprite.HEIGHT <= block[0] + sprite.gravity_speed :
+                                sprite.image_sprite.Y += block_size_y
+                            # Останавливаем функцию
+                            stop = True
+                        # Если в верх нельзя двигаться   
+                        elif dict_argument["list_surface"][index_y + 1][index_x] == "0":
+                            dict_argument_block["flag_directory_motion_block_up_down"] = "U"
+                            # Останавливаем функцию
+                            stop = True
                             
             # Увеличиваем index для нахождения клетки с платформой
-            index_x += 1
-        # Увеличиваем index для нахождения клетки с платформой
-        index_y += 1
-        index_x = 0
+            index_y += 1
 
 # Функция повоорота веревки 
 def rope_angle(index,direction,angle):
@@ -549,7 +550,56 @@ def cracking_platform(sprite):
                     dict_list_border["list_border_cor_cracking"][dict_list_border["list_border_cor_cracking"].index(i)][-2].image_load()
                     dict_list_border["list_border_cor_cracking"][dict_list_border["list_border_cor_cracking"].index(i)][7] = 40
 
+#Функция невидимой платформы
+def invisibility_block(element_door,element_door_empty,sprite1):
+    keys = key.get_pressed() 
+    
+    if keys[K_f]:
+        if dict_argument_block["count_load"] == 24: 
+            for el in range(len(dict_argument["list_surface"])):
+                for element in range(len(dict_argument["list_surface"][el])):
+                    if dict_argument["list_surface"][el][element] == element_door_empty:
+                        dict_argument["list_surface"][el][element] = element_door
+            dict_argument_block["count_load"] = 0
+            dict_Graphic_elements_obj["Circle_invible_block"] = Graphic_elements(sprite1.image_sprite.X,sprite1.image_sprite.Y,sprite1.image_sprite.WIDTH,sprite1.image_sprite.HEIGHT,"image/Circle_invible_block.png",1)
+            drawSurfaces()
+            
+                            
+    if dict_argument_block["count_load"] < 24:
+        load.path = "image/Загрузка/Загрузка"+str(dict_argument_block["count_load"])+".png"
+        load.image_load()
+        load.show_image(screen)
+       
+        if dict_argument_block["flag_load"] >= 15:
+            dict_argument_block["count_load"] += 1
+            dict_argument_block["flag_load"] = 0
+        dict_argument_block["flag_load"] += 1 
+    
+        if dict_argument_block["count_load"] == 12 and dict_argument_block["flag_load"] == 1:
+                
+            for el in range(len(dict_argument["list_surface"])):
+                for element in range(len(dict_argument["list_surface"][el])):
+                    if dict_argument["list_surface"][el][element] == element_door:
+                        dict_argument["list_surface"][el][element] = element_door_empty
+    
+            drawSurfaces()
+    
 
+    invisible_block_icon.show_image(screen)
+        
+
+    if dict_Graphic_elements_obj["Circle_invible_block"].NAME != None:      
+        if dict_Graphic_elements_obj["Circle_invible_block"].NAME > 0:
+            dict_Graphic_elements_obj["Circle_invible_block"].WIDTH += SCREEN_W//20
+            dict_Graphic_elements_obj["Circle_invible_block"].HEIGHT += SCREEN_W//20
+            dict_Graphic_elements_obj["Circle_invible_block"].X -= SCREEN_W//40
+            dict_Graphic_elements_obj["Circle_invible_block"].Y -= SCREEN_W//40
+            dict_Graphic_elements_obj["Circle_invible_block"].image_load()
+            dict_Graphic_elements_obj["Circle_invible_block"].NAME += 1
+            dict_Graphic_elements_obj["Circle_invible_block"].show_image(screen)
+            if dict_Graphic_elements_obj["Circle_invible_block"].NAME >= 9:
+                dict_Graphic_elements_obj["Circle_invible_block"].NAME = None# отображение последнего прорисованного экрана
+    
 # Функция движения облоков
 def move_cloud():
     # Отрисовываем две картинки облоко дабы лента из них никогда не заканчивалась
@@ -583,7 +633,10 @@ def spike():
             for i in range(len(dict_argument["list_surface"])):      
                 for j in range(len(dict_argument["list_surface"][i])):
                     if dict_argument["list_surface"][i][j] == "К":
-                        dict_argument["list_surface"][i+2][j] = "к"
+                        if i+2 < len(dict_argument["list_surface"]):
+                            dict_argument["list_surface"][i+2][j] = "к"
+                        else:
+                            dict_argument["list_spikes_outside"].append([i,j])
                         dict_argument["list_surface"][i][j] = "0"
                     
         # Меняем направление шипов
@@ -595,6 +648,10 @@ def spike():
                     if dict_argument["list_surface"][i][j] == "к":
                         dict_argument["list_surface"][i-2][j] = "К"
                         dict_argument["list_surface"][i][j] = "0"
+            for list_y_x in dict_argument["list_spikes_outside"]:
+                dict_argument["list_surface"][list_y_x[0]][list_y_x[1]] = "К"
+
+
         # обновляем поверхности 
         drawSurfaces()
     # Переменная щетчик
