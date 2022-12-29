@@ -23,7 +23,6 @@ class Sprite:
         self.border_width = border_width
         self.border_height = border_height
         self.list_animation = []
-        self.number_lock = 0
         self.open_door = False
         for i in range(10):
 
@@ -34,7 +33,7 @@ class Sprite:
         self.flag = 'R' # отвечает за контроль направления движения
         self.gravity_speed = sprite_gravity_power
         self.jump_now = 0                       
-        self.collected_key = []                                                            
+        self.collected_paper = []                                                            
         self.count = 0
         self.fly_up_spring = False
         self.fly_up = False
@@ -53,7 +52,7 @@ class Sprite:
         self.image_sprite = Graphic_elements(self.sprite_x,self.sprite_y,self.image_width,self.image_height,self.image_path)   
         self.List_layout = [[K_LEFT,K_RIGHT,K_UP,K_DOWN],[K_a,K_d,K_w,K_s],[K_RIGHT,K_LEFT,K_DOWN,K_UP],[K_d,K_a,K_s,K_w]]
         self.flag_spring = 0
-        self.ghost_img = Graphic_elements(0,0,BLOCK_WIDTH,BLOCK_WIDTH*1.86,"image/ghost_1.png")
+        self.ghost_img = Graphic_elements(0,0,BLOCK_SIZE,BLOCK_SIZE*1.86,"image/ghost_1.png")
         self.count_pressing_ghost = 0
         self.shield_img = Graphic_elements(0,0,self.image_sprite.WIDTH * 1.68,self.image_sprite.HEIGHT * 1.50,"image/shield.png")
         self.count_duration_shield = dict_argument["duration_shield"]
@@ -79,20 +78,18 @@ class Sprite:
             health_img.show_image(screen)
             x_health += SCREEN_W//25
         
-        if len(self.collected_key) > 0:
-            key_img = Graphic_elements(SCREEN_W//5,-BLOCK_WIDTH//3,SCREEN_W//15,SCREEN_W//18,"image/Key.png")
-            key_img.show_image(screen)
-            if len(self.collected_key) > 1:
-                number_key = Font("font/pixel_font.ttf",SCREEN_W//30,(255,0,0),"X"+str(len(self.collected_key)),SCREEN_W//5.1,SCREEN_W//45-BLOCK_WIDTH//3)
-                number_key.show_text(screen)
-        if self.number_lock > 0:        
-            lock_img = Graphic_elements(SCREEN_W//1-SCREEN_W//30,0,SCREEN_W//30,BLOCK_WIDTH,"image/Lock.png")
-            lock_img.show_image(screen)
-            if self.number_lock > 1:
-                number_lock = Font("font/pixel_font.ttf",SCREEN_W//40,(255,0,0),"X"+str(self.number_lock),SCREEN_W//1-SCREEN_W//25,SCREEN_W/30)
-                number_lock.show_text(screen)     
+        if len(self.collected_paper) == 4:
+            dict_argument["flag_puzzle_location"] = True
+            self.collected_paper.clear()     
+        if len(self.collected_paper) > 0:
+            paper_img = Graphic_elements(0,SCREEN_H-BLOCK_SIZE,BLOCK_SIZE,BLOCK_SIZE,"image/paper.png")
+            paper_img.show_image(screen)
+            number_paper = Font("font/pixel_font.ttf",BLOCK_SIZE,(255,0,0),"X"+str(len(self.collected_paper)),BLOCK_SIZE,SCREEN_H-BLOCK_SIZE,1)
+            number_paper.show_text(screen)
+ 
     # Функция приседания
     def squat(self,win):
+        
         for block in dict_list_border["list_border_cor"]:
             block_rect = Rect(block[4]+(block[5]-block[4])//5,block[0]+(block[1]-block[0])//1.5,(block[5]-block[4])-(block[5]-block[4])//2.5,1)
             rect_sprite = Rect(self.image_sprite.X,self.image_sprite.Y,self.image_sprite.WIDTH,self.image_sprite.HEIGHT)
@@ -233,7 +230,7 @@ class Sprite:
                     else:
                         self.gravity = True
                 else:
-                    if self.image_sprite.X + self.image_sprite.WIDTH >= i[4] + BLOCK_WIDTH//5 and self.image_sprite.X <= i[5] - BLOCK_WIDTH//5:
+                    if self.image_sprite.X + self.image_sprite.WIDTH >= i[4] + BLOCK_SIZE//5 and self.image_sprite.X <= i[5] - BLOCK_SIZE//5:
                         if self.image_sprite.Y + self.image_sprite.HEIGHT >= i[0]:
                             if self.image_sprite.Y + self.image_sprite.HEIGHT <= i[0] + self.gravity_speed*2:
                                 self.gravity = False#гравитация отключается
@@ -248,7 +245,7 @@ class Sprite:
                         self.gravity = True
         if self.gravity == True:
             for i in dict_list_border["list_border_cor_cracking"]:  
-                if self.image_sprite.X + self.image_sprite.WIDTH >= i[4] + BLOCK_WIDTH//5 and self.image_sprite.X <= i[5] - BLOCK_WIDTH//5:
+                if self.image_sprite.X + self.image_sprite.WIDTH >= i[4] + BLOCK_SIZE//5 and self.image_sprite.X <= i[5] - BLOCK_SIZE//5:
                     if self.image_sprite.Y + self.image_sprite.HEIGHT >= i[0]:
                         if self.image_sprite.Y + self.image_sprite.HEIGHT <= i[0] + self.gravity_speed*2:
                             self.gravity = False#гравитация отключается
@@ -262,31 +259,25 @@ class Sprite:
                     self.gravity = True
     # Проверка движения в лево
     def can_move_left(self):
-        for i in dict_list_border["list_border_cor"]:
-            if i[-1] != "K" :
-                                        # + 35, чтобы спрайт не зашел во внутрь блока
-                if self.image_sprite.X <= i[3] + self.image_sprite.WIDTH / 2 and self.image_sprite.X >= i[2] and self.image_sprite.Y  <= i[1] and self.image_sprite.Y + self.image_sprite.HEIGHT-10 >= i[0]:
+        for i in dict_list_border["list_border_cor"]:                       
+            if self.image_sprite.X - self.image_sprite.WIDTH//10 <= i[5] and self.image_sprite.X >= i[3] and self.image_sprite.Y  <= i[1] and self.image_sprite.Y + self.image_sprite.HEIGHT-self.image_sprite.HEIGHT//4 >= i[0]:
+                self.move_left = False
+                break
+            else: 
+                self.move_left = True
+
+        if self.move_left == True:
+            for i in dict_list_border["list_border_cor_spring"]:
+                if self.image_sprite.X - self.image_sprite.WIDTH//10 <= i[5] and self.image_sprite.X >= i[3] and self.image_sprite.Y  <= i[1] and self.image_sprite.Y + self.image_sprite.HEIGHT-self.image_sprite.HEIGHT//4 >= i[0]:
                     self.move_left = False
                     break
                 else: 
                     self.move_left = True
             else: 
                 self.move_left = True
-
-        if self.move_left == True:
-            for i in dict_list_border["list_border_cor_spring"]:
-                if i[-1] != "K" and i[-1] != "D":
-                                        # + 35, чтобы спрайт не зашел во внутрь блока
-                    if self.image_sprite.X <= i[3] + self.image_sprite.WIDTH / 2 and self.image_sprite.X >= i[2] and self.image_sprite.Y  <= i[1] and self.image_sprite.Y + self.image_sprite.HEIGHT-10 >= i[0]:
-                        self.move_left = False
-                        break
-                    else: 
-                        self.move_left = True
-                else: 
-                    self.move_left = True
         if self.move_left == True:
             for i in dict_list_border["list_border_cor_cracking"]:
-                if self.image_sprite.X <= i[3] + self.image_sprite.WIDTH / 2 and self.image_sprite.X >= i[2] and self.image_sprite.Y  <= i[1] and self.image_sprite.Y + self.image_sprite.HEIGHT-10 >= i[0]:
+                if self.image_sprite.X - self.image_sprite.WIDTH//10 <= i[5] and self.image_sprite.X >= i[3] and self.image_sprite.Y  <= i[1] and self.image_sprite.Y + self.image_sprite.HEIGHT-self.image_sprite.HEIGHT//4 >= i[0]:
                     self.move_left = False
                     break
                 else: 
@@ -347,33 +338,26 @@ class Sprite:
             self.count += 1
             if self.move_up == False or self.count == 10 or self.image_sprite.Y <= SCREEN_W//80:
                 self.fly_up_spring = False
-                self.count = 0
-            
+                self.count = 0            
     # Проверка движения в право    
     def can_move_right(self):
-        for i in dict_list_border["list_border_cor"]:
-            if i[-1] != "K":                                                    # -15, чтобы спрайт не зашел во внутрь блока
-                if self.image_sprite.X <= i[3] and self.image_sprite.X >= i[2] - self.image_sprite.WIDTH / 2 and self.image_sprite.Y  <= i[1] and self.image_sprite.Y + self.image_sprite.HEIGHT - self.image_sprite.HEIGHT//4 >= i[0]:
+        for i in dict_list_border["list_border_cor"]:                                                 
+            if self.image_sprite.X <= i[3] and self.image_sprite.X  + self.image_sprite.WIDTH + self.image_sprite.WIDTH//10 >= i[4] and self.image_sprite.Y  <= i[1] and self.image_sprite.Y + self.image_sprite.HEIGHT - self.image_sprite.HEIGHT//4 >= i[0]:
+                self.move_right = False 
+                break
+            else: 
+                self.move_right = True  
+        if self.move_right == True:
+            for i in dict_list_border["list_border_cor_spring"]:
+                if self.image_sprite.X <= i[3] and self.image_sprite.X  + self.image_sprite.WIDTH + self.image_sprite.WIDTH//10 >= i[4] and self.image_sprite.Y  <= i[1] and self.image_sprite.Y + self.image_sprite.HEIGHT - self.image_sprite.HEIGHT//4 >= i[0]:
                     self.move_right = False 
                     break
                 else: 
-                    self.move_right = True  
-            else: 
-                self.move_right = True    
-        if self.move_right == True:
-            for i in dict_list_border["list_border_cor_spring"]:
-                if i[-1] != "K" and i[-1] != "D":
-                                                                # -15, чтобы спрайт не зашел во внутрь блока
-                    if self.image_sprite.X <= i[3] and self.image_sprite.X >= i[2] - self.image_sprite.WIDTH / 2 and self.image_sprite.Y  <= i[1] and self.image_sprite.Y + self.image_sprite.HEIGHT - self.image_sprite.HEIGHT//4 >= i[0]:
-                        self.move_right = False 
-                        break
-                    else: 
-                        self.move_right = True   
-                else: 
                     self.move_right = True   
+            
         if self.move_right == True:
             for i in dict_list_border["list_border_cor_cracking"]:
-                if self.image_sprite.X <= i[3] and self.image_sprite.X >= i[2] - self.image_sprite.WIDTH / 2 and self.image_sprite.Y  <= i[1] and self.image_sprite.Y + self.image_sprite.HEIGHT - self.image_sprite.HEIGHT//4 >= i[0]:
+                if self.image_sprite.X <= i[3] and self.image_sprite.X  + self.image_sprite.WIDTH + self.image_sprite.WIDTH//10 >= i[4] and self.image_sprite.Y  <= i[1] and self.image_sprite.Y + self.image_sprite.HEIGHT - self.image_sprite.HEIGHT//4 >= i[0]:
                     self.move_right = False 
                     break
                 else: 
@@ -382,7 +366,7 @@ class Sprite:
     def can_move_up(self):
         for i in dict_list_border["list_border_cor"]:
             if i[-1] != "K":
-                i_rect = Rect(i[4]+ BLOCK_WIDTH//5,i[1] + SCREEN_H//500,i[5]-i[4]- BLOCK_WIDTH//2.5,1)
+                i_rect = Rect(i[4]+ BLOCK_SIZE//5,i[1] + SCREEN_H//500,i[5]-i[4]- BLOCK_SIZE//2.5,1)
                 rect_sprite = Rect(self.image_sprite.X,self.image_sprite.Y,self.image_sprite.WIDTH,self.image_sprite.HEIGHT)
                 if Rect.colliderect(rect_sprite,i_rect): 
                     self.move_up = False
@@ -393,7 +377,7 @@ class Sprite:
                 self.move_up = True
         if self.move_up == True:
             for i in dict_list_border["list_border_cor_cracking"]:
-                i_rect = Rect(i[4]+ BLOCK_WIDTH//5,i[1] + SCREEN_H//500,i[5]-i[4]- BLOCK_WIDTH//2.5,1)
+                i_rect = Rect(i[4]+ BLOCK_SIZE//5,i[1] + SCREEN_H//500,i[5]-i[4]- BLOCK_SIZE//2.5,1)
                 rect_sprite = Rect(self.image_sprite.X,self.image_sprite.Y,self.image_sprite.WIDTH,self.image_sprite.HEIGHT)
                 if Rect.colliderect(rect_sprite,i_rect): 
                     self.move_up = False
@@ -424,7 +408,7 @@ class Sprite:
             
             self.can_move = False
             if self.image_sprite.Y <= SCREEN_H//2:
-                self.ghost_img.Y = SCREEN_H - BLOCK_HEIGHT
+                self.ghost_img.Y = SCREEN_H - BLOCK_SIZE
             elif self.image_sprite.Y > SCREEN_H//2:
                 self.ghost_img.Y = self.image_sprite.Y
     # Функция призрака
@@ -445,12 +429,14 @@ class Sprite:
                     self.ghost_img.X += SCREEN_H//200
             if self.ghost_img.Y <= - self.ghost_img.HEIGHT:
                 dict_argument["ghost"] = False
-                self.image_sprite.X = self.image_sprite.start_x
-                self.image_sprite.Y = self.image_sprite.start_y
+                self.image_sprite.X = dict_spawn_and_finish_point["lvl"+str(dict_argument["index_lvl"]+1)+"_location_"+str(dict_argument["index_location"]+1)][0][0]
+                self.image_sprite.Y = dict_spawn_and_finish_point["lvl"+str(dict_argument["index_lvl"]+1)+"_location_"+str(dict_argument["index_location"]+1)][0][1]
                 self.health -= 1
                 self.count_pressing_ghost = 0 
                 self.can_move = True
                 self.count_duration_shield = 0
+                dict_argument["screen_dimming_flag"] = "+"
+                dict_argument["index_text_drimming"] = "dead"
 
             if self.random_direction_ghost_count[0] == self.random_direction_ghost_count[1]:
                 self.random_direction_ghost_count[0] = 0 
@@ -475,6 +461,12 @@ class Sprite:
             self.count_duration_shield -= 1 
             self.shield_img.X = self.image_sprite.X - self.image_sprite.WIDTH * 0.34
             self.shield_img.Y = self.image_sprite.Y - self.image_sprite.HEIGHT* 0.25
+            
+            self.shield_img.HEIGHT = self.image_sprite.HEIGHT * 1.50    
+            if self.flag == "R":
+                self.shield_img.image_load(rotate_x = True)
+            else:
+                self.shield_img.image_load()
             self.shield_img.show_image(screen)
     # Функция для вервки            
     def Hook(self,rect):
@@ -513,35 +505,16 @@ class Sprite:
             else:
                 self.flag_leader = False
     # Функция ключа    
-    def key(self):
-        for key_obj in dict_list_border["list_border_cor_key_and_door"]:
-            if key_obj[-1] == "K":
-                x_k = key_obj[-2].X
-                y_k = key_obj[-2].Y + key_obj[-2].HEIGHT //3
-                w_k = key_obj[-2].WIDTH
-                h_k = key_obj[-2].HEIGHT //3
-                x = self.image_sprite.X
-                y = self.image_sprite.Y
-                w = self.image_sprite.WIDTH
-                h = self.image_sprite.HEIGHT
-                if x < x_k + w_k and x + w > x_k:
-                    if y < y_k + h_k and y + h > y_k:
-                        index_x = key_obj[4] // (key_obj[5] - key_obj[4])
-                        index_y = key_obj[0] // (key_obj[1] - key_obj[0])
-                        if not [index_x,index_y] in self.collected_key:
-                            self.collected_key.append([index_x,index_y])
-                        dict_argument["list_surface"][index_y][index_x] = "0"
-                        return "key_true"
+    def paper(self):
+        for paper_obj in dict_list_border["list_border_cor_paper_and_door"]:
+            if paper_obj[-2].RECT.colliderect(self.image_sprite.RECT):
+                index_x = paper_obj[4] // (paper_obj[5] - paper_obj[4])
+                index_y = paper_obj[0] // (paper_obj[1] - paper_obj[0])
+                if not [index_x,index_y] in self.collected_paper:
+                    self.collected_paper.append([index_x,index_y])
+                dict_argument["list_surface"][index_y][index_x] = "0"
+                return "paper_true"
 
-        if self.number_lock == len(self.collected_key) and not self.open_door:
-            for i in dict_argument["list_surface"]:
-                for obj in i:
-                    if obj == "D":
-                        index_y = dict_argument["list_surface"].index(i)
-                        index_x = i.index(obj)
-                        dict_argument["list_surface"][index_y][index_x] = "0"
-                        self.open_door = True
-                        return "door"
     # Функция колизии с финишом 
     def finish_lvl(self,shooting_lvl):
         index_lvl = dict_argument["index_lvl"]

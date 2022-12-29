@@ -22,17 +22,54 @@ class SurfaceRect():
 
 # Обновляем матрицу
 def drawSurfaces():
+    #Проверяем выход индексов за матрицу
+    def matrix_index_check(y,x,element,list_direction):
+        result = True
+        if "right" in list_direction:
+            if x + 1 <= len(dict_argument["list_surface"][0]) - 1:
+                if dict_argument["list_surface"][y][x + 1] == element:
+                    result = True
+                else:
+                    return False
+            else:
+                return False
+        if "left" in list_direction:
+            if x - 1 >= 0:
+                if dict_argument["list_surface"][y][x - 1] == element:
+                    result = True
+                else:
+                    return False
+            else:
+                return False
+        if "down" in list_direction:
+            if y + 1 <= len(dict_argument["list_surface"]) - 1:
+                if dict_argument["list_surface"][y + 1][x] == element:
+                    result = True
+                else:
+                    return False
+            else:
+                return False
+        if "up" in list_direction:
+            if y - 1 >= 0:
+                if dict_argument["list_surface"][y - 1][x] == element:
+                    result = True
+                else:
+                    return False
+            else:
+                return False
+        return result
+
     # очищаем списки 
     list_Rope_with_saw.clear()
     list_hook.clear()
     list_spikes.clear()
     list_saw.clear()
-    dict_list_border["list_border_cor_key_and_door"].clear()
+    dict_list_border["list_border_cor_paper_and_door"].clear()
     dict_list_border["list_border_cor_ladder"].clear()
     dict_list_border["list_border_cor"].clear()
     dict_list_border["list_flag"].clear()
     # Список сиволов
-    list_symbol = ["b","K","D","П","Л","л","ъ","Ъ","P","L","i","c","с","C"]
+    list_symbol = ["b","K","D","П","Л","л","ъ","Ъ","Б","P","L","i","c","с","C"]
     # список символов трескающихся платформ
     list_cracking_platform = ["c","с","C"]
     # Кол-во платформ
@@ -53,8 +90,8 @@ def drawSurfaces():
     Y = dict_argument["Y_MAP"]
     # Изначальные значания для всех блоков
     PATH = "image/block.png"
-    WIDTH = BLOCK_WIDTH
-    HEIGHT = BLOCK_HEIGHT
+    WIDTH = BLOCK_SIZE
+    HEIGHT = BLOCK_SIZE
     NAME_LIST = list()
     flag_pf = SurfaceRect(PATH,WIDTH,HEIGHT)
     # Перебираем матрицу
@@ -68,35 +105,35 @@ def drawSurfaces():
 
             if dict_argument["list_surface"][i][j] in list_cracking_platform:
                 PATH = "image/cracking_platform_"+str(list_cracking_platform.index(dict_argument["list_surface"][i][j]))+".png"
-                WIDTH = BLOCK_WIDTH
-                HEIGHT = BLOCK_WIDTH//3.55
+                WIDTH = BLOCK_SIZE
+                HEIGHT = BLOCK_SIZE//3.55
                 NAME_LIST = "list_border_cor_cracking"
                 number_cracking += 1
             elif dict_argument["list_surface"][i][j] == "R":
-                list_Rope_with_saw.append(Graphic_elements(X+BLOCK_WIDTH//2,Y,BLOCK_WIDTH*1.36,BLOCK_WIDTH*10,"image/Rope_with_saw.png"))
+                list_Rope_with_saw.append(Graphic_elements(X+BLOCK_SIZE//2,Y,BLOCK_SIZE*1.36,BLOCK_SIZE*10,"image/Rope_with_saw.png"))
             elif dict_argument["list_surface"][i][j] == "H":
-                list_hook.append(Graphic_elements(X+SCREEN_W//44-SCREEN_W//60,Y,BLOCK_WIDTH,BLOCK_HEIGHT*10,"image/Hook.png"))
+                list_hook.append(Graphic_elements(X+SCREEN_W//44-SCREEN_W//60,Y,BLOCK_SIZE,BLOCK_SIZE*10,"image/Hook.png"))
             elif dict_argument["list_surface"][i][j] == "К":
-                list_spikes.append(Graphic_elements(X,Y+(BLOCK_HEIGHT-BLOCK_HEIGHT//3),BLOCK_WIDTH,BLOCK_HEIGHT//3,"image/spikes.png"))
+                list_spikes.append(Graphic_elements(X,Y+(BLOCK_SIZE-BLOCK_SIZE//3),BLOCK_SIZE,BLOCK_SIZE//3,"image/spikes.png"))
             elif dict_argument["list_surface"][i][j] == "к":
-                obj = Graphic_elements(X,Y,BLOCK_WIDTH,BLOCK_HEIGHT//3,"image/spikes.png")
+                obj = Graphic_elements(X,Y,BLOCK_SIZE,BLOCK_SIZE//3,"image/spikes.png")
                 obj.image_load(rotate_y=True)
                 list_spikes.append(obj)
             elif dict_argument["list_surface"][i][j] == "ш":
-                list_spikes.append(Graphic_elements(X,Y+(BLOCK_HEIGHT-BLOCK_HEIGHT//3),BLOCK_WIDTH,BLOCK_HEIGHT//3,"image/spikes.png"))    
+                list_spikes.append(Graphic_elements(X,Y+(BLOCK_SIZE-BLOCK_SIZE//3),BLOCK_SIZE,BLOCK_SIZE//3,"image/spikes.png"))    
 
 
 
             elif dict_argument["list_surface"][i][j] == "Л":
                 PATH = "image/ladder_middle.png"
-                WIDTH = BLOCK_WIDTH
-                HEIGHT = BLOCK_HEIGHT                     
+                WIDTH = BLOCK_SIZE
+                HEIGHT = BLOCK_SIZE                     
                 NAME_LIST = "list_border_cor_ladder"
             elif dict_argument["list_surface"][i][j] == "л":
                 
                 PATH = "image/ladder_beginning.png"
-                WIDTH = BLOCK_WIDTH
-                HEIGHT = BLOCK_HEIGHT                     
+                WIDTH = BLOCK_SIZE
+                HEIGHT = BLOCK_SIZE                     
                 NAME_LIST = "list_border_cor_ladder"
                 if dict_argument["list_surface"][i][j + 1] == "0":
                     direction_begin_leader = "l"
@@ -104,14 +141,14 @@ def drawSurfaces():
                     direction_begin_leader = "r"
             elif dict_argument["list_surface"][i][j] == "ъ":
                 PATH = "image/ladder_end.png"
-                WIDTH = BLOCK_WIDTH
-                HEIGHT = BLOCK_HEIGHT                     
+                WIDTH = BLOCK_SIZE
+                HEIGHT = BLOCK_SIZE                     
                 NAME_LIST = "list_border_cor_ladder"
 
             elif dict_argument["list_surface"][i][j] == "Ъ":
                 PATH = "image/ladder_beginning_end.png"
-                WIDTH = BLOCK_WIDTH
-                HEIGHT = BLOCK_HEIGHT                     
+                WIDTH = BLOCK_SIZE
+                HEIGHT = BLOCK_SIZE                     
                 NAME_LIST = "list_border_cor_ladder"
                 if dict_argument["list_surface"][i][j + 1] == "0":
                     direction_begin_leader = "l"
@@ -122,61 +159,106 @@ def drawSurfaces():
 
             elif dict_argument["list_surface"][i][j] == "П":
                 PATH = "image/spring.png"
-                WIDTH = BLOCK_WIDTH
-                HEIGHT = BLOCK_HEIGHT
+                WIDTH = BLOCK_SIZE
+                HEIGHT = BLOCK_SIZE
                 NAME_LIST = "list_border_cor_spring"
                 number_spring += 1
             elif dict_argument["list_surface"][i][j] == "s":
-                list_saw.append(Graphic_elements(X+(BLOCK_WIDTH*1.53-BLOCK_WIDTH),Y+(BLOCK_HEIGHT*1.54-BLOCK_HEIGHT),BLOCK_WIDTH*1.53,BLOCK_HEIGHT*1.54,"image/saw.png"))
+                list_saw.append(Graphic_elements(X+(BLOCK_SIZE*1.53-BLOCK_SIZE),Y+(BLOCK_SIZE*1.54-BLOCK_SIZE),BLOCK_SIZE*1.53,BLOCK_SIZE*1.54,"image/saw.png"))
             
             elif dict_argument["list_surface"][i][j] == "D":
                 PATH = "image/Door.png"
-                WIDTH = BLOCK_WIDTH
+                WIDTH = BLOCK_SIZE
                 HEIGHT = SCREEN_H//5.5
                 NAME_LIST = "list_border_cor"
             elif dict_argument["list_surface"][i][j] == "P": 
+                PATH = "image/block/solo_block.png"
                 if dict_argument["list_surface"][i][j+1] == "P":
                     PATH = "image/block_motion_left.png"
                 elif dict_argument["list_surface"][i][j-1] == "P":
                     PATH = "image/block_motion_right.png"
-                WIDTH = BLOCK_WIDTH
-                HEIGHT = BLOCK_HEIGHT
+                WIDTH = BLOCK_SIZE
+                HEIGHT = BLOCK_SIZE
                 NAME_LIST = "list_border_cor"
-            elif dict_argument["list_surface"][i][j] == "b": 
-                PATH = "image/block.png"
-                WIDTH = BLOCK_WIDTH
-                HEIGHT = BLOCK_HEIGHT
+            elif dict_argument["list_surface"][i][j] == "Б":
+                PATH = "image/paper.png"
+                WIDTH = BLOCK_SIZE
+                HEIGHT = BLOCK_SIZE
+                NAME_LIST = "list_border_cor_paper_and_door"
+            elif dict_argument["list_surface"][i][j] in ["b","i"]: 
+                PATH = "image/block/center.png"
+                WIDTH = BLOCK_SIZE
+                HEIGHT = BLOCK_SIZE
                 NAME_LIST = "list_border_cor"
+
+                if matrix_index_check(i,j,dict_argument["list_surface"][i][j],["right","left","down","up"]):
+                    PATH = "image/block/center.png"
+                elif matrix_index_check(i,j,dict_argument["list_surface"][i][j],["right","left","up"]):
+                    PATH = "image/block/down.png"
+                elif matrix_index_check(i,j,dict_argument["list_surface"][i][j],["right","left","down"]):
+                    PATH = "image/block/up.png"
+                elif matrix_index_check(i,j,dict_argument["list_surface"][i][j],["right","down","up"]):
+                    PATH = "image/block/left.png"
+                elif matrix_index_check(i,j,dict_argument["list_surface"][i][j],["left","down","up"]):
+                    PATH = "image/block/right.png"
+                elif matrix_index_check(i,j,dict_argument["list_surface"][i][j],["right","up"]):
+                    PATH = "image/block/left_down.png"
+                elif matrix_index_check(i,j,dict_argument["list_surface"][i][j],["left","up"]):
+                    PATH = "image/block/right_down.png"
+                elif matrix_index_check(i,j,dict_argument["list_surface"][i][j],["right","down"]):
+                    PATH = "image/block/left_up.png"
+                elif matrix_index_check(i,j,dict_argument["list_surface"][i][j],["left","down"]):
+                    PATH = "image/block/right_up.png"
+                elif matrix_index_check(i,j,dict_argument["list_surface"][i][j],["right","left"]):
+                    PATH = "image/block/up_down.png"
+                elif matrix_index_check(i,j,dict_argument["list_surface"][i][j],["down","up"]):
+                    PATH = "image/block/left_right.png"
+                elif matrix_index_check(i,j,dict_argument["list_surface"][i][j],["up"]):
+                    PATH = "image/block/left_right_down.png"
+                elif matrix_index_check(i,j,dict_argument["list_surface"][i][j],["down"]):
+                    PATH = "image/block/left_right_up.png"
+                elif matrix_index_check(i,j,dict_argument["list_surface"][i][j],["right"]):
+                    PATH = "image/block/up_down_left.png"
+                elif matrix_index_check(i,j,dict_argument["list_surface"][i][j],["left"]):
+                    PATH = "image/block/up_down_right.png"
+                else:
+                    PATH = "image/block/solo_block.png"
+
+
+
             elif dict_argument["list_surface"][i][j] == "L":
                 PATH = "image/Motion_block_up_down_"+str(dict_argument_block["count_img_spinning_motion_block"])+".png"
-                WIDTH = BLOCK_WIDTH
-                HEIGHT = BLOCK_HEIGHT//2
+                WIDTH = BLOCK_SIZE
+                HEIGHT = BLOCK_SIZE//2
                 NAME_LIST = "list_border_cor"
             elif dict_argument["list_surface"][i][j] == "K":
                 PATH = "image/Key.png"
-                WIDTH = BLOCK_WIDTH
-                HEIGHT = BLOCK_HEIGHT
-                NAME_LIST = "list_border_cor_key_and_door"
-
-            elif dict_argument["list_surface"][i][j] == "i":
-                if dict_argument_block["count_load"] < 24 and dict_argument["ded"]:
-                    PATH = "image/block.png"
-                    WIDTH = BLOCK_WIDTH
-                    HEIGHT = BLOCK_HEIGHT
-                    NAME_LIST = "list_border_cor"
+                WIDTH = BLOCK_SIZE
+                HEIGHT = BLOCK_SIZE
+                NAME_LIST = "list_border_cor_paper_and_door"
             
             elif dict_argument["list_surface"][i][j] in list_key_door:
-                PATH = "image/Door_block.png"
-                WIDTH = BLOCK_WIDTH*2
-                HEIGHT = BLOCK_WIDTH//5
+                if dict_direction_door[dict_argument["list_surface"][i][j]] == "r":
+                    PATH = "image/Door_block.png"
+                    WIDTH = BLOCK_SIZE*2
+                    HEIGHT = BLOCK_SIZE//5
+                else:
+                    PATH = "image/Door_block_up.png"
+                    WIDTH = BLOCK_SIZE//5
+                    HEIGHT = BLOCK_SIZE*2
                 NAME_LIST = "list_border_cor"
             for obj in list_key_door:
                 if dict_argument["list_surface"][i][j] in obj.lower():
-                    PATH = "image/Open_door_block.png"
-                    WIDTH = BLOCK_WIDTH*2
-                    HEIGHT = BLOCK_HEIGHT
-                    NAME_LIST = "list_border_cor_key_and_door"
-            
+                    if dict_direction_door[dict_argument["list_surface"][i][j].upper()] == "r":
+                        PATH = "image/Open_door_block.png"
+                        WIDTH = BLOCK_SIZE*2
+                        HEIGHT = BLOCK_SIZE
+                    else:
+                        PATH = "image/Open_door_block_up.png"
+                        WIDTH = BLOCK_SIZE
+                        HEIGHT = BLOCK_SIZE*2
+                    NAME_LIST = "list_border_cor_paper_and_door"
+                
             # Проверяем есть ди етот символ в списке символов
             if dict_argument["list_surface"][i][j] in list_symbol:
                 # Проверяем если ето не пружына и платформа 
@@ -211,10 +293,10 @@ def drawSurfaces():
                     dict_list_border["list_flag"][i][j].append(dict_argument["list_surface"][i][j])#буква елемента
 
             # Изменяем кординату на которой отрисовываеться картинка
-            X += BLOCK_WIDTH
+            X += BLOCK_SIZE
         # Изменяем кординату на которой отрисовываеться картинка    
         X = dict_argument["X_MAP"]
-        Y += BLOCK_HEIGHT
+        Y += BLOCK_SIZE
     # Добавляем все в основной список 
     for i in range(len(dict_list_border["list_flag"])):
         for j in range(len(dict_list_border["list_flag"][i])):
@@ -222,7 +304,7 @@ def drawSurfaces():
                 dict_list_border[dict_list_border["list_flag"][i][j][-3]].append(dict_list_border["list_flag"][i][j])
 
 # Функция для движения платформы вправо влево
-def block_motion_right_left(list_surface,dict_argument_block,platform_length,sprite,block_size_y = BLOCK_HEIGHT,block_size_x = BLOCK_WIDTH):
+def block_motion_right_left(list_surface,dict_argument_block,platform_length,sprite,block_size_y = BLOCK_SIZE,block_size_x = BLOCK_SIZE):
 
     # Перебираем матрицу
     list_index_vertically = [] 
@@ -231,8 +313,12 @@ def block_motion_right_left(list_surface,dict_argument_block,platform_length,spr
             if dict_argument["list_surface"][obj][i] == "P":
                 list_index_vertically.append(obj)
                 break
-
     
+    
+    for index_vertically in list_index_vertically:
+        if not index_vertically in dict_directory_motion_block_left_right.keys():
+            dict_directory_motion_block_left_right[index_vertically] = "R"
+
     for index_vertically in list_index_vertically:
         # Индексы клетки            
         index_x = 0
@@ -240,7 +326,7 @@ def block_motion_right_left(list_surface,dict_argument_block,platform_length,spr
         #Перебираем цыкл столько раз сколько длина платформа
         for obj in range(platform_length):
             # Проверяем направление платформы
-            if dict_argument_block["flag_directory_motion_block_left_right"] == "R":
+            if dict_directory_motion_block_left_right[index_vertically] == "R":
                 # Перебираем список ряда
                 for block in dict_argument["list_surface"][index_vertically]:
                     # Находим платформу
@@ -257,21 +343,21 @@ def block_motion_right_left(list_surface,dict_argument_block,platform_length,spr
                             dict_argument["list_surface"][index_vertically] = list(''.join(list1))
                             # Проверяем колизию персонажа дабы перемещать его когда он стоит на платформе
                             block = [index_vertically*block_size_y,index_vertically*block_size_y+block_size_y,index_x*block_size_x-block_size_x,index_x*block_size_x]
-                            if sprite.image_sprite.Y + sprite.image_sprite.HEIGHT >= block[0] and sprite.image_sprite.X + sprite.image_sprite.WIDTH >= block[2] + BLOCK_WIDTH//3 and sprite.image_sprite.X <= block[3] - BLOCK_WIDTH//3 and sprite.image_sprite.Y + sprite.image_sprite.HEIGHT <= block[0] + sprite.gravity_speed :
+                            if sprite.image_sprite.Y + sprite.image_sprite.HEIGHT >= block[0] and sprite.image_sprite.X + sprite.image_sprite.WIDTH >= block[2] + BLOCK_SIZE//3 and sprite.image_sprite.X <= block[3] - BLOCK_SIZE//3 and sprite.image_sprite.Y + sprite.image_sprite.HEIGHT <= block[0] + sprite.gravity_speed :
                                 sprite.image_sprite.X += block_size_y
                             # Останавливаем цыкл
                             break
                         # Если следующая келтка не путь для платформы
                         elif dict_argument["list_surface"][index_vertically][index_x + 1] in ["0","b"] and obj == 0:
                             # Меняем направление
-                            dict_argument_block["flag_directory_motion_block_left_right"] = "L"
+                            dict_directory_motion_block_left_right[index_vertically] = "L"
                             # Останавливаем цыкл
                             break
                             
                     index_x += 1
                 index_x = 0
             # Проверяем направление платформы
-            if dict_argument_block["flag_directory_motion_block_left_right"] == "L":
+            if dict_directory_motion_block_left_right[index_vertically] == "L":
                 index_x_2 = len(dict_argument["list_surface"][0])
                 # Перебираем список ряда в обратном порядке
                 for block in dict_argument["list_surface"][index_vertically][::-1]:
@@ -289,14 +375,14 @@ def block_motion_right_left(list_surface,dict_argument_block,platform_length,spr
                             dict_argument["list_surface"][index_vertically] = list(''.join(list1[::-1]))  
                             # Проверяем колизию персонажа дабы перемещать его когда он стоит на платформе
                             block = [index_vertically*block_size_y,index_vertically*block_size_y+block_size_y,index_x_2*block_size_x-block_size_x,index_x_2*block_size_x]
-                            if sprite.image_sprite.Y + sprite.image_sprite.HEIGHT >= block[0] and sprite.image_sprite.X + sprite.image_sprite.WIDTH >= block[2] + BLOCK_WIDTH//3 and sprite.image_sprite.X <= block[3] - BLOCK_WIDTH//3 and sprite.image_sprite.Y + sprite.image_sprite.HEIGHT <= block[0] + sprite.gravity_speed :
+                            if sprite.image_sprite.Y + sprite.image_sprite.HEIGHT >= block[0] and sprite.image_sprite.X + sprite.image_sprite.WIDTH >= block[2] + BLOCK_SIZE//3 and sprite.image_sprite.X <= block[3] - BLOCK_SIZE//3 and sprite.image_sprite.Y + sprite.image_sprite.HEIGHT <= block[0] + sprite.gravity_speed :
                                     sprite.image_sprite.X -= block_size_y
                             # Останавливаем цыкл
                             break
                         # Если следующая келтка не путь для платформы
                         elif dict_argument["list_surface"][index_vertically][::-1][index_x + 1] in ["0","b"] and obj == 1:
                             # Меняем направление
-                            dict_argument_block["flag_directory_motion_block_left_right"] = "R"
+                            dict_directory_motion_block_left_right[index_vertically] = "R"
                             # Останавливаем цыкл
                             break
                     # Увеличиваем index
@@ -306,15 +392,19 @@ def block_motion_right_left(list_surface,dict_argument_block,platform_length,spr
                 index_x = 0
 
 # Функция для движения платформы вверх вниз
-def block_motion_down_up(list_surface,dict_argument_block,sprite,block_size_y = BLOCK_HEIGHT,block_size_x = BLOCK_WIDTH):
+def block_motion_down_up(list_surface,dict_argument_block,sprite,block_size_y = BLOCK_SIZE,block_size_x = BLOCK_SIZE):
     # Перебираем матрицу
     list_index_horizontal = [] 
     for obj in range(len(dict_argument["list_surface"])):
         for i in range(len(dict_argument["list_surface"][obj])):
             if dict_argument["list_surface"][obj][i] == "L":
                 list_index_horizontal.append(i)
-                
-   
+    
+    
+    for index_x in list_index_horizontal:
+        if not index_x in dict_directory_motion_block_up_down.keys():
+            dict_directory_motion_block_up_down[index_x] = "D"
+
     
     # Перебираем матрицу
     for index_x in list_index_horizontal:
@@ -325,7 +415,7 @@ def block_motion_down_up(list_surface,dict_argument_block,sprite,block_size_y = 
             if stop == False:
                 if dict_argument["list_surface"][index_y][index_x] == "L":
                     # Если направление в верх 
-                    if dict_argument_block["flag_directory_motion_block_up_down"] == "U":
+                    if dict_directory_motion_block_up_down[index_x] == "U":
                         # Если в низ может двигаться
                         if dict_argument["list_surface"][index_y - 1][index_x] == "l":
                             # Создаем список с рядом  в котором клетка на которую нужно двигаться
@@ -349,11 +439,11 @@ def block_motion_down_up(list_surface,dict_argument_block,sprite,block_size_y = 
                         # Если в низ нельзя двигаться    
                         elif dict_argument["list_surface"][index_y - 1][index_x] == "0":
                             # Меняем направления
-                            dict_argument_block["flag_directory_motion_block_up_down"] = "D"
+                            dict_directory_motion_block_up_down[index_x] = "D"
                             # Останавливаем функцию
                             stop = True
                     # Если направление в низ        
-                    if dict_argument_block["flag_directory_motion_block_up_down"] == "D":
+                    if dict_directory_motion_block_up_down[index_x] == "D":
                         # Если в верх может двигаться
                         if dict_argument["list_surface"][index_y + 1][index_x] == "l":
                             # Создаем список с рядом  в котором клетка на которую нужно двигаться
@@ -376,7 +466,7 @@ def block_motion_down_up(list_surface,dict_argument_block,sprite,block_size_y = 
                             stop = True
                         # Если в верх нельзя двигаться   
                         elif dict_argument["list_surface"][index_y + 1][index_x] == "0":
-                            dict_argument_block["flag_directory_motion_block_up_down"] = "U"
+                            dict_directory_motion_block_up_down[index_x] = "U"
                             # Останавливаем функцию
                             stop = True
                             
@@ -412,15 +502,17 @@ def rope(index,graphic_elements,angle,width,height):
     # draw.rect(screen,(0,0,0),Rope_rect)
     # Отрисовываем веревку 
     screen.blit(Rope_copy, (graphic_elements.X - int(Rope_copy.get_width() / 2), graphic_elements.Y - int(Rope_copy.get_height() / 2)))
+    draw.rect(screen,"red",Rope_rect)
     # Возвращаем рект обект для колизии с накончечником 
     return Rope_rect
 
 #Функия двери которая открываеться по кнопке
-def door_and_button(index_button_x_1,index_button_y_1,index_button_x_2,index_button_y_2,element_door,element_door_empty,sprite1):
+def door_and_button(index_button_x_1,index_button_y_1,index_button_x_2,index_button_y_2,element_door,element_door_empty,sprite1,direction_door,duration):
     # Если еще нет етого елемента в словаре всехх дверей с кнопками 
     if not str("Count_door_"+element_door) in list(dict_argument_door_block.keys()):
         #Добавляем в словарь новый ключ к нашей двери
         dict_argument_door_block[str("Count_door_"+element_door)] = 0
+        dict_direction_door[element_door] = direction_door
     # когда дверь должна закрыться 
     if dict_argument_door_block[str("Count_door_"+element_door)] == 0: 
         # Даем ей значение при которой дверь будет закрыта  
@@ -436,11 +528,11 @@ def door_and_button(index_button_x_1,index_button_y_1,index_button_x_2,index_but
             drawSurfaces()
             
     # Создаем графические елементы кнопок                        
-    graphik_element_button_1 = Graphic_elements(index_button_x_1*BLOCK_WIDTH,(index_button_y_1+1)*BLOCK_HEIGHT-dict_Graphic_elements_obj["button"].HEIGHT,dict_Graphic_elements_obj["button"].WIDTH,dict_Graphic_elements_obj["button"].HEIGHT,dict_Graphic_elements_obj["button"].path)
+    graphik_element_button_1 = Graphic_elements(index_button_x_1*BLOCK_SIZE,(index_button_y_1+1)*BLOCK_SIZE-dict_Graphic_elements_obj["button"].HEIGHT,dict_Graphic_elements_obj["button"].WIDTH,dict_Graphic_elements_obj["button"].HEIGHT,dict_Graphic_elements_obj["button"].path)
     if index_button_x_2 == None:
         graphik_element_button_2 =Graphic_elements(0,0,0,0,None)
     else:
-        graphik_element_button_2 = Graphic_elements(index_button_x_2*BLOCK_WIDTH,(index_button_y_2+1)*BLOCK_HEIGHT-dict_Graphic_elements_obj["button"].HEIGHT,dict_Graphic_elements_obj["button"].WIDTH,dict_Graphic_elements_obj["button"].HEIGHT,dict_Graphic_elements_obj["button"].path)
+        graphik_element_button_2 = Graphic_elements(index_button_x_2*BLOCK_SIZE,(index_button_y_2+1)*BLOCK_SIZE-dict_Graphic_elements_obj["button"].HEIGHT,dict_Graphic_elements_obj["button"].WIDTH,dict_Graphic_elements_obj["button"].HEIGHT,dict_Graphic_elements_obj["button"].path)
     
     #Если кнопка не нажата то просто отрисовываем её 
     if not Rect.colliderect(sprite1.image_sprite.RECT,graphik_element_button_1.RECT):
@@ -470,7 +562,7 @@ def door_and_button(index_button_x_1,index_button_y_1,index_button_x_2,index_but
                         dict_argument["list_surface"][el][element] = element_door_empty
             drawSurfaces()
         # если кнопка нажата то постоянно обновляем счетчик закрывания двери
-        dict_argument_door_block[str("Count_door_"+element_door)] = 100 
+        dict_argument_door_block[str("Count_door_"+element_door)] = duration 
         
 
         
@@ -526,16 +618,16 @@ def cracking_platform(sprite):
             if i[6] <= 0:
                 # Проверяем можно ли изменяем картинку на следующую стадию
                 if len(list_cracking) -1 >= number+1:
-                    dict_argument["list_surface"][i[0]//(BLOCK_HEIGHT)][i[4]//(BLOCK_WIDTH)] = list_cracking[number+1]
+                    dict_argument["list_surface"][i[0]//(BLOCK_SIZE)][i[4]//(BLOCK_SIZE)] = list_cracking[number+1]
                     dict_list_border["list_border_cor_cracking"][dict_list_border["list_border_cor_cracking"].index(i)][-2].path = "image/cracking_platform_"+str(number+1)+".png"
                     dict_list_border["list_border_cor_cracking"][dict_list_border["list_border_cor_cracking"].index(i)][-2].image_load()
                     dict_list_border["list_border_cor_cracking"][dict_list_border["list_border_cor_cracking"].index(i)][6] = 20
                 # Если нет то удаляем платформу
                 else:
                     # Убираем букву на матрицу заменяя её нулем(пустым местом)
-                    dict_argument["list_surface"][i[0]//(BLOCK_HEIGHT)][i[4]//(BLOCK_WIDTH)] = "0"
+                    dict_argument["list_surface"][i[0]//(BLOCK_SIZE)][i[4]//(BLOCK_SIZE)] = "0"
                     # Добавляем плуатформу в словарь сломаных трескающихся платформ дабы потом его возобновить ключом к которому являються кординаты через запятую
-                    key = str(i[0]//(BLOCK_HEIGHT))+","+str(i[4]//(BLOCK_WIDTH))
+                    key = str(i[0]//(BLOCK_SIZE))+","+str(i[4]//(BLOCK_SIZE))
                     broken_cracking_platform[key] = 100
                     # Убираем ету пллатформу из списка платформ и очищаем список обектов етих платформ чтоб он мог снова заполниться
                     dict_list_border["list_border_cor_cracking"].clear()
@@ -545,7 +637,7 @@ def cracking_platform(sprite):
             if i[7] <= 0:
                 # Проверяем можно ли изменяем картинку на прошлую стадию
                 if number - 1 >= 0:
-                    dict_argument["list_surface"][i[0]//(BLOCK_HEIGHT)][i[4]//(BLOCK_WIDTH)] = list_cracking[number-1]
+                    dict_argument["list_surface"][i[0]//(BLOCK_SIZE)][i[4]//(BLOCK_SIZE)] = list_cracking[number-1]
                     dict_list_border["list_border_cor_cracking"][dict_list_border["list_border_cor_cracking"].index(i)][-2].path = "image/cracking_platform_"+str(number-1)+".png"
                     dict_list_border["list_border_cor_cracking"][dict_list_border["list_border_cor_cracking"].index(i)][-2].image_load()
                     dict_list_border["list_border_cor_cracking"][dict_list_border["list_border_cor_cracking"].index(i)][7] = 40
@@ -633,7 +725,7 @@ def spike():
             for i in range(len(dict_argument["list_surface"])):      
                 for j in range(len(dict_argument["list_surface"][i])):
                     if dict_argument["list_surface"][i][j] == "К":
-                        if i+2 < len(dict_argument["list_surface"]):
+                        if i+2 < len(dict_argument["list_surface"]) and dict_argument["list_surface"][i+2][j] == "0":
                             dict_argument["list_surface"][i+2][j] = "к"
                         else:
                             dict_argument["list_spikes_outside"].append([i,j])
@@ -666,25 +758,25 @@ def saw_function():
     # перебераем список со всеми пилами
     for saw in list_saw:
         # КОСТЫЛЬ
-        saw.Y += BLOCK_HEIGHT
+        saw.Y += BLOCK_SIZE
         # крутим пилу
         saw.image_load()
         saw_copy = transform.rotate(saw.IMG, int(dict_argument_angle["angle_saw"]))
         # Создаем рект обект пилы
-        rect_saw = Rect(saw.X - saw.WIDTH//2, saw.Y - saw.HEIGHT//2,saw.WIDTH,saw.HEIGHT)
+        rect_saw = Rect(saw.X - saw.WIDTH//2+saw.WIDTH//10, saw.Y - saw.HEIGHT//2+saw.HEIGHT//10,saw.WIDTH-saw.WIDTH//5,saw.HEIGHT-saw.HEIGHT//5)
         # draw.rect(screen,(255,0,0),rect_saw)
         # Отображаем пилу
         screen.blit(saw_copy, (saw.X - int(saw_copy.get_width() / 2), saw.Y - int(saw_copy.get_height() / 2)))
         # Убиваем игрока при косании с пилой
         sprite1.Touch_of_death(rect_saw)
         # КОСТЫЛЬ
-        saw.Y -= BLOCK_HEIGHT
+        saw.Y -= BLOCK_SIZE
 
 # Функция облока подсказки
 def help_function(index_x,index_y,indnex_width,index_height,text,color):
     # Задаем размеры
-    border_width = BLOCK_WIDTH
-    border_height = BLOCK_HEIGHT
+    border_width = BLOCK_SIZE
+    border_height = BLOCK_SIZE
     # Создаем и отображаем изображение облока
     help_img = Graphic_elements(index_x*border_width,index_y*border_height,indnex_width*border_width,index_height*border_height,"image/help.png")
     help_img.show_image(screen)
@@ -721,9 +813,31 @@ def bird():
     if dict_argument["max_number_beard"] <= dict_argument["count_beard"]:
         dict_argument["max_number_beard"] = random.randint(500,1000)
         dict_argument["count_beard"] = 0
-        dict_argument["list_beard"].append(Graphic_elements(-BLOCK_WIDTH,BLOCK_HEIGHT,BLOCK_WIDTH,BLOCK_HEIGHT//1.32,"image/beard/beard1.png",4))
+        dict_argument["list_beard"].append(Graphic_elements(-BLOCK_SIZE,BLOCK_SIZE,BLOCK_SIZE,BLOCK_SIZE//1.32,"image/beard/beard1.png",4))
     dict_argument["count_beard"] += 1
 
+#Функция затемнения
+def function_dimming():
+    if dict_argument["screen_dimming_flag"] != None:
+        if dict_argument["index_text_drimming"] == None:
+            text_transition_new_lvl.font_content = dict_mision_lvl_1["location_"+str(index_location+2)]
+        else:
+            text_transition_new_lvl.font_content = dict_text_drimming[dict_argument["index_text_drimming"]]
+            
+        text_transition_new_lvl.font_y = SCREEN_H//2-text_transition_new_lvl.font_size
+        if dict_argument["screen_dimming_flag"] == "+":
+            dict_argument["screen_dimming_count"] += 3
+            if dict_argument["screen_dimming_count"] == 300:
+                dict_argument["screen_dimming_flag"] = "-"
+                
+        if dict_argument["screen_dimming_flag"] == "-":
+            dict_argument["screen_dimming_count"] -= 3
+            if dict_argument["screen_dimming_count"] == 0:
+                dict_argument["screen_dimming_flag"] = None
+                dict_argument["index_text_drimming"] = None
+        dimming.IMG.set_alpha(round(dict_argument["screen_dimming_count"]))
+        dimming.show_image(screen)
+        text_transition_new_lvl.show_text(screen)
 # Функция движения карты
 def move_map(direction):
     # Флаг направления оси
@@ -794,12 +908,7 @@ def move_map(direction):
     # Проверяем направления
     if direction == "down" or direction == "right":
         # Цыкл движения
-        black_fon =  Graphic_elements(0,0,SCREEN_W,SCREEN_H,"image/lvl"+str(dict_argument["index_location"]+1)+".png")
-        black_fon_next =  Graphic_elements(0,0,SCREEN_W,SCREEN_H,"image/lvl"+str(dict_argument["index_location"]+2)+".png")
-        if flag_direction == "Y_MAP":
-            black_fon_next.Y += SCREEN_H
-        else:
-            black_fon_next.X += SCREEN_W
+
         while dict_argument[flag_direction] >= a:
             # Очищаем списки которые не очищаються в функции
             dict_list_border["list_border_cor_cracking"].clear()
@@ -815,7 +924,7 @@ def move_map(direction):
             for i in dict_list_border["list_border_cor"]:
                 if i[-1] != "K":
                     i[-2].show_image(screen)
-            for i in dict_list_border["list_border_cor_key_and_door"]:
+            for i in dict_list_border["list_border_cor_paper_and_door"]:
                 i[-2].show_image(screen)  
             for i in dict_list_border["list_border_cor_ladder"]:
                 i[-2].show_image(screen)
@@ -823,27 +932,16 @@ def move_map(direction):
                 i[-2].show_image(screen)
             for i in dict_list_border["list_border_cor_cracking"]:
                 i[-2].show_image(screen)
-            black_fon.show_image(screen)
-            black_fon_next.show_image(screen)
+
             # Двигаем карта
             dict_argument[flag_direction] -= SCREEN_W//spead_move_map
-            if flag_direction == "Y_MAP":
-                black_fon_next.Y -= SCREEN_W//spead_move_map
-                black_fon.Y -= SCREEN_W//spead_move_map
-            else:
-                black_fon_next.X -= SCREEN_W//spead_move_map
-                black_fon.X -= SCREEN_W//spead_move_map
+            function_dimming()
             # Обновляем экран
             display.update()
     # Проверяем направления
     if direction == "up" or direction == "left":
         # Цыкл движения
-        black_fon =  Graphic_elements(0,0,SCREEN_W,SCREEN_H,"image/lvl"+str(dict_argument["index_location"]+1)+".png")
-        black_fon_next =  Graphic_elements(0,0,SCREEN_W,SCREEN_H,"image/lvl"+str(dict_argument["index_location"]+2)+".png")
-        if flag_direction == "Y_MAP":
-            black_fon_next.Y -= SCREEN_H
-        else:
-            black_fon_next.X -= SCREEN_W
+
         while dict_argument[flag_direction] <= a:
             # Очищаем списки которые не очищаються в функции
             dict_list_border["list_border_cor_cracking"].clear()
@@ -859,7 +957,7 @@ def move_map(direction):
             for i in dict_list_border["list_border_cor"]:
                 if i[-1] != "K":
                     i[-2].show_image(screen)
-            for i in dict_list_border["list_border_cor_key_and_door"]:
+            for i in dict_list_border["list_border_cor_paper_and_door"]:
                 i[-2].show_image(screen)  
             for i in dict_list_border["list_border_cor_ladder"]:
                 i[-2].show_image(screen)
@@ -867,16 +965,10 @@ def move_map(direction):
                 i[-2].show_image(screen)
             for i in dict_list_border["list_border_cor_cracking"]:
                 i[-2].show_image(screen)
-            black_fon.show_image(screen)
-            black_fon_next.show_image(screen)
+
             # Двигаем карта
             dict_argument[flag_direction] += SCREEN_W//spead_move_map
-            if flag_direction == "Y_MAP":
-                black_fon_next.Y += SCREEN_W//spead_move_map
-                black_fon.Y += SCREEN_W//spead_move_map
-            else:
-                black_fon_next.X += SCREEN_W//spead_move_map
-                black_fon.X += SCREEN_W//spead_move_map
+            function_dimming()
             # Обновляем экран
             display.update()    
     
@@ -901,10 +993,10 @@ def shooting_lvl(screen,min_count_point,ammo_count,barriers):
     if barriers > 5:
         barriers = 5
 
-    ammo_img = Graphic_elements(SCREEN_W//100,SCREEN_W//100,BLOCK_WIDTH,BLOCK_WIDTH//1.14,"image/ammo.png")
+    ammo_img = Graphic_elements(SCREEN_W//100,SCREEN_W//100,BLOCK_SIZE,BLOCK_SIZE//1.14,"image/ammo.png")
     
-    left_side_stand_for_manniquens = Graphic_elements(0,0,BLOCK_WIDTH,BLOCK_HEIGHT*2.269,"image/left_side_stand_for_mannequins.png")
-    right_side_stand_for_manniquens = Graphic_elements(0,0,BLOCK_WIDTH,BLOCK_HEIGHT*2.269,"image/right_side_stand_for_mannequins.png")
+    left_side_stand_for_manniquens = Graphic_elements(0,0,BLOCK_SIZE,BLOCK_SIZE*2.269,"image/left_side_stand_for_mannequins.png")
+    right_side_stand_for_manniquens = Graphic_elements(0,0,BLOCK_SIZE,BLOCK_SIZE*2.269,"image/right_side_stand_for_mannequins.png")
     middle_stand_for_manniquens = Graphic_elements(0,0,0,right_side_stand_for_manniquens.HEIGHT//9.83,"image/middle_stand_stand_for_mannequins.png")
     
     list_down_stand_for_manniquens = [left_side_stand_for_manniquens,right_side_stand_for_manniquens,middle_stand_for_manniquens,[[Graphic_elements(None,0,SCREEN_W//10,SCREEN_W//10*1.693,None),"right",[]],[Graphic_elements(None,0,SCREEN_W//10,SCREEN_W//10*1.693,None),"right",[]]],[]]                 
@@ -1143,11 +1235,318 @@ def shooting_lvl(screen,min_count_point,ammo_count,barriers):
     mouse.set_visible(True)
 
 
+list_part_puzzle = []
+background = Graphic_elements(SCREEN_W//6.6,SCREEN_H//4,SCREEN_W//1.5,SCREEN_H//2,"image/puzzle/background.png")
+for i in range(6):
+    width,height = (image.load(os.path.join(os.path.abspath(__file__ + "/.."),"image/puzzle/"+str(i+1)+".png"))).get_rect().size
+    element = Graphic_elements(0,0,width*SCREEN_W//1000,height*SCREEN_W//1000,"image/puzzle/"+str(i+1)+".png")
+    if i+1 <= 3:
+        element.X = background.X + SCREEN_W//50
+        element.Y = background.Y +SCREEN_H//40 + ((element.HEIGHT+SCREEN_H//20)*i)
+    else:
+        element.X = background.X + background.WIDTH - SCREEN_W//10  
+        element.Y = background.Y + SCREEN_H//40 + ((element.HEIGHT+SCREEN_H//20)*(i-3))
+    element.start_x = element.X
+    element.start_y = element.Y
+    
+    list_part_puzzle.append(element)
+def puzzle(event):
+    
+    
+    background.show_image(screen)
+    
+
+    list_rect = [
+        Rect(SCREEN_W//2.976,SCREEN_H//2.482,SCREEN_W//3.4//3,SCREEN_H//10.284),
+        Rect(SCREEN_W//2.976+SCREEN_W//3.4//3,SCREEN_H//2.482,SCREEN_W//3.4//3,SCREEN_H//10.284),
+        Rect(SCREEN_W//2.976+(SCREEN_W//3.4//3*2),SCREEN_H//2.482,SCREEN_W//3.4//3,SCREEN_H//10.284),
+        Rect(SCREEN_W//2.976,SCREEN_H//2.482+SCREEN_H//10.284,SCREEN_W//3.4//3,SCREEN_H//10.284),
+        Rect(SCREEN_W//2.976+SCREEN_W//3.4//3,SCREEN_H//2.482+SCREEN_H//10.284,SCREEN_W//3.4//3,SCREEN_H//10.284),
+        Rect(SCREEN_W//2.976+(SCREEN_W//3.4//3*2),SCREEN_H//2.482+SCREEN_H//10.284,SCREEN_W//3.4//3,SCREEN_H//10.284)
+    ]    
+
+
+    for obj in list_part_puzzle:
+        if event != False:
+            if event.type == MOUSEBUTTONDOWN:
+                if obj.check_mouse_cor(mouse.get_pos()):
+                    if obj.NAME != "Final":
+                        flag_another_obj = True
+                        for another_obj in list_part_puzzle:
+                            if another_obj.NAME == "True":
+                                flag_another_obj = False
+                                break
+                        if flag_another_obj:
+                            obj.NAME = "True"
+            elif event.type == MOUSEBUTTONUP:
+                if obj.NAME == "True":
+                    
+                    if list_rect[list_part_puzzle.index(obj)-3].collidepoint(mouse.get_pos()[0],mouse.get_pos()[1]):
+                        obj.X = list_rect[list_part_puzzle.index(obj)-3].x
+                        if list_part_puzzle.index(obj)-3 >= 0:
+                            obj.Y = list_rect[list_part_puzzle.index(obj)-3].y
+                            
+                        else:
+                            obj.Y = list_rect[list_part_puzzle.index(obj)-3].y + list_rect[list_part_puzzle.index(obj)-3].height - obj.HEIGHT
+                            
+                        obj.NAME = "Final"    
+                    else:
+                        obj.NAME = "False"
+                        obj.X = obj.start_x
+                        obj.Y = obj.start_y
+            if obj.NAME == "True":
+
+                list_part_puzzle[list_part_puzzle.index(obj)].X = mouse.get_pos()[0] - obj.WIDTH//2
+                list_part_puzzle[list_part_puzzle.index(obj)].Y = mouse.get_pos()[1] - obj.HEIGHT//2
+    final_puzzle = True      
+    for obj in list_part_puzzle:
+        if obj.NAME != "Final":
+            final_puzzle = False
+            break
+    if final_puzzle:
+        if dict_argument["count_final_puzzle"] == None:
+            dict_argument["count_final_puzzle"] = 100
+        background.path = "image/puzzle/background_full.png"
+        background.image_load()
+    else:
+        for obj in list_part_puzzle:
+                obj.show_image(screen)
+    if dict_argument["count_final_puzzle"] != None:
+        if dict_argument["count_final_puzzle"] > 0:
+            dict_argument["count_final_puzzle"] -= 1
+        if dict_argument["count_final_puzzle"] <= 0:
+            dict_argument["flag_puzzle_location"] = False
+            dict_argument["screen_dimming_flag"] = "+"
+            dict_argument["index_text_drimming"] = None
+
+         
+
+def slider(sound_power, flag_mouse_volume_sound, rect_volume_sound, mouse_volume_sound, mouse_cor, text, win, divider = 1 , plus = 0):
+    sound_power.show_text(win)
+    if flag_mouse_volume_sound:
+        if mouse_volume_sound.x >= rect_volume_sound.x and mouse_volume_sound.x <= rect_volume_sound.x+rect_volume_sound.width:
+            mouse_volume_sound.x = mouse_cor[0]-mouse_volume_sound.width//2
+        if mouse_volume_sound.x <= rect_volume_sound.x:
+            mouse_volume_sound.x = rect_volume_sound.x
+        if mouse_volume_sound.x >= rect_volume_sound.x+rect_volume_sound.width:
+            mouse_volume_sound.x = rect_volume_sound.x+rect_volume_sound.width
+    count_volume = round((mouse_volume_sound.x-rect_volume_sound.x)/rect_volume_sound.width*100)
+    sound_power.font_content = [text+str(int(count_volume/divider + plus))]
+    rect_volume_sound.width+=mouse_volume_sound.width
+    rect_volume_sound_stroke = pygame.Rect(rect_volume_sound.left - SCREEN_W//300,rect_volume_sound.top - SCREEN_W//300,rect_volume_sound.width + SCREEN_W//150,rect_volume_sound.height + SCREEN_W//150)
+    pygame.draw.rect(win,"black",rect_volume_sound_stroke)
+            
+    if flag_mouse_volume_sound:
+        pygame.draw.rect(win,"darkgreen",rect_volume_sound)
+    else:
+        pygame.draw.rect(win,"gray",rect_volume_sound)
+    rect_volume_sound.width-=mouse_volume_sound.width
+            
+    mouse_volume_sound_stroke = pygame.Rect(mouse_volume_sound.left - SCREEN_W//300,mouse_volume_sound.top - SCREEN_W//300,mouse_volume_sound.width + SCREEN_W//150,mouse_volume_sound.height + SCREEN_W//150)
+    pygame.draw.rect(win,"black",mouse_volume_sound_stroke)
+    if flag_mouse_volume_sound:
+        pygame.draw.rect(win,"green",mouse_volume_sound)
+    else:
+        pygame.draw.rect(win,"white",mouse_volume_sound)
+  
+def menu(run_game):
+    win = pygame.display.set_mode((SCREEN_W, SCREEN_H))
+    def option():
+        bg_option = Graphic_elements(0, 0, SCREEN_W, SCREEN_H, 'image/menu/option_not.png')
+        flag_option = "not"
+        sound_power = Font("font/pixel_font.ttf",SCREEN_W//30,"black","Громкость звука 50",SCREEN_W//3.2,SCREEN_H//8,bold=False)
+        music_power = Font("font/pixel_font.ttf",SCREEN_W//30,"black","Громкость музики 50",SCREEN_W//3.2,SCREEN_H//3,bold=False)
+        flag_mouse_volume_sound = False
+        rect_volume_sound = pygame.Rect(SCREEN_W//3.2,SCREEN_H//4.5,SCREEN_W//1.6,SCREEN_H//25)
+        mouse_volume_sound = pygame.Rect(50*rect_volume_sound.width/100+rect_volume_sound.x,rect_volume_sound.top-(SCREEN_H//45*3-rect_volume_sound.height)//2,SCREEN_H//72*2,SCREEN_H//45*3)
+        flag_mouse_volume_music = False
+        rect_volume_music = pygame.Rect(SCREEN_W//3.2,SCREEN_H//2.3,SCREEN_W//1.6,SCREEN_H//25)
+        mouse_volume_music = pygame.Rect(50*rect_volume_music.width/100+rect_volume_music.x,rect_volume_music.top-(SCREEN_H//45*3-rect_volume_music.height)//2,SCREEN_H//72*2,SCREEN_H//45*3)
+        
+        
+        button_display_size = Font("font/pixel_font.ttf",SCREEN_W//20,'black','Разрешение:',SCREEN_W//3.2,SCREEN_H//8)
+        list_buttons_display_size =[
+                        Font("font/pixel_font.ttf",SCREEN_W//38,'black','1280x720',button_display_size.font_x,button_display_size.font_y+SCREEN_H//8),
+                        Font("font/pixel_font.ttf",SCREEN_W//38,'black','1600x920',button_display_size.font_x+SCREEN_W//14.2*2,button_display_size.font_y+SCREEN_H//8),
+                        Font("font/pixel_font.ttf",SCREEN_W//38,'black','1920x1080',button_display_size.font_x+SCREEN_W//14.2*4,button_display_size.font_y+SCREEN_H//8),
+        ]
+
+        for obj in list_buttons_display_size:
+            width = SCREEN_W
+            height = SCREEN_H
+            obj_width = obj.font_content[0].split('x')[0]
+            obj_height = obj.font_content[0].split('x')[1]
+            if (int(obj_width) == width and int(obj_height) == height):
+                obj.font_color = 'red'
+                break
+
+        button_display_fullsize = Font("font/pixel_font.ttf",SCREEN_W//25,'black','Полноэкранный режим:',SCREEN_W//3.2,SCREEN_H//3)
+        list_button_display_fullsize = [
+            Font("font/pixel_font.ttf",SCREEN_W//25,'black','Да',SCREEN_W//3.2*1.5,button_display_fullsize.font_y + SCREEN_H//8),
+            Font("font/pixel_font.ttf",SCREEN_W//25,'black','Нет',SCREEN_W//3.2*1.2,button_display_fullsize.font_y + SCREEN_H//8)
+        ]
+
+        if FULLSCREEN:
+            list_button_display_fullsize[0].font_color = 'red'
+        else:
+            list_button_display_fullsize[1].font_color = 'red'
+        run_option = True
+        while run_option: 
+            for event in pygame.event.get():
+                #Услове выхода из игры
+                mouse_cor = pygame.mouse.get_pos() 
+                
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                    obj_button_option = pygame.Rect(0, 0, SCREEN_W//3.8, SCREEN_H) 
+                    obj_video = pygame.Rect(SCREEN_W//67.3, SCREEN_H//10.3, SCREEN_W//4.3, SCREEN_H//12.2)
+                    obj_back = pygame.Rect(SCREEN_W//91.4, SCREEN_H//130, SCREEN_W//10.24, SCREEN_H//20.571)
+                    obj_audio = pygame.Rect(SCREEN_W//67.3, SCREEN_H//5.15, SCREEN_W//4.3, SCREEN_H//12.2)
+                    if obj_button_option.collidepoint(mouse_cor[0],mouse_cor[1]):
+                        if obj_back.collidepoint(mouse_cor[0],mouse_cor[1]):
+                            #СДЕСЬ СОХРАНЯЕМ ДАННЫЕ
+                            settings = {
+                                "FULLSCREEN":list_button_display_fullsize[0].font_color == "red"
+                            }
+                            #
+                            run_option = False
+                        elif obj_video.collidepoint(mouse_cor[0],mouse_cor[1]):
+                            flag_option = "video"
+                        elif obj_audio.collidepoint(mouse_cor[0],mouse_cor[1]):
+                            flag_option = "audio"
+                        else:
+                            flag_option = "not"
+                    if flag_option == "audio":        
+                        if pygame.Rect.collidepoint(mouse_volume_sound,mouse_cor[0],mouse_cor[1]):
+                            flag_mouse_volume_sound = True
+                        if pygame.Rect.collidepoint(mouse_volume_music,mouse_cor[0],mouse_cor[1]):
+                            flag_mouse_volume_music = True
+                    if flag_option == "video":
+                        if list_button_display_fullsize[1].font_color == "red":
+                            for i in list_buttons_display_size:
+                                if i.check_mouse_cor_font(mouse_cor):
+                                    for obj in list_buttons_display_size:
+                                        obj.font_color = "black"
+                                    i.font_color = "red"
+                                    break
+                        for i in list_button_display_fullsize:
+                            if i.check_mouse_cor_font(mouse_cor):
+                                for obj in list_button_display_fullsize:
+                                    obj.font_color = "black"
+                                if i.font_content[0] == "Да":
+                                    for obj2 in list_buttons_display_size:
+                                        obj2.font_color = (93, 93, 93)
+                                        
+                                else:
+                                    for obj2 in list_buttons_display_size:
+                                        obj2.font_color = "black"
+                                    list_buttons_display_size[0].font_color = "red"
+                                i.font_color = "red"
+                                break
+
+                if event.type == pygame.MOUSEBUTTONUP:
+                    if flag_option == "audio":  
+                        if flag_mouse_volume_sound:
+                            flag_mouse_volume_sound = False
+                        if flag_mouse_volume_music:
+                            flag_mouse_volume_music = False
+            
+            bg_option.path = 'image/menu/option_'+flag_option+'.png'
+            bg_option.image_load()
+            bg_option.show_image(win)
+            
+            if flag_option == "not":
+                help_text = Font("font/pixel_font.ttf",SCREEN_W//30,"black","Выберите категорию ;в которой хотите внести изменение;;Изменения вступят в игру;после нажатия кнопки назад",SCREEN_W//3.2,SCREEN_H//8,bold=False,index=5)
+                help_text.show_text(win)
+            if flag_option == "video":
+                button_display_size.show_text(win)
+                for i in list_buttons_display_size:
+                    i.show_text(win)
+                button_display_fullsize.show_text(win)
+                for i in list_button_display_fullsize:
+                    i.show_text(win)
+            if flag_option == "audio":
+                
+                slider(sound_power, flag_mouse_volume_sound, rect_volume_sound, mouse_volume_sound, mouse_cor, "Громкость звука ",win)
+                slider(music_power, flag_mouse_volume_music, rect_volume_music, mouse_volume_music, mouse_cor, "Громкость музики ",win)
+            pygame.display.flip()
+
+  
+    bg = Graphic_elements(0, 0, SCREEN_W, SCREEN_H, 'image/menu/bg.png')
+    
+    name_menu = Graphic_elements(SCREEN_W//20,SCREEN_H//40, SCREEN_W//1.7, SCREEN_H//7, 'image/menu/name.png')
+    button_play = Graphic_elements(SCREEN_W//1.395,SCREEN_H//6.1, SCREEN_W//3.5, SCREEN_H//7.8, 'image/menu/button_play.png')
+    button_option = Graphic_elements(SCREEN_W//1.395,SCREEN_H//2 - SCREEN_H//15.6, SCREEN_W//3.5, SCREEN_H//7.8, 'image/menu/button_option.png')
+    button_exit = Graphic_elements(SCREEN_W//1.395,SCREEN_H//1.4, SCREEN_W//3.5, SCREEN_H//7.8, 'image/menu/button_exit.png')
+    run = True
+    
+    while run: 
+        for event in pygame.event.get():
+            #Услове выхода из игры
+            mouse_cor = pygame.mouse.get_pos() 
+
+            if event.type == pygame.QUIT:
+                run = False
+            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                if button_exit.check_mouse_cor(mouse_cor):
+                    run = False
+                if button_option.check_mouse_cor(mouse_cor):
+                    option()
+                if button_play.check_mouse_cor(mouse_cor):
+                    run = False
+                    run_game()
+                
+                            
+                        
+
+
+            
+        bg.show_image(win)    
+        name_menu.show_image(win)
+        button_play.show_image(win)
+        button_option.show_image(win)
+        button_exit.show_image(win)
+        
+        
+        if button_play.check_mouse_cor(mouse_cor):
+            button_play.X = button_play.start_x
+        else:
+            button_play.X = SCREEN_W//1.1
+        if button_option.check_mouse_cor(mouse_cor):
+            button_option.X = button_option.start_x
+        else:
+            button_option.X = SCREEN_W//1.1
+        if button_exit.check_mouse_cor(mouse_cor):
+            button_exit.X = button_exit.start_x
+        else:
+            button_exit.X = SCREEN_W//1.1
+        pygame.display.flip()
+  
 
 
 
+def book():
 
-
-
-
-
+    dict_argument["count_animation_book"] += 1
+    
+    if dict_argument["count_animation_book"] < 45:
+        width,height = (image.load(os.path.join(os.path.abspath(__file__ + "/.."),"image/book_"+str(dict_argument["count_animation_book"]//15 + 1)+".png"))).get_rect().size
+        element = Graphic_elements(0,0,width*SCREEN_W//500,height*SCREEN_W//500,"image/book_"+str(dict_argument["count_animation_book"]//15 + 1)+".png")
+        element.X = (SCREEN_W - element.WIDTH ) //2
+        element.Y = (SCREEN_H - element.HEIGHT) //2
+        element.show_image(screen)
+    else:
+        width,height = (image.load(os.path.join(os.path.abspath(__file__ + "/.."),"image/book_4.png"))).get_rect().size
+        element = Graphic_elements(0,0,width*SCREEN_W//500,height*SCREEN_W//500,"image/book_4.png")
+        element.X = (SCREEN_W - element.WIDTH ) //2
+        element.Y = (SCREEN_H - element.HEIGHT) //2
+        text_book = Font("font/pixel_font.ttf",SCREEN_W//65,'black',"Сьогодні я зроблю;;свою останню справу;;після якої я влечу;;до себе на батьківщину",element.X + SCREEN_W//30,element.Y + SCREEN_W//30,7)
+        element.show_image(screen)
+        text_book.show_text(screen)
+        
+        
+    if dict_argument["count_animation_book"] >= 400:
+        dict_argument["flag_book"] = False
+    
+    

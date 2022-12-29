@@ -5,20 +5,21 @@ import os #Подключаем модуль os
 from constant import * #Подключаем модуль файл constant
 from sprite import Sprite #Подключаем модуль файл sprite
 from graphic_elements import Graphic_elements #Подключаем модуль файл graphic_elements
+from text import Font #Подключаем модуль файл text
 init() #Инициализируем pygame
 #Создаем спрайт и его настройки для создание графических елементов
 sprite1 = Sprite(
                     name_image="1", #Имя картинки
-                    sprite_x = dict_spawn_and_finish_point["lvl1_location_1"][0][0], #Горизонтальное расположение спрайта
+                    sprite_x = dict_spawn_and_finish_point["lvl"+str(dict_argument["index_lvl"]+1)+"_location_"+str(dict_argument["index_location"]+1)][0][0], #Горизонтальное расположение спрайта
                     sprite_y = dict_spawn_and_finish_point["lvl1_location_1"][0][1], #Вертикальное расположение спрайта
-                    sprite_speed = BLOCK_WIDTH//5, #Скорость спрайта
-                    sprite_width = BLOCK_WIDTH, #Ширина спрайта
-                    sprite_height = BLOCK_HEIGHT*1.66, #Высота спрайта
+                    sprite_speed = BLOCK_SIZE//5, #Скорость спрайта
+                    sprite_width = BLOCK_SIZE, #Ширина спрайта
+                    sprite_height = BLOCK_SIZE*1.66, #Высота спрайта
                     border_width = SCREEN_W, #Ширина контура
                     border_height = SCREEN_H, #Высота контура
                     sprite_gravity_power = SCREEN_H//40, #Сила гравитации спрайта
                     double_jump = False, #Двойной прыжок
-                    jump_boost = BLOCK_HEIGHT*1.1*3, #Сила прыжка 
+                    jump_boost = BLOCK_SIZE*1.1*3, #Сила прыжка 
                     index_layout = 0 #Индекс   0-стрелки 1 - WSDA
                 )                    
 #Создаем графические елементы
@@ -29,11 +30,17 @@ load = Graphic_elements(SCREEN_W-SCREEN_W//10,SCREEN_H-SCREEN_H//10,SCREEN_W//10
 cloud = Graphic_elements(0,0,SCREEN_W*2,SCREEN_H//3.52,"image/Облоко.bmp")
 cloud2 = Graphic_elements(SCREEN_W*2,0,SCREEN_W*2,SCREEN_H//3.52,"image/Облоко.bmp")
 invisible_block_icon = Graphic_elements(SCREEN_W-SCREEN_W//10,SCREEN_H-SCREEN_H//10,SCREEN_W//10,SCREEN_H//10,"image/invisible_block_icon.png")
-Rope_with_saw = Graphic_elements(SCREEN_W//2,SCREEN_H//15,int(BLOCK_WIDTH*1.36),BLOCK_WIDTH*10,"image/Rope_with_saw.png")
-Hook = Graphic_elements(SCREEN_W//2,SCREEN_H//15,SCREEN_W//30,BLOCK_WIDTH*10,"image/Hook.png")
-button = Graphic_elements(0,0,BLOCK_WIDTH,BLOCK_WIDTH//3.3846,"image/button.png")
+Rope_with_saw = Graphic_elements(SCREEN_W//2,SCREEN_H//15,int(BLOCK_SIZE*1.36),BLOCK_SIZE*10,"image/Rope_with_saw.png")
+Hook = Graphic_elements(SCREEN_W//2,SCREEN_H//15,SCREEN_W//30,BLOCK_SIZE*10,"image/Hook.png")
+button = Graphic_elements(0,0,BLOCK_SIZE,BLOCK_SIZE//3.3846,"image/button.png")
 Background_shooting = Graphic_elements(-SCREEN_W,-SCREEN_H,SCREEN_W*3,SCREEN_H*2,"image/Fon.jpg")
-aim = Graphic_elements(SCREEN_W//2-SCREEN_W//40,SCREEN_H//2-SCREEN_W//40,BLOCK_WIDTH,BLOCK_WIDTH,"image/aim.png")
+dimming = Graphic_elements(0,0,SCREEN_W,SCREEN_H,"image/black.png")
+dimming.image_load()
+dimming.IMG.set_alpha(round(dict_argument["screen_dimming_count"]))
+aim = Graphic_elements(SCREEN_W//2-SCREEN_W//40,SCREEN_H//2-SCREEN_W//40,BLOCK_SIZE,BLOCK_SIZE,"image/aim.png")
+#Обекты текста
+text_transition_new_lvl = Font("font/pixel_font.ttf",SCREEN_W//20,"white",None,0,0,None)
+
 #Создаем список графических елементов шипов
 list_spikes = []
 #Создаем словарь графических елементов
@@ -47,5 +54,6 @@ dict_Graphic_elements_obj = {
                         "Rope_with_saw":Rope_with_saw,
                         "Hook":Hook,
                         "button":button,
+                        "text_transition_new_lvl":text_transition_new_lvl,
 
 }

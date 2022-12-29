@@ -29,8 +29,10 @@ class Graphic_elements():
         if self.loading == False:
             if self.path != None:
                 self.image_load()#
+       
         if self.path != None:
-            #Отображаем елемент
+            #Отображаем елемент 
+            
             screen_object.blit(self.IMG, (self.X,self.Y))
     #Метод загрузки изображения
     def image_load(self,rotate_x = False,rotate_y = False):

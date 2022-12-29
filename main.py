@@ -4,17 +4,21 @@ init() #Инициализируем pygame
 #Создаем функцию запуска игры
 def run_game():    
     #Создаем дверь и кнопку
-    door_and_button(5,7,11,9,"Д","д",sprite1)
+    
     #Рисуем поверхности
     drawSurfaces()
     #y передвигающийся плаформы
     #Основной цыкл игры
-    
+    dict_argument["list_surface"] = list_surface[index_lvl][index_location]
+    sprite1.image_sprite.X = dict_spawn_and_finish_point["lvl"+str(dict_argument["index_lvl"]+1)+"_location_"+str(dict_argument["index_location"]+1)][0][0]
+    sprite1.image_sprite.Y = dict_spawn_and_finish_point["lvl"+str(dict_argument["index_lvl"]+1)+"_location_"+str(dict_argument["index_location"]+1)][0][1]
     while dict_argument["game"]:
         
         for event1 in event.get(): # Получаем значение события из "списка событий" 
             # и записываем в переменную event1 
             mouse_cor = mouse.get_pos() #Включаем поддержку действия мыши
+            if dict_argument["flag_puzzle_location"]:
+                puzzle(event1)
             if event1.type == MOUSEBUTTONDOWN:
                 if sprite1.ghost_img.check_mouse_cor(mouse_cor):
                     sprite1.count_pressing_ghost += 1
@@ -35,9 +39,8 @@ def run_game():
 
             #Перебераем все списки блоков и отррисовываем их
             for i in dict_list_border["list_border_cor"]:
-                if i[-1] != "K":
-                    i[-2].show_image(screen)
-            for i in dict_list_border["list_border_cor_key_and_door"]:
+                i[-2].show_image(screen)
+            for i in dict_list_border["list_border_cor_paper_and_door"]:
                 i[-2].show_image(screen)
             for i in dict_list_border["list_border_cor_ladder"]:
                 i[-2].show_image(screen)
@@ -61,7 +64,7 @@ def run_game():
                 sprite1.Touch_of_death(rect_rope) #Дотронулся до пилы = сразу умер
             #Основы платформера
             sprite1.image_sprite.show_image(screen)  #Показ картинки
-            if sprite1.can_move:
+            if sprite1.can_move and dict_argument["screen_dimming_flag"] == None and not dict_argument["flag_puzzle_location"]:
                 
                 sprite1.squat(screen)
                 sprite1.sprite_move() #Анимации
@@ -90,11 +93,12 @@ def run_game():
                 sprite1.hook(rect_rope) 
             # Добавляем невидимые платформы
             # ключи
-            key = sprite1.key()
-            if key == "key_true" or key == "door":
+            paper = sprite1.paper()
+            if paper == "paper_true":
                 drawSurfaces()
             # шипы
             spike()
+            
             
             # Облоко подсказка
             # help_function(2.5,2,3,2.5,"TEXT;TEXT","red")
@@ -128,13 +132,25 @@ def run_game():
                 i[-2].show_image(screen)
             if dict_argument["index_location"] == 0 and dict_argument["index_lvl"] == 0:
                 #Создаем дверь и кнопку
-                door_and_button(4,7,None,None,"Д","д",sprite1)
+                door_and_button(4,7,None,None,"Д","д",sprite1,"r",100)
+
             # bird() #Включает метод птицы
-            
-            
+            function_dimming()
             # 
+            if dict_argument["flag_book"]:
+                book()
+            if dict_argument["count_final_puzzle"] != None and dict_argument["count_final_puzzle"] <= 0:
+                sprite1.image_sprite.X = dict_spawn_and_finish_point["lvl2_location_2"][0][0]
+                sprite1.image_sprite.Y = dict_spawn_and_finish_point["lvl2_location_2"][0][1]
+                sprite1.image_sprite.start_x = sprite1.image_sprite.X
+                sprite1.image_sprite.start_y = sprite1.image_sprite.Y
+                move_map("right")
+                dict_argument["count_final_puzzle"] = None
+            if dict_argument["flag_puzzle_location"]:
+                puzzle(False)
         # print(clock.get_fps()) #Пишит в терминале количество кадров в секунду
         display.update() #Обновление экрана
 #Запускает игру
-run_game()
+menu(run_game)
+
 
