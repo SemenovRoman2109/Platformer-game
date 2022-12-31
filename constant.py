@@ -21,13 +21,19 @@ list_border_cor_saw = list()
 list_border_cor_ladder = list()
 list_border_cor_spring = list()
 list_border_cor = list()
+list_NPC = list()
+list_index_NPC = list()
 list_flag = list()#временный список,где будут хранится координаты
 #Индексы уровней
 index_lvl = 1
-index_location = 0
+index_location = 2
 #Считаем птицу (beard в переводе - борода)
 max_number_beard = random.randint(500,1000)
 count_beard = 0
+flag_collid_npc = False
+index_npc_collid = None
+number_click_npc = 0
+flag_false_criminal_selected = False
 #Список верёвок (анимация)
 list_cor_Rope = [
     [-SCREEN_W//5.28,-SCREEN_H//5.10],
@@ -108,7 +114,14 @@ dict_argument = {
     "flag_puzzle_location":False,
     "count_final_puzzle":None,
     "count_animation_book":0,
-    "flag_book":True,
+    "flag_book":False,
+    "picture_flag":False,
+    "picture_count":150,
+    "BLOCK_SIZE":BLOCK_SIZE,
+    "flag_collid_npc":flag_collid_npc,
+    "number_click_npc":number_click_npc,
+    "flag_false_criminal_selected":flag_false_criminal_selected,
+    "index_npc_collid":index_npc_collid
     
 
 
@@ -134,22 +147,29 @@ dict_list_border = {
 }
 
 dict_spawn_and_finish_point = {
-    "lvl1_location_1":[[SCREEN_W//80,SCREEN_H-SCREEN_H//10*2.5],Rect(0,-SCREEN_W/40,BLOCK_SIZE,1),"up"],
+    "lvl1_location_1":[[SCREEN_W//80,SCREEN_H-SCREEN_H//10*2.5],Rect(0,-SCREEN_W/40,dict_argument["BLOCK_SIZE"],1),"up"],
     "lvl1_location_2":[[SCREEN_W//80,SCREEN_H-SCREEN_H//10*2.5],Rect(SCREEN_W-SCREEN_W//80,SCREEN_H//5.53,1,SCREEN_H//5.53),"right"],
     "lvl1_location_3":[[SCREEN_W//80,SCREEN_H//5.5],Rect(SCREEN_W-SCREEN_W//80,SCREEN_H//45,1,SCREEN_H//6.31),"right"],
     "lvl1_location_4":[[SCREEN_W//80,SCREEN_H-SCREEN_H//10*2.5],Rect(SCREEN_W-SCREEN_W//80,SCREEN_H//2.48,1,SCREEN_H//7.2),None],
-    "lvl2_location_1":[[BLOCK_SIZE*18,SCREEN_H-BLOCK_SIZE*3.5],Rect(0,0,0,0),"right"],
-    "lvl2_location_2":[[SCREEN_W//80,SCREEN_H-BLOCK_SIZE*3.5],Rect(0,0,0,0),"right"],
-    "lvl2_location_3":[[BLOCK_SIZE*14,SCREEN_H-BLOCK_SIZE*3.5],Rect(0,0,0,0),None],
+    "lvl2_location_1":[[round(SCREEN_W/30)*18,SCREEN_H-round(SCREEN_W/30)*3.5],Rect(0,0,0,0),"right"],
+    "lvl2_location_2":[[SCREEN_W//80,SCREEN_H-round(SCREEN_W/30)*3.5],[Rect(SCREEN_W//80,round(SCREEN_W/30)*4,1,SCREEN_H//5.53),Rect(SCREEN_W-SCREEN_W//80,0,1,SCREEN_H//5.53)],"right"],
+    "lvl2_location_3":[[round(SCREEN_W/30)*14,SCREEN_H-round(SCREEN_W/30)*3.5],Rect(0,0,0,0),None],
 }
+# [Rect(SCREEN_W//80,round(SCREEN_W/30)*4,1,SCREEN_H//5.53),Rect(SCREEN_W-SCREEN_W//80,0,1,SCREEN_H//5.53)]
 
 dict_mision_lvl_1 = {
-    "location_1":["Вы приехали на место преступления","          найдите зацепки        ","","        Нажмите кнопку [F]        ","  чтоб появились новые платформы  "],
-    "location_2":["    Вы приехали в дом к убийце    ","       осмотрите все комнаты      "],
-    "location_3":["   Вы приехали на рейс к убийце   ","        Узнайте кто убийца        "],
+    "location_0":["Вы приехали на место преступления","          найдите зацепки        ","","        Нажмите кнопку [F]        ","  чтоб появились новые платформы  "],
+    "location_1":["    Вы приехали в дом к убийце    ","       осмотрите все комнаты      "],
+    "location_2":["   Вы приехали на рейс к убийце   ","        Узнайте кто убийца        ","Убийца мог изменить свою внешность"],
 }
 dict_text_drimming = {
-    "dead":[" Вы не смогли удержать свою душу ","  возвращайтесь в начало уровня  "]
+    "dead":[" Вы не смогли удержать свою душу ","  возвращайтесь в начало уровня  "],
+    "lose_game":["   Преступнику удалось скрыться  ","           Вы проиграли          "],
+    "win_game" :["Вам удалось задержать преступника","          Вы прошли игру         "],
+    "drive":[" Вы правильно выбрали преступника","И он начал убегать подстрелите его"],
+    "incorrectly_selected_criminal":["     Вы выбрали не правильно     ","    У тебя осталась одна попытка   ","             до рейса             "],
+    "lose_all_hp_0":["      Вы не прошли академию      ","        попробуйте еще раз       "],
+    "lose_all_hp_1":["Вы умерли во время раскрытия дела","        попробуйте еще раз       "]
 }
 
 dict_direction_door = dict()

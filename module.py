@@ -60,6 +60,7 @@ def drawSurfaces():
         return result
 
     # очищаем списки 
+    
     list_Rope_with_saw.clear()
     list_hook.clear()
     list_spikes.clear()
@@ -75,6 +76,7 @@ def drawSurfaces():
     # Кол-во платформ
     number_cracking = 0
     number_spring = 0
+    number_person = 0
     # направления палки крепления лестниицы
     direction_begin_leader = "left"
     
@@ -90,8 +92,8 @@ def drawSurfaces():
     Y = dict_argument["Y_MAP"]
     # Изначальные значания для всех блоков
     PATH = "image/block.png"
-    WIDTH = BLOCK_SIZE
-    HEIGHT = BLOCK_SIZE
+    WIDTH = dict_argument["BLOCK_SIZE"]
+    HEIGHT = dict_argument["BLOCK_SIZE"]
     NAME_LIST = list()
     flag_pf = SurfaceRect(PATH,WIDTH,HEIGHT)
     # Перебираем матрицу
@@ -105,35 +107,55 @@ def drawSurfaces():
 
             if dict_argument["list_surface"][i][j] in list_cracking_platform:
                 PATH = "image/cracking_platform_"+str(list_cracking_platform.index(dict_argument["list_surface"][i][j]))+".png"
-                WIDTH = BLOCK_SIZE
-                HEIGHT = BLOCK_SIZE//3.55
+                WIDTH = dict_argument["BLOCK_SIZE"]
+                HEIGHT = dict_argument["BLOCK_SIZE"]//3.55
                 NAME_LIST = "list_border_cor_cracking"
                 number_cracking += 1
             elif dict_argument["list_surface"][i][j] == "R":
-                list_Rope_with_saw.append(Graphic_elements(X+BLOCK_SIZE//2,Y,BLOCK_SIZE*1.36,BLOCK_SIZE*10,"image/Rope_with_saw.png"))
+                list_Rope_with_saw.append(Graphic_elements(X+dict_argument["BLOCK_SIZE"]//2,Y,dict_argument["BLOCK_SIZE"]*1.36,dict_argument["BLOCK_SIZE"]*10,"image/Rope_with_saw.png"))
             elif dict_argument["list_surface"][i][j] == "H":
-                list_hook.append(Graphic_elements(X+SCREEN_W//44-SCREEN_W//60,Y,BLOCK_SIZE,BLOCK_SIZE*10,"image/Hook.png"))
+                list_hook.append(Graphic_elements(X+SCREEN_W//44-SCREEN_W//60,Y,dict_argument["BLOCK_SIZE"],dict_argument["BLOCK_SIZE"]*10,"image/Hook.png"))
             elif dict_argument["list_surface"][i][j] == "К":
-                list_spikes.append(Graphic_elements(X,Y+(BLOCK_SIZE-BLOCK_SIZE//3),BLOCK_SIZE,BLOCK_SIZE//3,"image/spikes.png"))
+                list_spikes.append(Graphic_elements(X,Y+(dict_argument["BLOCK_SIZE"]-dict_argument["BLOCK_SIZE"]//3),dict_argument["BLOCK_SIZE"],dict_argument["BLOCK_SIZE"]//3,"image/spikes.png"))
             elif dict_argument["list_surface"][i][j] == "к":
-                obj = Graphic_elements(X,Y,BLOCK_SIZE,BLOCK_SIZE//3,"image/spikes.png")
+                obj = Graphic_elements(X,Y,dict_argument["BLOCK_SIZE"],dict_argument["BLOCK_SIZE"]//3,"image/spikes.png")
                 obj.image_load(rotate_y=True)
                 list_spikes.append(obj)
             elif dict_argument["list_surface"][i][j] == "ш":
-                list_spikes.append(Graphic_elements(X,Y+(BLOCK_SIZE-BLOCK_SIZE//3),BLOCK_SIZE,BLOCK_SIZE//3,"image/spikes.png"))    
+                list_spikes.append(Graphic_elements(X,Y+(dict_argument["BLOCK_SIZE"]-dict_argument["BLOCK_SIZE"]//3),dict_argument["BLOCK_SIZE"],dict_argument["BLOCK_SIZE"]//3,"image/spikes.png"))    
 
-
-
+            elif dict_argument["list_surface"][i][j] == "N" or dict_argument["list_surface"][i][j] == "n" or dict_argument["list_surface"][i][j] == "У":
+                if len(list_NPC) <= number_person:
+                    list_NPC.append(Graphic_elements(X,Y-dict_argument["BLOCK_SIZE"]*1.66+dict_argument["BLOCK_SIZE"],dict_argument["BLOCK_SIZE"],dict_argument["BLOCK_SIZE"]*1.66,"image/Персонажи/Person/person_"+str(random.randint(1,13))+".png"))
+                    list_index_NPC.append([i,j])
+                    if dict_argument["list_surface"][i][j] == "У":
+                        list_NPC[-1].path = "image/Персонажи/Преступник/model.png"
+                    
+                    if len(list_NPC) > 1:
+                        stop = True
+                        while stop:
+                            for obj in list_NPC:
+                                if obj != list_NPC[-1]:
+                                    if obj.path == list_NPC[-1].path:
+                                        stop = True
+                                        list_NPC[-1].path = "image/Персонажи/Person/person_"+str(random.randint(1,13))+".png"
+                                        break
+                                    else:
+                                        stop = False
+                    if dict_argument["list_surface"][i][j] == "n":
+                        list_NPC[-1].X -= BLOCK_SIZE//5
+                        list_NPC[-1].image_load(rotate_x= True)
+                number_person += 1
             elif dict_argument["list_surface"][i][j] == "Л":
                 PATH = "image/ladder_middle.png"
-                WIDTH = BLOCK_SIZE
-                HEIGHT = BLOCK_SIZE                     
+                WIDTH = dict_argument["BLOCK_SIZE"]
+                HEIGHT = dict_argument["BLOCK_SIZE"]                     
                 NAME_LIST = "list_border_cor_ladder"
             elif dict_argument["list_surface"][i][j] == "л":
                 
                 PATH = "image/ladder_beginning.png"
-                WIDTH = BLOCK_SIZE
-                HEIGHT = BLOCK_SIZE                     
+                WIDTH = dict_argument["BLOCK_SIZE"]
+                HEIGHT = dict_argument["BLOCK_SIZE"]                     
                 NAME_LIST = "list_border_cor_ladder"
                 if dict_argument["list_surface"][i][j + 1] == "0":
                     direction_begin_leader = "l"
@@ -141,14 +163,14 @@ def drawSurfaces():
                     direction_begin_leader = "r"
             elif dict_argument["list_surface"][i][j] == "ъ":
                 PATH = "image/ladder_end.png"
-                WIDTH = BLOCK_SIZE
-                HEIGHT = BLOCK_SIZE                     
+                WIDTH = dict_argument["BLOCK_SIZE"]
+                HEIGHT = dict_argument["BLOCK_SIZE"]                     
                 NAME_LIST = "list_border_cor_ladder"
 
             elif dict_argument["list_surface"][i][j] == "Ъ":
                 PATH = "image/ladder_beginning_end.png"
-                WIDTH = BLOCK_SIZE
-                HEIGHT = BLOCK_SIZE                     
+                WIDTH = dict_argument["BLOCK_SIZE"]
+                HEIGHT = dict_argument["BLOCK_SIZE"]                     
                 NAME_LIST = "list_border_cor_ladder"
                 if dict_argument["list_surface"][i][j + 1] == "0":
                     direction_begin_leader = "l"
@@ -159,16 +181,16 @@ def drawSurfaces():
 
             elif dict_argument["list_surface"][i][j] == "П":
                 PATH = "image/spring.png"
-                WIDTH = BLOCK_SIZE
-                HEIGHT = BLOCK_SIZE
+                WIDTH = dict_argument["BLOCK_SIZE"]
+                HEIGHT = dict_argument["BLOCK_SIZE"]
                 NAME_LIST = "list_border_cor_spring"
                 number_spring += 1
             elif dict_argument["list_surface"][i][j] == "s":
-                list_saw.append(Graphic_elements(X+(BLOCK_SIZE*1.53-BLOCK_SIZE),Y+(BLOCK_SIZE*1.54-BLOCK_SIZE),BLOCK_SIZE*1.53,BLOCK_SIZE*1.54,"image/saw.png"))
+                list_saw.append(Graphic_elements(X+(dict_argument["BLOCK_SIZE"]*1.53-dict_argument["BLOCK_SIZE"]),Y+(dict_argument["BLOCK_SIZE"]*1.54-dict_argument["BLOCK_SIZE"]),dict_argument["BLOCK_SIZE"]*1.53,dict_argument["BLOCK_SIZE"]*1.54,"image/saw.png"))
             
             elif dict_argument["list_surface"][i][j] == "D":
                 PATH = "image/Door.png"
-                WIDTH = BLOCK_SIZE
+                WIDTH = dict_argument["BLOCK_SIZE"]
                 HEIGHT = SCREEN_H//5.5
                 NAME_LIST = "list_border_cor"
             elif dict_argument["list_surface"][i][j] == "P": 
@@ -177,18 +199,18 @@ def drawSurfaces():
                     PATH = "image/block_motion_left.png"
                 elif dict_argument["list_surface"][i][j-1] == "P":
                     PATH = "image/block_motion_right.png"
-                WIDTH = BLOCK_SIZE
-                HEIGHT = BLOCK_SIZE
+                WIDTH = dict_argument["BLOCK_SIZE"]
+                HEIGHT = dict_argument["BLOCK_SIZE"]
                 NAME_LIST = "list_border_cor"
             elif dict_argument["list_surface"][i][j] == "Б":
                 PATH = "image/paper.png"
-                WIDTH = BLOCK_SIZE
-                HEIGHT = BLOCK_SIZE
+                WIDTH = dict_argument["BLOCK_SIZE"]
+                HEIGHT = dict_argument["BLOCK_SIZE"]
                 NAME_LIST = "list_border_cor_paper_and_door"
             elif dict_argument["list_surface"][i][j] in ["b","i"]: 
                 PATH = "image/block/center.png"
-                WIDTH = BLOCK_SIZE
-                HEIGHT = BLOCK_SIZE
+                WIDTH = dict_argument["BLOCK_SIZE"]
+                HEIGHT = dict_argument["BLOCK_SIZE"]
                 NAME_LIST = "list_border_cor"
 
                 if matrix_index_check(i,j,dict_argument["list_surface"][i][j],["right","left","down","up"]):
@@ -228,35 +250,35 @@ def drawSurfaces():
 
             elif dict_argument["list_surface"][i][j] == "L":
                 PATH = "image/Motion_block_up_down_"+str(dict_argument_block["count_img_spinning_motion_block"])+".png"
-                WIDTH = BLOCK_SIZE
-                HEIGHT = BLOCK_SIZE//2
+                WIDTH = dict_argument["BLOCK_SIZE"]
+                HEIGHT = dict_argument["BLOCK_SIZE"]//2
                 NAME_LIST = "list_border_cor"
             elif dict_argument["list_surface"][i][j] == "K":
                 PATH = "image/Key.png"
-                WIDTH = BLOCK_SIZE
-                HEIGHT = BLOCK_SIZE
+                WIDTH = dict_argument["BLOCK_SIZE"]
+                HEIGHT = dict_argument["BLOCK_SIZE"]
                 NAME_LIST = "list_border_cor_paper_and_door"
             
             elif dict_argument["list_surface"][i][j] in list_key_door:
                 if dict_direction_door[dict_argument["list_surface"][i][j]] == "r":
                     PATH = "image/Door_block.png"
-                    WIDTH = BLOCK_SIZE*2
-                    HEIGHT = BLOCK_SIZE//5
+                    WIDTH = dict_argument["BLOCK_SIZE"]*2
+                    HEIGHT = dict_argument["BLOCK_SIZE"]//5
                 else:
                     PATH = "image/Door_block_up.png"
-                    WIDTH = BLOCK_SIZE//5
-                    HEIGHT = BLOCK_SIZE*2
+                    WIDTH = dict_argument["BLOCK_SIZE"]//5
+                    HEIGHT = dict_argument["BLOCK_SIZE"]*2
                 NAME_LIST = "list_border_cor"
             for obj in list_key_door:
                 if dict_argument["list_surface"][i][j] in obj.lower():
                     if dict_direction_door[dict_argument["list_surface"][i][j].upper()] == "r":
                         PATH = "image/Open_door_block.png"
-                        WIDTH = BLOCK_SIZE*2
-                        HEIGHT = BLOCK_SIZE
+                        WIDTH = dict_argument["BLOCK_SIZE"]*2
+                        HEIGHT = dict_argument["BLOCK_SIZE"]
                     else:
                         PATH = "image/Open_door_block_up.png"
-                        WIDTH = BLOCK_SIZE
-                        HEIGHT = BLOCK_SIZE*2
+                        WIDTH = dict_argument["BLOCK_SIZE"]
+                        HEIGHT = dict_argument["BLOCK_SIZE"]*2
                     NAME_LIST = "list_border_cor_paper_and_door"
                 
             # Проверяем есть ди етот символ в списке символов
@@ -293,10 +315,10 @@ def drawSurfaces():
                     dict_list_border["list_flag"][i][j].append(dict_argument["list_surface"][i][j])#буква елемента
 
             # Изменяем кординату на которой отрисовываеться картинка
-            X += BLOCK_SIZE
+            X += dict_argument["BLOCK_SIZE"]
         # Изменяем кординату на которой отрисовываеться картинка    
         X = dict_argument["X_MAP"]
-        Y += BLOCK_SIZE
+        Y += dict_argument["BLOCK_SIZE"]
     # Добавляем все в основной список 
     for i in range(len(dict_list_border["list_flag"])):
         for j in range(len(dict_list_border["list_flag"][i])):
@@ -304,7 +326,7 @@ def drawSurfaces():
                 dict_list_border[dict_list_border["list_flag"][i][j][-3]].append(dict_list_border["list_flag"][i][j])
 
 # Функция для движения платформы вправо влево
-def block_motion_right_left(list_surface,dict_argument_block,platform_length,sprite,block_size_y = BLOCK_SIZE,block_size_x = BLOCK_SIZE):
+def block_motion_right_left(list_surface,dict_argument_block,platform_length,sprite):
 
     # Перебираем матрицу
     list_index_vertically = [] 
@@ -342,9 +364,9 @@ def block_motion_right_left(list_surface,dict_argument_block,platform_length,spr
                             # Добавляем наш ряд в основную матрицу
                             dict_argument["list_surface"][index_vertically] = list(''.join(list1))
                             # Проверяем колизию персонажа дабы перемещать его когда он стоит на платформе
-                            block = [index_vertically*block_size_y,index_vertically*block_size_y+block_size_y,index_x*block_size_x-block_size_x,index_x*block_size_x]
-                            if sprite.image_sprite.Y + sprite.image_sprite.HEIGHT >= block[0] and sprite.image_sprite.X + sprite.image_sprite.WIDTH >= block[2] + BLOCK_SIZE//3 and sprite.image_sprite.X <= block[3] - BLOCK_SIZE//3 and sprite.image_sprite.Y + sprite.image_sprite.HEIGHT <= block[0] + sprite.gravity_speed :
-                                sprite.image_sprite.X += block_size_y
+                            block = [index_vertically*dict_argument["BLOCK_SIZE"],index_vertically*dict_argument["BLOCK_SIZE"]+dict_argument["BLOCK_SIZE"],index_x*dict_argument["BLOCK_SIZE"]-dict_argument["BLOCK_SIZE"],index_x*dict_argument["BLOCK_SIZE"]]
+                            if sprite.image_sprite.Y + sprite.image_sprite.HEIGHT >= block[0] and sprite.image_sprite.X + sprite.image_sprite.WIDTH >= block[2] + dict_argument["BLOCK_SIZE"]//3 and sprite.image_sprite.X <= block[3] - dict_argument["BLOCK_SIZE"]//3 and sprite.image_sprite.Y + sprite.image_sprite.HEIGHT <= block[0] + sprite.gravity_speed :
+                                sprite.image_sprite.X += dict_argument["BLOCK_SIZE"]
                             # Останавливаем цыкл
                             break
                         # Если следующая келтка не путь для платформы
@@ -374,9 +396,9 @@ def block_motion_right_left(list_surface,dict_argument_block,platform_length,spr
                             # Добавляем наш ряд в основную матрицу
                             dict_argument["list_surface"][index_vertically] = list(''.join(list1[::-1]))  
                             # Проверяем колизию персонажа дабы перемещать его когда он стоит на платформе
-                            block = [index_vertically*block_size_y,index_vertically*block_size_y+block_size_y,index_x_2*block_size_x-block_size_x,index_x_2*block_size_x]
-                            if sprite.image_sprite.Y + sprite.image_sprite.HEIGHT >= block[0] and sprite.image_sprite.X + sprite.image_sprite.WIDTH >= block[2] + BLOCK_SIZE//3 and sprite.image_sprite.X <= block[3] - BLOCK_SIZE//3 and sprite.image_sprite.Y + sprite.image_sprite.HEIGHT <= block[0] + sprite.gravity_speed :
-                                    sprite.image_sprite.X -= block_size_y
+                            block = [index_vertically*dict_argument["BLOCK_SIZE"],index_vertically*dict_argument["BLOCK_SIZE"]+dict_argument["BLOCK_SIZE"],index_x_2*dict_argument["BLOCK_SIZE"]-dict_argument["BLOCK_SIZE"],index_x_2*dict_argument["BLOCK_SIZE"]]
+                            if sprite.image_sprite.Y + sprite.image_sprite.HEIGHT >= block[0] and sprite.image_sprite.X + sprite.image_sprite.WIDTH >= block[2] + dict_argument["BLOCK_SIZE"]//3 and sprite.image_sprite.X <= block[3] - dict_argument["BLOCK_SIZE"]//3 and sprite.image_sprite.Y + sprite.image_sprite.HEIGHT <= block[0] + sprite.gravity_speed :
+                                    sprite.image_sprite.X -= dict_argument["BLOCK_SIZE"]
                             # Останавливаем цыкл
                             break
                         # Если следующая келтка не путь для платформы
@@ -392,7 +414,7 @@ def block_motion_right_left(list_surface,dict_argument_block,platform_length,spr
                 index_x = 0
 
 # Функция для движения платформы вверх вниз
-def block_motion_down_up(list_surface,dict_argument_block,sprite,block_size_y = BLOCK_SIZE,block_size_x = BLOCK_SIZE):
+def block_motion_down_up(list_surface,dict_argument_block,sprite):
     # Перебираем матрицу
     list_index_horizontal = [] 
     for obj in range(len(dict_argument["list_surface"])):
@@ -431,9 +453,9 @@ def block_motion_down_up(list_surface,dict_argument_block,sprite,block_size_y = 
                             dict_argument["list_surface"][index_y] = list(''.join(list_up))  
                             dict_argument["list_surface"][index_y - 1] = list(''.join(list_down))  
                             # Проверяем колизию блока и если персонаж на нем двигаем его
-                            block = [index_y*block_size_y,index_y*block_size_y+block_size_y,index_x*block_size_x,index_x*block_size_x+block_size_x]
+                            block = [index_y*dict_argument["BLOCK_SIZE"],index_y*dict_argument["BLOCK_SIZE"]+dict_argument["BLOCK_SIZE"],index_x*dict_argument["BLOCK_SIZE"],index_x*dict_argument["BLOCK_SIZE"]+dict_argument["BLOCK_SIZE"]]
                             if sprite.image_sprite.Y + sprite.image_sprite.HEIGHT >= block[0] and sprite.image_sprite.X + sprite.image_sprite.WIDTH >= block[2] and sprite.image_sprite.X <= block[3] and sprite.image_sprite.Y + sprite.image_sprite.HEIGHT <= block[0] + sprite.gravity_speed :
-                                sprite.image_sprite.Y -= block_size_y
+                                sprite.image_sprite.Y -= dict_argument["BLOCK_SIZE"]
                             # Останавливаем функцию
                             stop = True
                         # Если в низ нельзя двигаться    
@@ -459,9 +481,9 @@ def block_motion_down_up(list_surface,dict_argument_block,sprite,block_size_y = 
                             dict_argument["list_surface"][index_y] = list(''.join(list_up))  
                             dict_argument["list_surface"][index_y + 1] = list(''.join(list_down))  
                             # Проверяем колизию блока и если персонаж на нем двигаем его
-                            block = [index_y*block_size_y,index_y*block_size_y+block_size_y,index_x*block_size_x,index_x*block_size_x+block_size_x]
+                            block = [index_y*dict_argument["BLOCK_SIZE"],index_y*dict_argument["BLOCK_SIZE"]+dict_argument["BLOCK_SIZE"],index_x*dict_argument["BLOCK_SIZE"],index_x*dict_argument["BLOCK_SIZE"]+dict_argument["BLOCK_SIZE"]]
                             if sprite.image_sprite.Y + sprite.image_sprite.HEIGHT >= block[0] and sprite.image_sprite.X + sprite.image_sprite.WIDTH >= block[2] and sprite.image_sprite.X <= block[3] and sprite.image_sprite.Y + sprite.image_sprite.HEIGHT <= block[0] + sprite.gravity_speed :
-                                sprite.image_sprite.Y += block_size_y
+                                sprite.image_sprite.Y += dict_argument["BLOCK_SIZE"]
                             # Останавливаем функцию
                             stop = True
                         # Если в верх нельзя двигаться   
@@ -496,13 +518,12 @@ def rope(index,graphic_elements,angle,width,height):
     Rope_copy = transform.rotate(graphic_elements.IMG, int(dict_argument_angle[angle]))
     # Задаем x и y для нашего наконечника дабы засечь косание с ним
     x = graphic_elements.X-graphic_elements.WIDTH//2+int(list_cor_Rope[dict_argument_angle[index]][0])
-    y = graphic_elements.Y+graphic_elements.HEIGHT//2-graphic_elements.WIDTH+int(list_cor_Rope[dict_argument_angle[index]][1])
+    y = graphic_elements.Y+graphic_elements.HEIGHT//2-graphic_elements.WIDTH+int(list_cor_Rope[dict_argument_angle[index]][1])-BLOCK_SIZE
     # Создаем рект обект для колизии с накончечником
     Rope_rect = Rect(x,y,graphic_elements.WIDTH,graphic_elements.WIDTH)
     # draw.rect(screen,(0,0,0),Rope_rect)
     # Отрисовываем веревку 
-    screen.blit(Rope_copy, (graphic_elements.X - int(Rope_copy.get_width() / 2), graphic_elements.Y - int(Rope_copy.get_height() / 2)))
-    draw.rect(screen,"red",Rope_rect)
+    screen.blit(Rope_copy, (graphic_elements.X - int(Rope_copy.get_width() / 2), graphic_elements.Y -BLOCK_SIZE - int(Rope_copy.get_height() / 2)))
     # Возвращаем рект обект для колизии с накончечником 
     return Rope_rect
 
@@ -528,11 +549,11 @@ def door_and_button(index_button_x_1,index_button_y_1,index_button_x_2,index_but
             drawSurfaces()
             
     # Создаем графические елементы кнопок                        
-    graphik_element_button_1 = Graphic_elements(index_button_x_1*BLOCK_SIZE,(index_button_y_1+1)*BLOCK_SIZE-dict_Graphic_elements_obj["button"].HEIGHT,dict_Graphic_elements_obj["button"].WIDTH,dict_Graphic_elements_obj["button"].HEIGHT,dict_Graphic_elements_obj["button"].path)
+    graphik_element_button_1 = Graphic_elements(index_button_x_1*dict_argument["BLOCK_SIZE"],(index_button_y_1+1)*dict_argument["BLOCK_SIZE"]-dict_Graphic_elements_obj["button"].HEIGHT,dict_Graphic_elements_obj["button"].WIDTH,dict_Graphic_elements_obj["button"].HEIGHT,dict_Graphic_elements_obj["button"].path)
     if index_button_x_2 == None:
         graphik_element_button_2 =Graphic_elements(0,0,0,0,None)
     else:
-        graphik_element_button_2 = Graphic_elements(index_button_x_2*BLOCK_SIZE,(index_button_y_2+1)*BLOCK_SIZE-dict_Graphic_elements_obj["button"].HEIGHT,dict_Graphic_elements_obj["button"].WIDTH,dict_Graphic_elements_obj["button"].HEIGHT,dict_Graphic_elements_obj["button"].path)
+        graphik_element_button_2 = Graphic_elements(index_button_x_2*dict_argument["BLOCK_SIZE"],(index_button_y_2+1)*dict_argument["BLOCK_SIZE"]-dict_Graphic_elements_obj["button"].HEIGHT,dict_Graphic_elements_obj["button"].WIDTH,dict_Graphic_elements_obj["button"].HEIGHT,dict_Graphic_elements_obj["button"].path)
     
     #Если кнопка не нажата то просто отрисовываем её 
     if not Rect.colliderect(sprite1.image_sprite.RECT,graphik_element_button_1.RECT):
@@ -618,16 +639,16 @@ def cracking_platform(sprite):
             if i[6] <= 0:
                 # Проверяем можно ли изменяем картинку на следующую стадию
                 if len(list_cracking) -1 >= number+1:
-                    dict_argument["list_surface"][i[0]//(BLOCK_SIZE)][i[4]//(BLOCK_SIZE)] = list_cracking[number+1]
+                    dict_argument["list_surface"][i[0]//(dict_argument["BLOCK_SIZE"])][i[4]//(dict_argument["BLOCK_SIZE"])] = list_cracking[number+1]
                     dict_list_border["list_border_cor_cracking"][dict_list_border["list_border_cor_cracking"].index(i)][-2].path = "image/cracking_platform_"+str(number+1)+".png"
                     dict_list_border["list_border_cor_cracking"][dict_list_border["list_border_cor_cracking"].index(i)][-2].image_load()
                     dict_list_border["list_border_cor_cracking"][dict_list_border["list_border_cor_cracking"].index(i)][6] = 20
                 # Если нет то удаляем платформу
                 else:
                     # Убираем букву на матрицу заменяя её нулем(пустым местом)
-                    dict_argument["list_surface"][i[0]//(BLOCK_SIZE)][i[4]//(BLOCK_SIZE)] = "0"
+                    dict_argument["list_surface"][i[0]//(dict_argument["BLOCK_SIZE"])][i[4]//(dict_argument["BLOCK_SIZE"])] = "0"
                     # Добавляем плуатформу в словарь сломаных трескающихся платформ дабы потом его возобновить ключом к которому являються кординаты через запятую
-                    key = str(i[0]//(BLOCK_SIZE))+","+str(i[4]//(BLOCK_SIZE))
+                    key = str(i[0]//(dict_argument["BLOCK_SIZE"]))+","+str(i[4]//(dict_argument["BLOCK_SIZE"]))
                     broken_cracking_platform[key] = 100
                     # Убираем ету пллатформу из списка платформ и очищаем список обектов етих платформ чтоб он мог снова заполниться
                     dict_list_border["list_border_cor_cracking"].clear()
@@ -637,7 +658,7 @@ def cracking_platform(sprite):
             if i[7] <= 0:
                 # Проверяем можно ли изменяем картинку на прошлую стадию
                 if number - 1 >= 0:
-                    dict_argument["list_surface"][i[0]//(BLOCK_SIZE)][i[4]//(BLOCK_SIZE)] = list_cracking[number-1]
+                    dict_argument["list_surface"][i[0]//(dict_argument["BLOCK_SIZE"])][i[4]//(dict_argument["BLOCK_SIZE"])] = list_cracking[number-1]
                     dict_list_border["list_border_cor_cracking"][dict_list_border["list_border_cor_cracking"].index(i)][-2].path = "image/cracking_platform_"+str(number-1)+".png"
                     dict_list_border["list_border_cor_cracking"][dict_list_border["list_border_cor_cracking"].index(i)][-2].image_load()
                     dict_list_border["list_border_cor_cracking"][dict_list_border["list_border_cor_cracking"].index(i)][7] = 40
@@ -758,7 +779,7 @@ def saw_function():
     # перебераем список со всеми пилами
     for saw in list_saw:
         # КОСТЫЛЬ
-        saw.Y += BLOCK_SIZE
+        saw.Y += dict_argument["BLOCK_SIZE"]
         # крутим пилу
         saw.image_load()
         saw_copy = transform.rotate(saw.IMG, int(dict_argument_angle["angle_saw"]))
@@ -770,13 +791,13 @@ def saw_function():
         # Убиваем игрока при косании с пилой
         sprite1.Touch_of_death(rect_saw)
         # КОСТЫЛЬ
-        saw.Y -= BLOCK_SIZE
+        saw.Y -= dict_argument["BLOCK_SIZE"]
 
 # Функция облока подсказки
 def help_function(index_x,index_y,indnex_width,index_height,text,color):
     # Задаем размеры
-    border_width = BLOCK_SIZE
-    border_height = BLOCK_SIZE
+    border_width = dict_argument["BLOCK_SIZE"]
+    border_height = dict_argument["BLOCK_SIZE"]
     # Создаем и отображаем изображение облока
     help_img = Graphic_elements(index_x*border_width,index_y*border_height,indnex_width*border_width,index_height*border_height,"image/help.png")
     help_img.show_image(screen)
@@ -813,14 +834,14 @@ def bird():
     if dict_argument["max_number_beard"] <= dict_argument["count_beard"]:
         dict_argument["max_number_beard"] = random.randint(500,1000)
         dict_argument["count_beard"] = 0
-        dict_argument["list_beard"].append(Graphic_elements(-BLOCK_SIZE,BLOCK_SIZE,BLOCK_SIZE,BLOCK_SIZE//1.32,"image/beard/beard1.png",4))
+        dict_argument["list_beard"].append(Graphic_elements(-dict_argument["BLOCK_SIZE"],dict_argument["BLOCK_SIZE"],dict_argument["BLOCK_SIZE"],dict_argument["BLOCK_SIZE"]//1.32,"image/beard/beard1.png",4))
     dict_argument["count_beard"] += 1
 
 #Функция затемнения
 def function_dimming():
     if dict_argument["screen_dimming_flag"] != None:
         if dict_argument["index_text_drimming"] == None:
-            text_transition_new_lvl.font_content = dict_mision_lvl_1["location_"+str(index_location+2)]
+            text_transition_new_lvl.font_content = dict_mision_lvl_1["location_"+str(dict_argument["index_location"])]
         else:
             text_transition_new_lvl.font_content = dict_text_drimming[dict_argument["index_text_drimming"]]
             
@@ -829,24 +850,32 @@ def function_dimming():
             dict_argument["screen_dimming_count"] += 3
             if dict_argument["screen_dimming_count"] == 300:
                 dict_argument["screen_dimming_flag"] = "-"
-                
+                if dict_argument["index_text_drimming"] in ["lose_game","win_game"]:
+                    dict_argument["game"] = False
         if dict_argument["screen_dimming_flag"] == "-":
             dict_argument["screen_dimming_count"] -= 3
             if dict_argument["screen_dimming_count"] == 0:
                 dict_argument["screen_dimming_flag"] = None
+                
                 dict_argument["index_text_drimming"] = None
         dimming.IMG.set_alpha(round(dict_argument["screen_dimming_count"]))
         dimming.show_image(screen)
         text_transition_new_lvl.show_text(screen)
 # Функция движения карты
 def move_map(direction):
+    if dict_argument["index_lvl"] == 1:
+        dict_argument["screen_dimming_flag"] = "+"
+        dict_argument["index_text_drimming"] = None
     # Флаг направления оси
     flag_direction = None
     # Список в который будет помещена полная карта
     full_map = []
     list_full_surface = dict_argument["full_surface"]
     # Скорость передвижаня карты
-    spead_move_map = 100
+    if dict_argument["BLOCK_SIZE"] == round(SCREEN_W/30):
+        spead_move_map = 100
+    else:
+        spead_move_map = 200
     # Проверяем направление перемещения
     if direction == "right":
         # Соединяем матрицы
@@ -854,7 +883,7 @@ def move_map(direction):
             str_list = []
             for i in dict_argument["list_surface"][index]:
                 str_list.append(i)
-            for i in list_full_surface[dict_argument["index_lvl"]][dict_argument["index_location"]+1][index]:
+            for i in list_full_surface[dict_argument["index_lvl"]][dict_argument["index_location"]][index]:
                 str_list.append(i)
             full_map.append(list(str_list))
         # Задаем стартовую координауту отрисовки здувух матриц
@@ -866,7 +895,7 @@ def move_map(direction):
         # Соединяем матрицы
         for index in range(len(dict_argument["list_surface"])):
             str_list = []
-            for i in list_full_surface[dict_argument["index_lvl"]][dict_argument["index_location"]+1][index]:
+            for i in list_full_surface[dict_argument["index_lvl"]][dict_argument["index_location"]][index]:
                 str_list.append(i)
             for i in dict_argument["list_surface"][index]:
                 str_list.append(i)
@@ -883,7 +912,7 @@ def move_map(direction):
         # Соединяем матрицы
         for index in dict_argument["list_surface"]:
             full_map.append(index)
-        for index in list_full_surface[dict_argument["index_lvl"]][dict_argument["index_location"]+1]:
+        for index in list_full_surface[dict_argument["index_lvl"]][dict_argument["index_location"]]:
             full_map.append(index)
         # Задаем стартовую координауту отрисовки здувух матриц
         a = -SCREEN_H
@@ -892,7 +921,7 @@ def move_map(direction):
     # Проверяем направление перемещения
     elif direction == "up":
         # Соединяем матрицы
-        for index in list_full_surface[dict_argument["index_lvl"]][dict_argument["index_location"]+1]:
+        for index in list_full_surface[dict_argument["index_lvl"]][dict_argument["index_location"]]:
             full_map.append(index)
         for index in dict_argument["list_surface"]:
             full_map.append(index)
@@ -974,7 +1003,6 @@ def move_map(direction):
     
     # Меняем матрицу на другую
     dict_argument[flag_direction] = 0
-    dict_argument["index_location"]+=1
     dict_argument["list_surface"] = list_full_surface[dict_argument["index_lvl"]][dict_argument["index_location"]]
     # Очищаем списки которые не очищаються в функции
     dict_list_border["list_border_cor_cracking"].clear()
@@ -993,10 +1021,10 @@ def shooting_lvl(screen,min_count_point,ammo_count,barriers):
     if barriers > 5:
         barriers = 5
 
-    ammo_img = Graphic_elements(SCREEN_W//100,SCREEN_W//100,BLOCK_SIZE,BLOCK_SIZE//1.14,"image/ammo.png")
+    ammo_img = Graphic_elements(SCREEN_W//100,SCREEN_W//100,dict_argument["BLOCK_SIZE"],dict_argument["BLOCK_SIZE"]//1.14,"image/ammo.png")
     
-    left_side_stand_for_manniquens = Graphic_elements(0,0,BLOCK_SIZE,BLOCK_SIZE*2.269,"image/left_side_stand_for_mannequins.png")
-    right_side_stand_for_manniquens = Graphic_elements(0,0,BLOCK_SIZE,BLOCK_SIZE*2.269,"image/right_side_stand_for_mannequins.png")
+    left_side_stand_for_manniquens = Graphic_elements(0,0,dict_argument["BLOCK_SIZE"],dict_argument["BLOCK_SIZE"]*2.269,"image/left_side_stand_for_mannequins.png")
+    right_side_stand_for_manniquens = Graphic_elements(0,0,dict_argument["BLOCK_SIZE"],dict_argument["BLOCK_SIZE"]*2.269,"image/right_side_stand_for_mannequins.png")
     middle_stand_for_manniquens = Graphic_elements(0,0,0,right_side_stand_for_manniquens.HEIGHT//9.83,"image/middle_stand_stand_for_mannequins.png")
     
     list_down_stand_for_manniquens = [left_side_stand_for_manniquens,right_side_stand_for_manniquens,middle_stand_for_manniquens,[[Graphic_elements(None,0,SCREEN_W//10,SCREEN_W//10*1.693,None),"right",[]],[Graphic_elements(None,0,SCREEN_W//10,SCREEN_W//10*1.693,None),"right",[]]],[]]                 
@@ -1228,7 +1256,6 @@ def shooting_lvl(screen,min_count_point,ammo_count,barriers):
         ammo_statistic.show_text(screen)
         statstic.show_text(screen)
         clock.tick(FPS*2)
-        # print(clock.get_fps())
         if ammo_count <= 0:
             return count_point
         display.update()
@@ -1316,10 +1343,7 @@ def puzzle(event):
             dict_argument["count_final_puzzle"] -= 1
         if dict_argument["count_final_puzzle"] <= 0:
             dict_argument["flag_puzzle_location"] = False
-            dict_argument["screen_dimming_flag"] = "+"
-            dict_argument["index_text_drimming"] = None
-
-         
+            
 
 def slider(sound_power, flag_mouse_volume_sound, rect_volume_sound, mouse_volume_sound, mouse_cor, text, win, divider = 1 , plus = 0):
     sound_power.show_text(win)
@@ -1494,8 +1518,9 @@ def menu(run_game):
                 if button_option.check_mouse_cor(mouse_cor):
                     option()
                 if button_play.check_mouse_cor(mouse_cor):
-                    run = False
                     run_game()
+                    
+                    
                 
                             
                         
@@ -1523,9 +1548,6 @@ def menu(run_game):
             button_exit.X = SCREEN_W//1.1
         pygame.display.flip()
   
-
-
-
 def book():
 
     dict_argument["count_animation_book"] += 1
@@ -1541,12 +1563,96 @@ def book():
         element = Graphic_elements(0,0,width*SCREEN_W//500,height*SCREEN_W//500,"image/book_4.png")
         element.X = (SCREEN_W - element.WIDTH ) //2
         element.Y = (SCREEN_H - element.HEIGHT) //2
-        text_book = Font("font/pixel_font.ttf",SCREEN_W//65,'black',"Сьогодні я зроблю;;свою останню справу;;після якої я влечу;;до себе на батьківщину",element.X + SCREEN_W//30,element.Y + SCREEN_W//30,7)
+        text_book = Font("font/pixel_font.ttf",SCREEN_W//65,'black',"Сьогодні я зроблю;;свою останню справу;;після якої я влечу;;до себе на батьківщину;;Нарешті я побачу;;свою дочку;;у неї через 3 міцяться;;день народженя. ",element.X + SCREEN_W//30,element.Y + SCREEN_W//30,7)
+        text_book_2 = Font("font/pixel_font.ttf",SCREEN_W//65,'black',"Вона напевно скучила;;за мною.",element.X + SCREEN_W//4,element.Y + SCREEN_W//30,7)
         element.show_image(screen)
         text_book.show_text(screen)
+        text_book_2.show_text(screen)
         
         
     if dict_argument["count_animation_book"] >= 400:
         dict_argument["flag_book"] = False
+        return False
+    return True
     
-    
+def finish_shooting():
+    game = True
+    mouse.set_visible(False)
+    criminal = Graphic_elements(Background_shooting.WIDTH //2 ,Background_shooting.HEIGHT-dict_argument["BLOCK_SIZE"]*6.64,dict_argument["BLOCK_SIZE"]*5,dict_argument["BLOCK_SIZE"]*8.3,"image/Персонажи/Преступник/1.png")
+    direction_move_criminal = None
+    count_move_criminal = 0 
+    count_change_direction_criminal = 15
+    falg_motion = False
+    health_criminal = 2
+    gun = Sounds("sounds/gun.wav",100)
+    coin = Sounds("sounds/coins.wav",100)
+    count_gun = 0
+    while game:
+        Background_shooting.show_image(screen)
+        mouse_cor = mouse.get_pos()
+        
+        criminal.X = Background_shooting.X + criminal.start_x
+        criminal.Y = Background_shooting.Y + criminal.start_y
+        
+        criminal.start_y -= SCREEN_W//250
+        criminal.WIDTH -= SCREEN_W/(1706*1.5)
+        criminal.HEIGHT -= SCREEN_H/(578*1.5)
+        if criminal.WIDTH > 0 and criminal.HEIGHT > 0:
+            criminal.image_load()
+        if direction_move_criminal != None and count_move_criminal > 0:
+            if direction_move_criminal == "R":
+                criminal.start_x += SCREEN_W//200
+            else:
+                criminal.start_x -= SCREEN_W//200
+            count_move_criminal -= 1
+        for event1 in event.get(): # Получаем значение события из "списка событий" 
+            
+            if event1.type == QUIT:
+                game = False
+            if event1.type == MOUSEMOTION:
+                
+                Background_shooting.X += int(event1.rel[0]) * -1
+                Background_shooting.Y += int(event1.rel[1]) * -1
+                falg_motion = True
+                if Background_shooting.X > 0:
+                    Background_shooting.X = 0
+                if Background_shooting.Y > 0:
+                    Background_shooting.Y = 0
+                if Background_shooting.X < SCREEN_W - Background_shooting.WIDTH:
+                    Background_shooting.X = SCREEN_W - Background_shooting.WIDTH
+                if Background_shooting.Y < SCREEN_H - Background_shooting.HEIGHT:
+                    Background_shooting.Y = SCREEN_H - Background_shooting.HEIGHT
+            if event1.type == MOUSEBUTTONDOWN and event1.button == 1:
+                if count_gun == 0:
+                    count_gun = 60
+                    gun.play_sound()
+                    if criminal.check_mouse_cor((SCREEN_W//2,SCREEN_H//2)):
+                        coin.play_sound()
+                        health_criminal -= 1
+                
+
+        if mouse_cor[0]<= SCREEN_W//4 or mouse_cor[0]>= SCREEN_W - SCREEN_W//4 or mouse_cor[1]<= SCREEN_H//4 or mouse_cor[1]>= SCREEN_H - SCREEN_H//4:
+            mouse.set_pos([SCREEN_W//2,SCREEN_H//2])
+        if not falg_motion:
+            mouse.set_pos([SCREEN_W//2,SCREEN_H//2])
+        if count_gun > 0 :
+            count_gun -= 1
+        if count_change_direction_criminal >= 20:
+
+            count_change_direction_criminal = 0 
+            direction_move_criminal = random.choice(["L","L","L","R","R","R",None])
+            count_move_criminal = 60 
+            
+        if criminal.start_y < -criminal.HEIGHT:
+
+            mouse.set_visible(True)
+            return False
+        if health_criminal <= 0:
+
+            mouse.set_visible(True)
+            return True
+        criminal.show_image(screen)
+        aim.show_image(screen)
+        clock.tick(FPS*2)
+        display.update() #Обновление экрана
+        count_change_direction_criminal += 1

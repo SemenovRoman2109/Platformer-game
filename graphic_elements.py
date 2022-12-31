@@ -24,7 +24,8 @@ class Graphic_elements():
     #Метод для отображения картинки
     def show_image(self,screen_object):
         #переопределяем rect обект нашего елемента
-        self.RECT = Rect(self.X,self.Y,self.WIDTH,self.HEIGHT)
+        if self.X != None and self.Y != None and self.WIDTH != None and self.HEIGHT != None:
+            self.RECT = Rect(self.X,self.Y,self.WIDTH,self.HEIGHT)
         #Проверка картинки
         if self.loading == False:
             if self.path != None:

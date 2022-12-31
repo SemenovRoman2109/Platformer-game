@@ -9,14 +9,10 @@ class Sprite:
                 sprite_speed, sprite_width, sprite_height,
                  border_width, border_height,sprite_gravity_power,
                  double_jump = None,index_layout = 0,jump_boost = SCREEN_H//10*3,
-                 health = 3):
+                 ):
         
         self.flag_hook = 20
         self.image_path = "image/Персонажи/Двойной_прижок/" + str(name_image) + ".png"
-        self.image_width = sprite_width 
-        self.image_height = sprite_height
-        self.sprite_x = sprite_x
-        self.sprite_y = sprite_y
         self.speed = sprite_speed
         self.flag_leader = False
         self.start_speed = sprite_speed
@@ -27,7 +23,6 @@ class Sprite:
         for i in range(10):
 
             self.list_animation.append("image/Персонажи/Двойной_прижок/"+str(i+1)+".png")
-        self.health = health
         self.flag_sprite = 0 # счетчик изменения костюмов
         self.index = 0 # счетчик индексов списка list_images
         self.flag = 'R' # отвечает за контроль направления движения
@@ -49,10 +44,10 @@ class Sprite:
         self.flag_squat2 = 3
         self.random_direction_ghost_number = None
         self.random_direction_ghost_count = [10,15]
-        self.image_sprite = Graphic_elements(self.sprite_x,self.sprite_y,self.image_width,self.image_height,self.image_path)   
+        self.image_sprite = Graphic_elements(sprite_x,sprite_y,sprite_width,sprite_height,self.image_path)   
         self.List_layout = [[K_LEFT,K_RIGHT,K_UP,K_DOWN],[K_a,K_d,K_w,K_s],[K_RIGHT,K_LEFT,K_DOWN,K_UP],[K_d,K_a,K_s,K_w]]
         self.flag_spring = 0
-        self.ghost_img = Graphic_elements(0,0,BLOCK_SIZE,BLOCK_SIZE*1.86,"image/ghost_1.png")
+        self.ghost_img = Graphic_elements(0,0,dict_argument["BLOCK_SIZE"],dict_argument["BLOCK_SIZE"]*1.86,"image/ghost_1.png")
         self.count_pressing_ghost = 0
         self.shield_img = Graphic_elements(0,0,self.image_sprite.WIDTH * 1.68,self.image_sprite.HEIGHT * 1.50,"image/shield.png")
         self.count_duration_shield = dict_argument["duration_shield"]
@@ -62,29 +57,14 @@ class Sprite:
 
     # Отображает статистику персонажа
     def statistic_person(self):
-        x_health = SCREEN_W-SCREEN_W/5
-        health_img = Graphic_elements(0,SCREEN_H-SCREEN_H//15,SCREEN_W//30,SCREEN_W/40,"image/Health.png")
-        for i in range(3):
-            health_img.path = "image/Slot_Health.png"
-            health_img.X = x_health
-            health_img.image_load()
-            health_img.show_image(screen)
-            x_health += SCREEN_W//25
-        x_health = SCREEN_W-SCREEN_W/5
-        for i in range(self.health):
-            health_img.path = "image/Health.png"
-            health_img.X = x_health
-            health_img.image_load()
-            health_img.show_image(screen)
-            x_health += SCREEN_W//25
-        
+
         if len(self.collected_paper) == 4:
             dict_argument["flag_puzzle_location"] = True
             self.collected_paper.clear()     
         if len(self.collected_paper) > 0:
-            paper_img = Graphic_elements(0,SCREEN_H-BLOCK_SIZE,BLOCK_SIZE,BLOCK_SIZE,"image/paper.png")
+            paper_img = Graphic_elements(0,SCREEN_H-dict_argument["BLOCK_SIZE"],dict_argument["BLOCK_SIZE"],dict_argument["BLOCK_SIZE"],"image/paper.png")
             paper_img.show_image(screen)
-            number_paper = Font("font/pixel_font.ttf",BLOCK_SIZE,(255,0,0),"X"+str(len(self.collected_paper)),BLOCK_SIZE,SCREEN_H-BLOCK_SIZE,1)
+            number_paper = Font("font/pixel_font.ttf",dict_argument["BLOCK_SIZE"],(255,0,0),"X"+str(len(self.collected_paper)),dict_argument["BLOCK_SIZE"],SCREEN_H-dict_argument["BLOCK_SIZE"],1)
             number_paper.show_text(screen)
  
     # Функция приседания
@@ -230,7 +210,7 @@ class Sprite:
                     else:
                         self.gravity = True
                 else:
-                    if self.image_sprite.X + self.image_sprite.WIDTH >= i[4] + BLOCK_SIZE//5 and self.image_sprite.X <= i[5] - BLOCK_SIZE//5:
+                    if self.image_sprite.X + self.image_sprite.WIDTH >= i[4] + dict_argument["BLOCK_SIZE"]//5 and self.image_sprite.X <= i[5] - dict_argument["BLOCK_SIZE"]//5:
                         if self.image_sprite.Y + self.image_sprite.HEIGHT >= i[0]:
                             if self.image_sprite.Y + self.image_sprite.HEIGHT <= i[0] + self.gravity_speed*2:
                                 self.gravity = False#гравитация отключается
@@ -245,7 +225,7 @@ class Sprite:
                         self.gravity = True
         if self.gravity == True:
             for i in dict_list_border["list_border_cor_cracking"]:  
-                if self.image_sprite.X + self.image_sprite.WIDTH >= i[4] + BLOCK_SIZE//5 and self.image_sprite.X <= i[5] - BLOCK_SIZE//5:
+                if self.image_sprite.X + self.image_sprite.WIDTH >= i[4] + dict_argument["BLOCK_SIZE"]//5 and self.image_sprite.X <= i[5] - dict_argument["BLOCK_SIZE"]//5:
                     if self.image_sprite.Y + self.image_sprite.HEIGHT >= i[0]:
                         if self.image_sprite.Y + self.image_sprite.HEIGHT <= i[0] + self.gravity_speed*2:
                             self.gravity = False#гравитация отключается
@@ -366,7 +346,7 @@ class Sprite:
     def can_move_up(self):
         for i in dict_list_border["list_border_cor"]:
             if i[-1] != "K":
-                i_rect = Rect(i[4]+ BLOCK_SIZE//5,i[1] + SCREEN_H//500,i[5]-i[4]- BLOCK_SIZE//2.5,1)
+                i_rect = Rect(i[4]+ dict_argument["BLOCK_SIZE"]//5,i[1] + SCREEN_H//500,i[5]-i[4]- dict_argument["BLOCK_SIZE"]//2.5,1)
                 rect_sprite = Rect(self.image_sprite.X,self.image_sprite.Y,self.image_sprite.WIDTH,self.image_sprite.HEIGHT)
                 if Rect.colliderect(rect_sprite,i_rect): 
                     self.move_up = False
@@ -377,7 +357,7 @@ class Sprite:
                 self.move_up = True
         if self.move_up == True:
             for i in dict_list_border["list_border_cor_cracking"]:
-                i_rect = Rect(i[4]+ BLOCK_SIZE//5,i[1] + SCREEN_H//500,i[5]-i[4]- BLOCK_SIZE//2.5,1)
+                i_rect = Rect(i[4]+ dict_argument["BLOCK_SIZE"]//5,i[1] + SCREEN_H//500,i[5]-i[4]- dict_argument["BLOCK_SIZE"]//2.5,1)
                 rect_sprite = Rect(self.image_sprite.X,self.image_sprite.Y,self.image_sprite.WIDTH,self.image_sprite.HEIGHT)
                 if Rect.colliderect(rect_sprite,i_rect): 
                     self.move_up = False
@@ -408,7 +388,7 @@ class Sprite:
             
             self.can_move = False
             if self.image_sprite.Y <= SCREEN_H//2:
-                self.ghost_img.Y = SCREEN_H - BLOCK_SIZE
+                self.ghost_img.Y = SCREEN_H - dict_argument["BLOCK_SIZE"]
             elif self.image_sprite.Y > SCREEN_H//2:
                 self.ghost_img.Y = self.image_sprite.Y
     # Функция призрака
@@ -431,12 +411,12 @@ class Sprite:
                 dict_argument["ghost"] = False
                 self.image_sprite.X = dict_spawn_and_finish_point["lvl"+str(dict_argument["index_lvl"]+1)+"_location_"+str(dict_argument["index_location"]+1)][0][0]
                 self.image_sprite.Y = dict_spawn_and_finish_point["lvl"+str(dict_argument["index_lvl"]+1)+"_location_"+str(dict_argument["index_location"]+1)][0][1]
-                self.health -= 1
                 self.count_pressing_ghost = 0 
                 self.can_move = True
                 self.count_duration_shield = 0
                 dict_argument["screen_dimming_flag"] = "+"
                 dict_argument["index_text_drimming"] = "dead"
+                
 
             if self.random_direction_ghost_count[0] == self.random_direction_ghost_count[1]:
                 self.random_direction_ghost_count[0] = 0 
@@ -516,44 +496,104 @@ class Sprite:
                 return "paper_true"
 
     # Функция колизии с финишом 
-    def finish_lvl(self,shooting_lvl):
+    def finish_lvl(self,shooting_lvl,Fon,move_cloud,book):
         index_lvl = dict_argument["index_lvl"]
         index_location = dict_argument["index_location"]
-        key = "lvl"+str(index_lvl+1)+"_location_"+str(index_location+1)
-        key_next = "lvl"+str(index_lvl+1)+"_location_"+str(index_location+2)
-        if dict_spawn_and_finish_point[key][2] != None:
-            if Rect.colliderect(dict_spawn_and_finish_point[key][1],self.image_sprite.RECT):
-                self.image_sprite.X = dict_spawn_and_finish_point[key_next][0][0]
-                self.image_sprite.start_x = dict_spawn_and_finish_point[key_next][0][0]
-                self.image_sprite.Y = dict_spawn_and_finish_point[key_next][0][1]
-                self.image_sprite.start_y = dict_spawn_and_finish_point[key_next][0][1]
-                return dict_spawn_and_finish_point[key][2]
-        else:
-            
-            if Rect.colliderect(dict_spawn_and_finish_point[key][1],self.image_sprite.RECT):
-                flag_first_shooting_lvl_point = shooting_lvl(screen,100,20,False)
+        
+        if index_lvl == 1:
+            if index_location == 1:
+                if dict_spawn_and_finish_point["lvl2_location_2"][1][0] == Rect(0,0,0,0) and dict_spawn_and_finish_point["lvl2_location_2"][1][1] == Rect(0,0,0,0):
+                    self.image_sprite.X = dict_spawn_and_finish_point["lvl2_location_3"][0][0]
+                    self.image_sprite.start_x = dict_spawn_and_finish_point["lvl2_location_3"][0][0]
+                    self.image_sprite.Y = dict_spawn_and_finish_point["lvl2_location_3"][0][1]
+                    self.image_sprite.start_y = dict_spawn_and_finish_point["lvl2_location_3"][0][1]
+                    list_NPC.clear()
+                    
+                    return "right"
+                if Rect.colliderect(dict_spawn_and_finish_point["lvl2_location_2"][1][0],self.image_sprite.RECT):
+                    bk = Graphic_elements(0,0,SCREEN_W,SCREEN_H,"image/room_1.png")
+                    rect = Rect(SCREEN_W//1.47,SCREEN_H//2,SCREEN_W//16.78,SCREEN_H//10.5)
+                    
+                    run = True
+                    while run:
+                        Fon.show_image(screen)
+                        move_cloud()
+                        bk.show_image(screen)
+                        for event1 in event.get():
+                            if event1.type == MOUSEBUTTONDOWN:
+                                if Rect.collidepoint(rect,mouse.get_pos()[0],mouse.get_pos()[1]):
+                                    dict_argument["flag_book"] = True
+                            if event1.type == QUIT:
+                                dict_spawn_and_finish_point["lvl2_location_2"][1][0] = Rect(0,0,0,0)
+                                run = False
+
+                        if dict_argument["flag_book"]:
+                            if not book():
+                                dict_spawn_and_finish_point["lvl2_location_2"][1][0] = Rect(0,0,0,0)
+                                run = False
+                                
+                            
+                        
+                        display.update()
+                elif Rect.colliderect(dict_spawn_and_finish_point["lvl2_location_2"][1][1],self.image_sprite.RECT):
+                    bk = Graphic_elements(0,0,SCREEN_W,SCREEN_H,"image/room_2.png")
+                    rect = Rect(SCREEN_W//1.4,SCREEN_H//3.46,SCREEN_W//10.6,SCREEN_W//10.6)
+                    picture_criminal = Graphic_elements(SCREEN_W//2 - dict_argument["BLOCK_SIZE"]*4,SCREEN_H//2 - dict_argument["BLOCK_SIZE"]*4,dict_argument["BLOCK_SIZE"]*8,dict_argument["BLOCK_SIZE"]*8,"image/Персонажи/Преступник/picture.png")
+                    
+                    while True:
+                        Fon.show_image(screen)
+                        move_cloud()
+                        bk.show_image(screen)
+                        for event1 in event.get():
+                            if event1.type == MOUSEBUTTONDOWN:
+                                if Rect.collidepoint(rect,mouse.get_pos()[0],mouse.get_pos()[1]):
+                                    dict_argument["picture_flag"] = True
+                            if event1.type == QUIT:
+                                dict_spawn_and_finish_point["lvl2_location_2"][1][1] = Rect(0,0,0,0)
+                                break
+                        if dict_argument["picture_flag"]:
+                            picture_criminal.show_image(screen)
+                            dict_argument["picture_count"] -= 1
+                            if dict_argument["picture_count"] <= 0:
+                                dict_argument["picture_flag"] = False
+                                dict_spawn_and_finish_point["lvl2_location_2"][1][1] = Rect(0,0,0,0)
+                                break
+
+                        display.update()
+        
+        if index_lvl == 0:
+            key = "lvl1_location_"+str(index_location+1)
+            key_next = "lvl1_location_"+str(index_location+2)
+            if dict_spawn_and_finish_point[key][2] != None:
+                if Rect.colliderect(dict_spawn_and_finish_point[key][1],self.image_sprite.RECT):
+                    self.image_sprite.X = dict_spawn_and_finish_point[key_next][0][0]
+                    self.image_sprite.start_x = dict_spawn_and_finish_point[key_next][0][0]
+                    self.image_sprite.Y = dict_spawn_and_finish_point[key_next][0][1]
+                    self.image_sprite.start_y = dict_spawn_and_finish_point[key_next][0][1]
+                    return dict_spawn_and_finish_point[key][2]
+            else:
+                if Rect.colliderect(dict_spawn_and_finish_point[key][1],self.image_sprite.RECT):
+                    flag_first_shooting_lvl_point = shooting_lvl(screen,100,20,False)
+                    
+                    while True:
+                        
+                        if flag_first_shooting_lvl_point >= 100:
+                            break
+                        
+                        else:
+                            print("У тебя не получилось пройти первый уровень вот тебе еще попытка")
+                            flag_first_shooting_lvl_point = shooting_lvl(screen,100,20,False)
+                    flag_second_shooting_lvl_point = shooting_lvl(screen,150,30,3)
+                    while True:
+                        
+                        if flag_second_shooting_lvl_point >= 150:
+                            break
+                        
+                        else:
+                            print("У тебя не получилось пройти второй уровень вот тебе еще попытка")
+                            flag_second_shooting_lvl_point = shooting_lvl(screen,150,30,3)
+                    return "finish_lvl"
                 
-                while True:
-                    
-                    if flag_first_shooting_lvl_point >= 100:
-                        break
-                    
-                    else:
-                        print("У тебя не получилось пройти первый уровень вот тебе еще попытка")
-                        flag_first_shooting_lvl_point = shooting_lvl(screen,100,20,False)
-                flag_second_shooting_lvl_point = shooting_lvl(screen,150,30,3)
-                while True:
-                    
-                    if flag_second_shooting_lvl_point >= 150:
-                        break
-                    
-                    else:
-                        print("У тебя не получилось пройти второй уровень вот тебе еще попытка")
-                        flag_second_shooting_lvl_point = shooting_lvl(screen,150,30,3)
-                self.image_sprite.X = 0
-                self.image_sprite.start_x = 0
-                self.image_sprite.Y = 0
-                self.image_sprite.start_y = 0
         return "False"
                     
         

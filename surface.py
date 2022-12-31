@@ -28,11 +28,12 @@ list_surface_lvl1_location_1 = [
                 list('00bbb000000000000000'),
                 list('000000000000000шшшшш'),
                 list('bbbbbbbbbbbbbbbbbbbb'),
+                list('bbbbbbbbbbbbbbbbbbbb'),
 ]
 #Матрица для второй локации первого уровня
 list_surface_lvl1_location_2 = [
-                list('00000000000H00000000'),
                 list('00000000000000000000'),
+                list('00000000000H00000000'),
                 list('00000000000000000000'),
                 list('00000000000000000000'),
                 list('00000cc0000000000bbb'),
@@ -41,6 +42,7 @@ list_surface_lvl1_location_2 = [
                 list('00000000000000000000'),
                 list('000bb000000000000000'),
                 list('00000000000000000000'),
+                list('bbbbbbbbbbbbbbbbbbbb'),
                 list('bbbbbbbbbbbbbbbbbbbb'),
 ]
 #Матрица для третий локации первого уровня
@@ -56,10 +58,11 @@ list_surface_lvl1_location_3 = [
                 list('000l000000c000000000'),
                 list('00000000000000000000'),
                 list('bbbbbbbbbbbbbbbbbbbb'),
+                list('bbbbbbbbbbbbbbbbbbbb'),
 ]
 #Матрица для четвертой локации первого уровня
 list_surface_lvl1_location_4 = [
-                list('000000000000000000R0'),
+                list('00000000000000000R00'),
                 list('00000000000000000000'),
                 list('00ppPPpppppb00000000'),
                 list('bb000000000b00000000'),
@@ -70,6 +73,8 @@ list_surface_lvl1_location_4 = [
                 list('000bb000000b00000ъ00'),
                 list('00000000000b00000000'),
                 list('bbbbbbbbbbbbbbbbbbbb'),
+                list('bbbbbbbbbbbbbbbbbbbb'),
+                
 ]
 #Список локаций первого уровня
 list_surface_lvl1 = [list_surface_lvl1_location_1,list_surface_lvl1_location_2,list_surface_lvl1_location_3,list_surface_lvl1_location_4]
@@ -120,20 +125,20 @@ list_surface_lvl2_location_2 = [
 #Матрица для третей локации второго уровня
 list_surface_lvl2_location_3 = [
                 list('00000000000000b000000000000000'),
-                list('10000000000000b020000000000000'),
-                list('bb000000000000bbbbb00000000003'),
-                list('0000IIII00l000b0000000000cc0bb'),
+                list('00000000000000b0N0000000000000'),
+                list('У0000000000000bbbbbл000000000n'),
+                list('bb0IIIII00l000b0000ъ00000cc0bb'),
                 list('0000000000L000b00000000l000000'),
                 list('0000000000l000b00000000l000000'),
-                list('0000000000l004b00000000L000000'),
-                list('0000000000l0bbb000ККК00l000000'),
+                list('N000000000l00nb00000000L00000n'),
+                list('bb00000000l0bbb000ККК00l0cc0bb'),
                 list('00000КККК0l000b00Ъbbb000000000'),
                 list('00000bbbb0l000b000000000000000'),
-                list('00II0000000000bI00000000000000'),
+                list('00II0000000000b000000000000000'),
                 list('00000000000000b000000000000000'),    
                 list('00000000000000bb00000000000000'),
-                list('00000000000000000I000000000000'),
-                list('0П00ККККККК000000000шшшшшшшшшш'),    
+                list('000000000000000000000000000000'),
+                list('0П00ККККККК0000000N0шшшшшшшшшш'),    
                 list('bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb'),
                 list('bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb'),
 ]
