@@ -86,6 +86,8 @@ def run_game():
             for i in dict_list_border["list_border_cor_cracking"]:
                 i[-2].show_image(screen)
             dict_argument["flag_collid_npc"] = False
+            for p in list_noot_colision_platphorm:
+                p.show_image(screen)
             for i in list_NPC:
                 
                 i.show_image(screen)

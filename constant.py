@@ -24,9 +24,10 @@ list_border_cor = list()
 list_NPC = list()
 list_index_NPC = list()
 list_flag = list()#временный список,где будут хранится координаты
+list_noot_colision_platphorm = list()
 #Индексы уровней
 index_lvl = 1
-index_location = 2
+index_location = 1
 #Считаем птицу (beard в переводе - борода)
 max_number_beard = random.randint(500,1000)
 count_beard = 0
@@ -152,7 +153,7 @@ dict_spawn_and_finish_point = {
     "lvl1_location_3":[[SCREEN_W//80,SCREEN_H//5.5],Rect(SCREEN_W-SCREEN_W//80,SCREEN_H//45,1,SCREEN_H//6.31),"right"],
     "lvl1_location_4":[[SCREEN_W//80,SCREEN_H-SCREEN_H//10*2.5],Rect(SCREEN_W-SCREEN_W//80,SCREEN_H//2.48,1,SCREEN_H//7.2),None],
     "lvl2_location_1":[[round(SCREEN_W/30)*18,SCREEN_H-round(SCREEN_W/30)*3.5],Rect(0,0,0,0),"right"],
-    "lvl2_location_2":[[SCREEN_W//80,SCREEN_H-round(SCREEN_W/30)*3.5],[Rect(SCREEN_W//80,round(SCREEN_W/30)*4,1,SCREEN_H//5.53),Rect(SCREEN_W-SCREEN_W//80,0,1,SCREEN_H//5.53)],"right"],
+    "lvl2_location_2":[[SCREEN_W//80,SCREEN_H-round(SCREEN_W/30)*3.5],[Rect(SCREEN_W//80,round(SCREEN_W/30)*4,round(SCREEN_W/30),SCREEN_H//5.53),Rect(SCREEN_W-round(SCREEN_W/30),0,round(SCREEN_W/30),SCREEN_H//5.53)],"right"],
     "lvl2_location_3":[[round(SCREEN_W/30)*14,SCREEN_H-round(SCREEN_W/30)*3.5],Rect(0,0,0,0),None],
 }
 # [Rect(SCREEN_W//80,round(SCREEN_W/30)*4,1,SCREEN_H//5.53),Rect(SCREEN_W-SCREEN_W//80,0,1,SCREEN_H//5.53)]

@@ -60,7 +60,7 @@ def drawSurfaces():
         return result
 
     # очищаем списки 
-    
+    list_noot_colision_platphorm.clear()
     list_Rope_with_saw.clear()
     list_hook.clear()
     list_spikes.clear()
@@ -70,7 +70,7 @@ def drawSurfaces():
     dict_list_border["list_border_cor"].clear()
     dict_list_border["list_flag"].clear()
     # Список сиволов
-    list_symbol = ["b","K","D","П","Л","л","ъ","Ъ","Б","P","L","i","c","с","C"]
+    list_symbol = ["b","K","П","Л","л","ъ","Ъ","Б","P","L","i","c","с","C"]
     # список символов трескающихся платформ
     list_cracking_platform = ["c","с","C"]
     # Кол-во платформ
@@ -188,11 +188,13 @@ def drawSurfaces():
             elif dict_argument["list_surface"][i][j] == "s":
                 list_saw.append(Graphic_elements(X+(dict_argument["BLOCK_SIZE"]*1.53-dict_argument["BLOCK_SIZE"]),Y+(dict_argument["BLOCK_SIZE"]*1.54-dict_argument["BLOCK_SIZE"]),dict_argument["BLOCK_SIZE"]*1.53,dict_argument["BLOCK_SIZE"]*1.54,"image/saw.png"))
             
-            elif dict_argument["list_surface"][i][j] == "D":
+            elif dict_argument["list_surface"][i][j] == "D" or dict_argument["list_surface"][i][j] == "d" :
                 PATH = "image/Door.png"
                 WIDTH = dict_argument["BLOCK_SIZE"]
-                HEIGHT = SCREEN_H//5.5
-                NAME_LIST = "list_border_cor"
+                HEIGHT = dict_argument["BLOCK_SIZE"]*2
+                list_noot_colision_platphorm.append(Graphic_elements(X,Y,WIDTH,HEIGHT,PATH))
+                if dict_argument["list_surface"][i][j] == "d":
+                    list_noot_colision_platphorm[-1].image_load(rotate_x= True)
             elif dict_argument["list_surface"][i][j] == "P": 
                 PATH = "image/block/solo_block.png"
                 if dict_argument["list_surface"][i][j+1] == "P":
@@ -1128,16 +1130,6 @@ def shooting_lvl(screen,min_count_point,ammo_count,barriers):
                     
 
                                     
-                        # for obj_barier_another in list_barier_obj:
-                        #     if list_barier_obj.index(obj_barier_another) != list_barier_obj.index(obj_barier):
-                        #         while True:
-                        #             if obj_barier.start_x <= obj_barier_another.start_x and obj_barier.start_x >= obj_barier_another.start_x - obj_barier_another.WIDTH *1.5:
-                        #                 obj_barier.start_x = random.randint(0,int(list_s[2].WIDTH - obj_barier.WIDTH)) 
-                        #             elif obj_barier.start_x >= obj_barier_another.start_x and obj_barier.start_x <= obj_barier_another.start_x - obj_barier_another.WIDTH *1.5:
-                        #                 obj_barier.start_x = random.randint(0,int(list_s[2].WIDTH - obj_barier.WIDTH))
-                        #             else:
-                        #                 break
-                                            
                     #Мы не можем это в цикле создать потому что разные координаты у каждой зоны
                     i[2].append(Rect(object.X+object.WIDTH//2.578,object.Y+object.HEIGHT//16.6,object.WIDTH//3.769,object.WIDTH//3.769)) #Белая зона головы
                     i[2].append(Rect(object.X+object.WIDTH//2.13,object.Y+object.HEIGHT//9.22,object.WIDTH//9.8,object.WIDTH//9.8)) #Красная зона головы
@@ -1257,6 +1249,7 @@ def shooting_lvl(screen,min_count_point,ammo_count,barriers):
         statstic.show_text(screen)
         clock.tick(FPS*2)
         if ammo_count <= 0:
+            mouse.set_visible(True)
             return count_point
         display.update()
     mouse.set_visible(True)
