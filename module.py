@@ -1511,6 +1511,9 @@ def menu(run_game):
                 if button_option.check_mouse_cor(mouse_cor):
                     option()
                 if button_play.check_mouse_cor(mouse_cor):
+                    sprite1.image_sprite.X = dict_argument["sprite_x"]
+                    sprite1.image_sprite.Y = dict_argument["sprite_y"]
+                    dict_argument["game"] = True
                     run_game()
                     
                     
@@ -1649,3 +1652,11 @@ def finish_shooting():
         clock.tick(FPS*2)
         display.update() #Обновление экрана
         count_change_direction_criminal += 1
+
+import json
+def save_game(sprite1): 
+    print(sprite1.image_sprite.Y)
+    dict_argument["sprite_x"] = sprite1.image_sprite.X
+    dict_argument["sprite_y"] = sprite1.image_sprite.Y
+    with open('saves/saves.json','w') as file:
+        json.dump(dict_argument,file,indent=4,ensure_ascii=True)

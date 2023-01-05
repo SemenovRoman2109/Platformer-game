@@ -10,9 +10,7 @@ def run_game():
     #y передвигающийся плаформы+
     #Основной цыкл игры
     dict_argument["list_surface"] = list_surface[dict_argument["index_lvl"]][dict_argument["index_location"]]
-    sprite1.image_sprite.X = dict_spawn_and_finish_point["lvl"+str(dict_argument["index_lvl"]+1)+"_location_"+str(dict_argument["index_location"]+1)][0][0]
-    sprite1.image_sprite.Y = dict_spawn_and_finish_point["lvl"+str(dict_argument["index_lvl"]+1)+"_location_"+str(dict_argument["index_location"]+1)][0][1]
-    
+
     while dict_argument["game"]:
         clock.tick(FPS)
 
@@ -67,6 +65,7 @@ def run_game():
             
             if event1.type == QUIT: # если событие равно "закрыть" выполняем метод exit()
                 dict_argument["game"] = False #Отключает игру
+                save_game(sprite1)
 
         
         if dict_argument["scene"] == "game": #Сцена игры
@@ -89,7 +88,6 @@ def run_game():
             for p in list_noot_colision_platphorm:
                 p.show_image(screen)
             for i in list_NPC:
-                
                 i.show_image(screen)
                 if Rect.colliderect(sprite1.image_sprite.RECT,i.RECT) :
                     if not dict_argument["flag_false_criminal_selected"]:
@@ -110,7 +108,8 @@ def run_game():
                 rect_rope = rope("index_Hook",hook,"angle_Hook",20,30)
                 list_rect.append(rect_rope)
                 sprite1.Hook(rect_rope) 
-            invisibility_block("i","I",sprite1)
+            if dict_argument["index_lvl"] == 1:
+                invisibility_block("i","I",sprite1)
             rope_angle("index_Rope_with_saw","angle_Rope_with_saw_direction","angle_Rope_with_saw")  #функция наклона веревки
             #перебираем все вереаки с пилами 
             for Rope_with_saw in list_Rope_with_saw:
@@ -135,7 +134,6 @@ def run_game():
                 sprite1.fly_up = False
             sprite1.spring()
             sprite1.shield(screen)
-            print(dict_argument["index_location"])
             direction_move_map = sprite1.finish_lvl(shooting_lvl,dict_Graphic_elements_obj["Fon"],move_cloud,book)
             if direction_move_map != "False" and direction_move_map != "finish_lvl":
                 dict_argument["index_location"] += 1
@@ -205,8 +203,8 @@ def run_game():
                 drawSurfaces()
                 dict_argument_block["count_motion_block"] = 0
             dict_argument_block["count_motion_block"] += 1
-
-            sprite1.statistic_person() #Статистика игрока
+            if dict_argument["index_lvl"] == 1:
+                sprite1.statistic_person() #Статистика игрока
             sprite1.ghost(screen)
             for i in dict_list_border["list_border_cor_spring"]:
                 i[-2].show_image(screen)

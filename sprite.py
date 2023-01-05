@@ -7,17 +7,15 @@ from constant import *
 class Sprite:
     def __init__(self, name_image, sprite_x, sprite_y,
                 sprite_speed, sprite_width, sprite_height,
-                 border_width, border_height,sprite_gravity_power,
-                 double_jump = None,index_layout = 0,jump_boost = SCREEN_H//10*3,
-                 ):
+                sprite_gravity_power,
+                double_jump = None,index_layout = 0,jump_boost = SCREEN_H//10*3,
+                ):
         
         self.flag_hook = 20
         self.image_path = "image/Персонажи/Двойной_прижок/" + str(name_image) + ".png"
         self.speed = sprite_speed
         self.flag_leader = False
         self.start_speed = sprite_speed
-        self.border_width = border_width
-        self.border_height = border_height
         self.list_animation = []
         self.open_door = False
         for i in range(10):
@@ -78,7 +76,10 @@ class Sprite:
                 self.image_sprite.HEIGHT = self.image_sprite.start_height / 1.7
                 self.image_sprite.Y = self.image_sprite.Y + (self.image_sprite.HEIGHT - self.image_sprite.start_height / 3.4)
                 self.speed = self.speed//2
-                self.image_sprite.image_load()
+                if self.flag == "R":
+                    self.image_sprite.image_load()
+                else:
+                    self.image_sprite.image_load(rotate_x=True)
                 self.flag_squat2 = 3
                 self.flag_squat = 1
                 break
@@ -99,12 +100,18 @@ class Sprite:
                     self.image_sprite.HEIGHT = self.image_sprite.start_height / 1.7
                     self.image_sprite.Y += (self.image_sprite.HEIGHT - self.image_sprite.start_height / 15)
                     self.speed = self.speed//2
-                    self.image_sprite.image_load()
+                    if self.flag == "R":
+                        self.image_sprite.image_load()
+                    else:
+                        self.image_sprite.image_load(rotate_x=True)
                     self.flag_squat2 = 3
                 if self.flag_squat == 0 and self.flag_squat2 == 0 and self.move_up:
                     self.image_sprite.HEIGHT = self.image_sprite.start_height
                     self.image_sprite.Y = self.image_sprite.Y - (self.image_sprite.HEIGHT - self.image_sprite.start_height / 1.7)
-                    self.image_sprite.image_load()
+                    if self.flag == "R":
+                        self.image_sprite.image_load()
+                    else:
+                        self.image_sprite.image_load(rotate_x=True)
                     self.flag_squat2 = 3  
                     self.speed = self.start_speed                        
     # Функция которая отвечает за анимации персонажа
@@ -122,7 +129,7 @@ class Sprite:
                 self.index2 = 0
             self.index2 += 1
             
-        elif keys[self.List_layout[self.index_layout][1]] and self.image_sprite.X < self.border_width - self.image_sprite.WIDTH - SCREEN_W//80 and self.move_right:
+        elif keys[self.List_layout[self.index_layout][1]] and self.image_sprite.X < SCREEN_W - self.image_sprite.WIDTH - SCREEN_W//80 and self.move_right:
             self.image_sprite.X += self.speed
             self.flag = "R"  
             if self.index == 10:
@@ -173,7 +180,7 @@ class Sprite:
     # Гравитация  смена индексов и картинок   
     def sprite_gravity(self): 
         if self.double_jump != None:
-            if self.image_sprite.Y < self.border_height - self.image_sprite.HEIGHT and self.fly_up == False and self.gravity:
+            if self.image_sprite.Y < SCREEN_H - self.image_sprite.HEIGHT and self.fly_up == False and self.gravity:
                 if self.jump_now != 5:
                     self.jump_now = 1
                 self.image_sprite.Y += self.gravity_speed
@@ -186,7 +193,7 @@ class Sprite:
                 self.jump_now = 0  
                 self.double_jump = True     
         else:
-            if self.image_sprite.Y < self.border_height - self.image_sprite.HEIGHT and self.fly_up == False and self.gravity:
+            if self.image_sprite.Y < SCREEN_H - self.image_sprite.HEIGHT and self.fly_up == False and self.gravity:
                 self.jump_now = 1
                 self.image_sprite.Y += self.gravity_speed
                 if self.flag == "R":

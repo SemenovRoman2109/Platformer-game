@@ -8,17 +8,16 @@ from graphic_elements import Graphic_elements #Подключаем модуль
 from text import Font #Подключаем модуль файл text
 init() #Инициализируем pygame
 #Создаем спрайт и его настройки для создание графических елементов
+print(dict_argument["sprite_x"])
 sprite1 = Sprite(
                     name_image="1", #Имя картинки
-                    sprite_x = dict_spawn_and_finish_point["lvl"+str(dict_argument["index_lvl"]+1)+"_location_"+str(dict_argument["index_location"]+1)][0][0], #Горизонтальное расположение спрайта
-                    sprite_y = dict_spawn_and_finish_point["lvl1_location_1"][0][1], #Вертикальное расположение спрайта
+                    sprite_x = dict_argument["sprite_x"],
+                    sprite_y = dict_argument["sprite_y"],
                     sprite_speed = dict_argument["BLOCK_SIZE"]//5, #Скорость спрайта
                     sprite_width = dict_argument["BLOCK_SIZE"], #Ширина спрайта
                     sprite_height = dict_argument["BLOCK_SIZE"]*1.66, #Высота спрайта
-                    border_width = SCREEN_W, #Ширина контура
-                    border_height = SCREEN_H, #Высота контура
                     sprite_gravity_power = SCREEN_H//40, #Сила гравитации спрайта
-                    double_jump = False, #Двойной прыжок
+                    double_jump = True, #Двойной прыжок
                     jump_boost = dict_argument["BLOCK_SIZE"]*1.1*3, #Сила прыжка 
                     index_layout = 0 #Индекс   0-стрелки 1 - WSDA
                 )                    

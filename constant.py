@@ -1,6 +1,8 @@
 #Подключаем подготовленные модули нашего проекта#
 from pygame import* 
 import random
+import json
+import copy
 #Подключаем модули нашего проекта
 from surface import *
 init() #Инициализируем pygame
@@ -9,8 +11,13 @@ SCREEN_W = display.Info().current_w
 SCREEN_H = display.Info().current_h
 SCREEN_W = 1280
 SCREEN_H = 720
-
-BLOCK_SIZE = round(SCREEN_W/30)
+#Индексы уровней
+index_lvl = 0
+index_location = 0
+if index_lvl == 0:
+    BLOCK_SIZE = round(SCREEN_W/20)
+if index_lvl == 1:
+    BLOCK_SIZE = round(SCREEN_W/30)
 FPS = 30
 
 
@@ -25,9 +32,7 @@ list_NPC = list()
 list_index_NPC = list()
 list_flag = list()#временный список,где будут хранится координаты
 list_noot_colision_platphorm = list()
-#Индексы уровней
-index_lvl = 1
-index_location = 1
+
 #Считаем птицу (beard в переводе - борода)
 max_number_beard = random.randint(500,1000)
 count_beard = 0
@@ -90,43 +95,65 @@ dict_argument_block = {
     "direction_spike":"U",
     
 }
+dict_spawn_and_finish_point = {
+    "lvl1_location_1":[[SCREEN_W//80,SCREEN_H-SCREEN_H//10*2.5],Rect(0,-SCREEN_W/40,round(SCREEN_W/20),1),"up"],
+    "lvl1_location_2":[[SCREEN_W//80,SCREEN_H-SCREEN_H//10*2.5],Rect(SCREEN_W-SCREEN_W//80,SCREEN_H//5.53,1,SCREEN_H//5.53),"right"],
+    "lvl1_location_3":[[SCREEN_W//80,SCREEN_H//5.5],Rect(SCREEN_W-SCREEN_W//80,SCREEN_H//45,1,SCREEN_H//6.31),"right"],
+    "lvl1_location_4":[[SCREEN_W//80,SCREEN_H-SCREEN_H//10*2.5],Rect(SCREEN_W-SCREEN_W//80,SCREEN_H//2.48,1,SCREEN_H//7.2),None],
+    "lvl2_location_1":[[round(SCREEN_W/30)*18,SCREEN_H-round(SCREEN_W/30)*3.5],Rect(0,0,0,0),"right"],
+    "lvl2_location_2":[[SCREEN_W//80,SCREEN_H-round(SCREEN_W/30)*3.5],[Rect(SCREEN_W//80,round(SCREEN_W/30)*4,round(SCREEN_W/30),SCREEN_H//5.53),Rect(SCREEN_W-round(SCREEN_W/30),0,round(SCREEN_W/30),SCREEN_H//5.53)],"right"],
+    "lvl2_location_3":[[round(SCREEN_W/30)*14,SCREEN_H-round(SCREEN_W/30)*3.5],Rect(0,0,0,0),None],
+}
 
-#Словарь аргументов
-dict_argument = {
-    "ghost": False, 
-    "keys": key.get_pressed(), 
-    "ded": True,    
-    "game": True,
-    "scene":"game",
-    "full_surface":list_surface,
-    "list_surface":list_surface[index_lvl][index_location],
-    "max_number_beard":max_number_beard,
-    "count_beard":count_beard,
-    "list_beard":list(),
-    "index_lvl":index_lvl,
-    "index_location":index_location,
-    "X_MAP":0,
-    "Y_MAP":0,
-    "duration_shield":100,
-    "list_spikes_outside":list_spikes_outside,
-    "screen_dimming_flag": None,
-    "screen_dimming_count": 0,
-    "index_text_drimming":None,
-    "flag_puzzle_location":False,
-    "count_final_puzzle":None,
-    "count_animation_book":0,
-    "flag_book":False,
-    "picture_flag":False,
-    "picture_count":150,
-    "BLOCK_SIZE":BLOCK_SIZE,
-    "flag_collid_npc":flag_collid_npc,
-    "number_click_npc":number_click_npc,
-    "flag_false_criminal_selected":flag_false_criminal_selected,
-    "index_npc_collid":index_npc_collid
+
+
+with open('saves/saves.json','r') as file:
+    dict_argument = json.load(file)
+
+
+if dict_argument["defolt"] == "True":
+    print(dict_argument["defolt"])
+    #Словарь аргументов
+    dict_argument = {
+        "defolt":"False",
+        "ghost": False, 
+        "keys": key.get_pressed(), 
+        "ded": True,    
+        "game": True,
+        "scene":"game",
+        "full_surface":list_surface,
+        "list_surface":list_surface[index_lvl][index_location],
+        "max_number_beard":max_number_beard,
+        "count_beard":count_beard,
+        "list_beard":list(),
+        "index_lvl":index_lvl,
+        "index_location":index_location,
+        "X_MAP":0,
+        "Y_MAP":0,
+        "duration_shield":100,
+        "list_spikes_outside":list_spikes_outside,
+        "screen_dimming_flag": None,
+        "screen_dimming_count": 0,
+        "index_text_drimming":None,
+        "flag_puzzle_location":False,
+        "count_final_puzzle":None,
+        "count_animation_book":0,
+        "flag_book":False,
+        "picture_flag":False,
+        "picture_count":150,
+        "BLOCK_SIZE":BLOCK_SIZE,
+        "flag_collid_npc":flag_collid_npc,
+        "number_click_npc":number_click_npc,
+        "flag_false_criminal_selected":flag_false_criminal_selected,
+        "index_npc_collid":index_npc_collid,
+        "sprite_x":dict_spawn_and_finish_point["lvl"+str(index_lvl+1)+"_location_"+str(index_location+1)][0][0],
+        "sprite_y":dict_spawn_and_finish_point["lvl1_location_1"][0][1]
     
 
 
 }
+
+print(dict_argument["sprite_x"])
 #Словарь аргументов ангелов
 dict_argument_angle = {
     "angle_saw":0,
@@ -147,16 +174,6 @@ dict_list_border = {
     "list_flag":list_flag
 }
 
-dict_spawn_and_finish_point = {
-    "lvl1_location_1":[[SCREEN_W//80,SCREEN_H-SCREEN_H//10*2.5],Rect(0,-SCREEN_W/40,dict_argument["BLOCK_SIZE"],1),"up"],
-    "lvl1_location_2":[[SCREEN_W//80,SCREEN_H-SCREEN_H//10*2.5],Rect(SCREEN_W-SCREEN_W//80,SCREEN_H//5.53,1,SCREEN_H//5.53),"right"],
-    "lvl1_location_3":[[SCREEN_W//80,SCREEN_H//5.5],Rect(SCREEN_W-SCREEN_W//80,SCREEN_H//45,1,SCREEN_H//6.31),"right"],
-    "lvl1_location_4":[[SCREEN_W//80,SCREEN_H-SCREEN_H//10*2.5],Rect(SCREEN_W-SCREEN_W//80,SCREEN_H//2.48,1,SCREEN_H//7.2),None],
-    "lvl2_location_1":[[round(SCREEN_W/30)*18,SCREEN_H-round(SCREEN_W/30)*3.5],Rect(0,0,0,0),"right"],
-    "lvl2_location_2":[[SCREEN_W//80,SCREEN_H-round(SCREEN_W/30)*3.5],[Rect(SCREEN_W//80,round(SCREEN_W/30)*4,round(SCREEN_W/30),SCREEN_H//5.53),Rect(SCREEN_W-round(SCREEN_W/30),0,round(SCREEN_W/30),SCREEN_H//5.53)],"right"],
-    "lvl2_location_3":[[round(SCREEN_W/30)*14,SCREEN_H-round(SCREEN_W/30)*3.5],Rect(0,0,0,0),None],
-}
-# [Rect(SCREEN_W//80,round(SCREEN_W/30)*4,1,SCREEN_H//5.53),Rect(SCREEN_W-SCREEN_W//80,0,1,SCREEN_H//5.53)]
 
 dict_mision_lvl_1 = {
     "location_0":["Вы приехали на место преступления","          найдите зацепки        ","","        Нажмите кнопку [F]        ","  чтоб появились новые платформы  "],
