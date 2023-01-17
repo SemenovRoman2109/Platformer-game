@@ -7,10 +7,17 @@ import copy
 from surface import *
 init() #Инициализируем pygame
 #Настраиваем разрешение и ограничение кадров
-SCREEN_W = display.Info().current_w
-SCREEN_H = display.Info().current_h
-SCREEN_W = 1280
-SCREEN_H = 720
+with open('saves/config.json','r') as file:
+    config = json.load(file)
+
+if config["FULLSCREEN"]:
+    SCREEN_W = display.Info().current_w
+    SCREEN_H = display.Info().current_h
+else:    
+    SCREEN_W = int(config["SCREEN_WIDTH"])
+    SCREEN_H = int(config["SCREEN_HEIGHT"])
+MUSIC_VOLUME = int(config["MUSIC_VOLUME"])
+SOUNDS_VOLUME = int(config["SOUNDS_VOLUME"])
 #Индексы уровней
 index_lvl = 0
 index_location = 0
@@ -101,7 +108,7 @@ dict_spawn_and_finish_point = {
     "lvl1_location_3":[[SCREEN_W//80,SCREEN_H//5.5],Rect(SCREEN_W-SCREEN_W//80,SCREEN_H//45,1,SCREEN_H//6.31),"right"],
     "lvl1_location_4":[[SCREEN_W//80,SCREEN_H-SCREEN_H//10*2.5],Rect(SCREEN_W-SCREEN_W//80,SCREEN_H//2.48,1,SCREEN_H//7.2),None],
     "lvl2_location_1":[[round(SCREEN_W/30)*18,SCREEN_H-round(SCREEN_W/30)*3.5],Rect(0,0,0,0),"right"],
-    "lvl2_location_2":[[SCREEN_W//80,SCREEN_H-round(SCREEN_W/30)*3.5],[Rect(SCREEN_W//80,round(SCREEN_W/30)*4,round(SCREEN_W/30),SCREEN_H//5.53),Rect(SCREEN_W-round(SCREEN_W/30),0,round(SCREEN_W/30),SCREEN_H//5.53)],"right"],
+    "lvl2_location_2":[[SCREEN_W//80,SCREEN_H-round(SCREEN_W/30)*3.5],[Rect(SCREEN_W//80,round(SCREEN_W/30)*4,round(SCREEN_W/30),round(SCREEN_W/30)*1.8),Rect(SCREEN_W-round(SCREEN_W/30),0,round(SCREEN_W/30),round(SCREEN_W/30)*1.8)],"right"],
     "lvl2_location_3":[[round(SCREEN_W/30)*14,SCREEN_H-round(SCREEN_W/30)*3.5],Rect(0,0,0,0),None],
 }
 
@@ -111,7 +118,7 @@ with open('saves/saves.json','r') as file:
     dict_argument = json.load(file)
 
 
-if dict_argument["defolt"] == "True":
+if dict_argument["defolt"] == "true":
     print(dict_argument["defolt"])
     #Словарь аргументов
     dict_argument = {
@@ -132,9 +139,9 @@ if dict_argument["defolt"] == "True":
         "Y_MAP":0,
         "duration_shield":100,
         "list_spikes_outside":list_spikes_outside,
-        "screen_dimming_flag": None,
+        "screen_dimming_flag": "+",
         "screen_dimming_count": 0,
-        "index_text_drimming":None,
+        "index_text_drimming":"first_entry_into_the_game",
         "flag_puzzle_location":False,
         "count_final_puzzle":None,
         "count_animation_book":0,
@@ -147,13 +154,11 @@ if dict_argument["defolt"] == "True":
         "flag_false_criminal_selected":flag_false_criminal_selected,
         "index_npc_collid":index_npc_collid,
         "sprite_x":dict_spawn_and_finish_point["lvl"+str(index_lvl+1)+"_location_"+str(index_location+1)][0][0],
-        "sprite_y":dict_spawn_and_finish_point["lvl1_location_1"][0][1]
-    
-
-
+        "sprite_y":dict_spawn_and_finish_point["lvl1_location_1"][0][1],
+        "count_change_bg":0
 }
 
-print(dict_argument["sprite_x"])
+
 #Словарь аргументов ангелов
 dict_argument_angle = {
     "angle_saw":0,
@@ -187,7 +192,10 @@ dict_text_drimming = {
     "drive":[" Вы правильно выбрали преступника","И он начал убегать подстрелите его"],
     "incorrectly_selected_criminal":["     Вы выбрали не правильно     ","    У тебя осталась одна попытка   ","             до рейса             "],
     "lose_all_hp_0":["      Вы не прошли академию      ","        попробуйте еще раз       "],
-    "lose_all_hp_1":["Вы умерли во время раскрытия дела","        попробуйте еще раз       "]
+    "lose_all_hp_1":["Вы умерли во время раскрытия дела","        попробуйте еще раз       "],
+    "first_entry_into_the_game":["Вы прибыли в полицейскую академию","        Пройдите обучение        ","     чтоб преступить к работе    "],
+    "first_shooting" :["     Вы практически закончили    ","       обучение в академии       "," осталось проверить вашу меткость "],
+    "second_shooting":["Вы прошли первый уровень стрельбы","     следующий будет сложнее     "],
 }
 
 dict_direction_door = dict()

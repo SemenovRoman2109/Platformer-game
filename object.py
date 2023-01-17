@@ -8,7 +8,7 @@ from graphic_elements import Graphic_elements #Подключаем модуль
 from text import Font #Подключаем модуль файл text
 init() #Инициализируем pygame
 #Создаем спрайт и его настройки для создание графических елементов
-print(dict_argument["sprite_x"])
+
 sprite1 = Sprite(
                     name_image="1", #Имя картинки
                     sprite_x = dict_argument["sprite_x"],
@@ -23,16 +23,16 @@ sprite1 = Sprite(
                 )                    
 #Создаем графические елементы
 Circle_invible_block = Graphic_elements(0,0,sprite1.image_sprite.WIDTH,sprite1.image_sprite.HEIGHT,"image/Circle_invible_block.png",None)
-Fon =  Graphic_elements(0,0,SCREEN_W,SCREEN_H,"image/фон.bmp")
+Fon =  Graphic_elements(0,0,SCREEN_W,SCREEN_H,"image/backgroubd_room.bmp")
 black_fon =  Graphic_elements(0,0,SCREEN_W,SCREEN_H,"image/lvl1.png")
 load = Graphic_elements(SCREEN_W-SCREEN_W//10,SCREEN_H-SCREEN_H//10,SCREEN_W//10,SCREEN_H//10,"image/Загрузка/Загрузка0.png")
-cloud = Graphic_elements(0,0,SCREEN_W*2,SCREEN_H//3.52,"image/Облоко.bmp")
-cloud2 = Graphic_elements(SCREEN_W*2,0,SCREEN_W*2,SCREEN_H//3.52,"image/Облоко.bmp")
+cloud = Graphic_elements(0,0,SCREEN_W*2,SCREEN_H//3.52,"image/cloud.bmp")
+cloud2 = Graphic_elements(SCREEN_W*2,0,SCREEN_W*2,SCREEN_H//3.52,"image/cloud.bmp")
 invisible_block_icon = Graphic_elements(SCREEN_W-SCREEN_W//10,SCREEN_H-SCREEN_H//10,SCREEN_W//10,SCREEN_H//10,"image/invisible_block_icon.png")
 Rope_with_saw = Graphic_elements(SCREEN_W//2,SCREEN_H//15,int(dict_argument["BLOCK_SIZE"]*1.36),dict_argument["BLOCK_SIZE"]*10,"image/Rope_with_saw.png")
 Hook = Graphic_elements(SCREEN_W//2,SCREEN_H//15,SCREEN_W//30,dict_argument["BLOCK_SIZE"]*10,"image/Hook.png")
 button = Graphic_elements(0,0,dict_argument["BLOCK_SIZE"],dict_argument["BLOCK_SIZE"]//3.3846,"image/button.png")
-Background_shooting = Graphic_elements(-SCREEN_W,-SCREEN_H,SCREEN_W*3,SCREEN_H*2,"image/Fon.jpg")
+Background_shooting = Graphic_elements(-SCREEN_W,-SCREEN_H,SCREEN_W*3,SCREEN_H*2,"image/Fon_shooting.jpg")
 dimming = Graphic_elements(0,0,SCREEN_W,SCREEN_H,"image/black.png")
 dimming.image_load()
 dimming.IMG.set_alpha(round(dict_argument["screen_dimming_count"]))

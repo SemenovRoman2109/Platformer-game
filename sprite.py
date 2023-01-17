@@ -12,7 +12,7 @@ class Sprite:
                 ):
         
         self.flag_hook = 20
-        self.image_path = "image/Персонажи/Двойной_прижок/" + str(name_image) + ".png"
+        self.image_path = "image/main/" + str(name_image) + ".png"
         self.speed = sprite_speed
         self.flag_leader = False
         self.start_speed = sprite_speed
@@ -20,7 +20,7 @@ class Sprite:
         self.open_door = False
         for i in range(10):
 
-            self.list_animation.append("image/Персонажи/Двойной_прижок/"+str(i+1)+".png")
+            self.list_animation.append("image/main/"+str(i+1)+".png")
         self.flag_sprite = 0 # счетчик изменения костюмов
         self.index = 0 # счетчик индексов списка list_images
         self.flag = 'R' # отвечает за контроль направления движения
@@ -168,7 +168,7 @@ class Sprite:
                 
             if self.fly_up:
                 if self.flag == "R":
-                    self.image_sprite.path = "image/Персонажи/Двойной_прижок/1.png"
+                    self.image_sprite.path = "image/main/1.png"
                     self.image_sprite.image_load()
                 elif self.flag == "L":
                     self.image_sprite.image_load(rotate_x=True)
@@ -185,7 +185,7 @@ class Sprite:
                     self.jump_now = 1
                 self.image_sprite.Y += self.gravity_speed
                 if  self.flag == "R":
-                    self.image_sprite.path = "image/Персонажи/Двойной_прижок/1.png"
+                    self.image_sprite.path = "image/main/1.png"
                     self.image_sprite.image_load()
                 elif self.flag == "L":
                     self.image_sprite.image_load(rotate_x=True)
@@ -197,7 +197,7 @@ class Sprite:
                 self.jump_now = 1
                 self.image_sprite.Y += self.gravity_speed
                 if self.flag == "R":
-                    self.image_sprite.path = "image/Персонажи/Двойной_прижок/1.png"
+                    self.image_sprite.path = "image/main/1.png"
                     self.image_sprite.image_load()
                 elif self.flag == "L":
                     self.image_sprite.image_load(rotate_x=True)
@@ -317,7 +317,7 @@ class Sprite:
                 
         if self.fly_up_spring:
             if self.flag == "R":
-                self.image_sprite.path = "image/Персонажи/Двойной_прижок/1.png"
+                self.image_sprite.path = "image/main/1.png"
                 self.image_sprite.image_load()
             elif self.flag == "L":
                 self.image_sprite.image_load(rotate_x=True)
@@ -503,7 +503,7 @@ class Sprite:
                 return "paper_true"
 
     # Функция колизии с финишом 
-    def finish_lvl(self,shooting_lvl,Fon,move_cloud,book):
+    def finish_lvl(self,shooting_lvl,move_cloud,safe):
         index_lvl = dict_argument["index_lvl"]
         index_location = dict_argument["index_location"]
         
@@ -518,37 +518,21 @@ class Sprite:
                     
                     return "right"
                 if Rect.colliderect(dict_spawn_and_finish_point["lvl2_location_2"][1][0],self.image_sprite.RECT):
-                    bk = Graphic_elements(0,0,SCREEN_W,SCREEN_H,"image/room_1.png")
-                    rect = Rect(SCREEN_W//1.47,SCREEN_H//2,SCREEN_W//16.78,SCREEN_H//10.5)
-                    
-                    run = True
-                    while run:
-                        Fon.show_image(screen)
-                        move_cloud()
-                        bk.show_image(screen)
-                        for event1 in event.get():
-                            if event1.type == MOUSEBUTTONDOWN:
-                                if Rect.collidepoint(rect,mouse.get_pos()[0],mouse.get_pos()[1]):
-                                    dict_argument["flag_book"] = True
-                            if event1.type == QUIT:
-                                dict_spawn_and_finish_point["lvl2_location_2"][1][0] = Rect(0,0,0,0)
-                                run = False
+                    safe()
+                
 
-                        if dict_argument["flag_book"]:
-                            if not book():
-                                dict_spawn_and_finish_point["lvl2_location_2"][1][0] = Rect(0,0,0,0)
-                                run = False
-                                
-                            
-                        
-                        display.update()
-                elif Rect.colliderect(dict_spawn_and_finish_point["lvl2_location_2"][1][1],self.image_sprite.RECT):
+
+                if Rect.colliderect(dict_spawn_and_finish_point["lvl2_location_2"][1][1],self.image_sprite.RECT):
+                    dict_argument["sprite_x"] = self.image_sprite.X
+                    dict_argument["sprite_y"] = self.image_sprite.Y
+                    with open('saves/saves.json','w') as file:
+                        json.dump(dict_argument,file,indent=4,ensure_ascii=True)
                     bk = Graphic_elements(0,0,SCREEN_W,SCREEN_H,"image/room_2.png")
                     rect = Rect(SCREEN_W//1.4,SCREEN_H//3.46,SCREEN_W//10.6,SCREEN_W//10.6)
-                    picture_criminal = Graphic_elements(SCREEN_W//2 - dict_argument["BLOCK_SIZE"]*4,SCREEN_H//2 - dict_argument["BLOCK_SIZE"]*4,dict_argument["BLOCK_SIZE"]*8,dict_argument["BLOCK_SIZE"]*8,"image/Персонажи/Преступник/picture.png")
+                    picture_criminal = Graphic_elements(SCREEN_W//2 - dict_argument["BLOCK_SIZE"]*4,SCREEN_H//2 - dict_argument["BLOCK_SIZE"]*4,dict_argument["BLOCK_SIZE"]*8,dict_argument["BLOCK_SIZE"]*8,"image/criminal/picture.png")
                     
                     while True:
-                        Fon.show_image(screen)
+                        screen.fill("blue")
                         move_cloud()
                         bk.show_image(screen)
                         for event1 in event.get():
@@ -556,8 +540,8 @@ class Sprite:
                                 if Rect.collidepoint(rect,mouse.get_pos()[0],mouse.get_pos()[1]):
                                     dict_argument["picture_flag"] = True
                             if event1.type == QUIT:
-                                dict_spawn_and_finish_point["lvl2_location_2"][1][1] = Rect(0,0,0,0)
-                                break
+                                quit()
+
                         if dict_argument["picture_flag"]:
                             picture_criminal.show_image(screen)
                             dict_argument["picture_count"] -= 1
@@ -569,17 +553,19 @@ class Sprite:
                         display.update()
         
         if index_lvl == 0:
-            key = "lvl1_location_"+str(index_location+1)
+            key1 = "lvl1_location_"+str(index_location+1)
             key_next = "lvl1_location_"+str(index_location+2)
-            if dict_spawn_and_finish_point[key][2] != None:
-                if Rect.colliderect(dict_spawn_and_finish_point[key][1],self.image_sprite.RECT):
+            if dict_spawn_and_finish_point[key1][2] != None:
+                if Rect.colliderect(dict_spawn_and_finish_point[key1][1],self.image_sprite.RECT):
                     self.image_sprite.X = dict_spawn_and_finish_point[key_next][0][0]
                     self.image_sprite.start_x = dict_spawn_and_finish_point[key_next][0][0]
                     self.image_sprite.Y = dict_spawn_and_finish_point[key_next][0][1]
                     self.image_sprite.start_y = dict_spawn_and_finish_point[key_next][0][1]
-                    return dict_spawn_and_finish_point[key][2]
+                    return dict_spawn_and_finish_point[key1][2]
             else:
-                if Rect.colliderect(dict_spawn_and_finish_point[key][1],self.image_sprite.RECT):
+                if Rect.colliderect(dict_spawn_and_finish_point[key1][1],self.image_sprite.RECT):
+                    dict_argument["screen_dimming_flag"] = "+"
+                    dict_argument["index_text_drimming"] = "first_shooting"
                     flag_first_shooting_lvl_point = shooting_lvl(screen,100,20,False)
                     
                     while True:
@@ -590,6 +576,8 @@ class Sprite:
                         else:
                             print("У тебя не получилось пройти первый уровень вот тебе еще попытка")
                             flag_first_shooting_lvl_point = shooting_lvl(screen,100,20,False)
+                    dict_argument["screen_dimming_flag"] = "+"
+                    dict_argument["index_text_drimming"] = "second_shooting"
                     flag_second_shooting_lvl_point = shooting_lvl(screen,150,30,3)
                     while True:
                         

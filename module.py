@@ -9,6 +9,7 @@ from object import *
 from sounds import *
 from text import *
 import copy
+import json
 # Инициализируем настройки pygame
 init()
 
@@ -111,6 +112,11 @@ def drawSurfaces():
                 HEIGHT = dict_argument["BLOCK_SIZE"]//3.55
                 NAME_LIST = "list_border_cor_cracking"
                 number_cracking += 1
+            elif dict_argument["list_surface"][i][j] == "Т":
+                PATH = "image/corpse.png"
+                WIDTH = dict_argument["BLOCK_SIZE"] * 2
+                HEIGHT = dict_argument["BLOCK_SIZE"] * 2
+                list_noot_colision_platphorm.append(Graphic_elements(X,Y,WIDTH,HEIGHT,PATH))
             elif dict_argument["list_surface"][i][j] == "R":
                 list_Rope_with_saw.append(Graphic_elements(X+dict_argument["BLOCK_SIZE"]//2,Y,dict_argument["BLOCK_SIZE"]*1.36,dict_argument["BLOCK_SIZE"]*10,"image/Rope_with_saw.png"))
             elif dict_argument["list_surface"][i][j] == "H":
@@ -126,10 +132,10 @@ def drawSurfaces():
 
             elif dict_argument["list_surface"][i][j] == "N" or dict_argument["list_surface"][i][j] == "n" or dict_argument["list_surface"][i][j] == "У":
                 if len(list_NPC) <= number_person:
-                    list_NPC.append(Graphic_elements(X,Y-dict_argument["BLOCK_SIZE"]*1.66+dict_argument["BLOCK_SIZE"],dict_argument["BLOCK_SIZE"],dict_argument["BLOCK_SIZE"]*1.66,"image/Персонажи/Person/person_"+str(random.randint(1,13))+".png"))
+                    list_NPC.append(Graphic_elements(X,Y-dict_argument["BLOCK_SIZE"]*1.66+dict_argument["BLOCK_SIZE"],dict_argument["BLOCK_SIZE"],dict_argument["BLOCK_SIZE"]*1.66,"image/Person/person_"+str(random.randint(1,13))+".png"))
                     list_index_NPC.append([i,j])
                     if dict_argument["list_surface"][i][j] == "У":
-                        list_NPC[-1].path = "image/Персонажи/Преступник/model.png"
+                        list_NPC[-1].path = "image/criminal/model.png"
                     
                     if len(list_NPC) > 1:
                         stop = True
@@ -138,7 +144,7 @@ def drawSurfaces():
                                 if obj != list_NPC[-1]:
                                     if obj.path == list_NPC[-1].path:
                                         stop = True
-                                        list_NPC[-1].path = "image/Персонажи/Person/person_"+str(random.randint(1,13))+".png"
+                                        list_NPC[-1].path = "image/Person/person_"+str(random.randint(1,13))+".png"
                                         break
                                     else:
                                         stop = False
@@ -949,7 +955,7 @@ def move_map(direction):
             # Отрисовываем фон
             dict_Graphic_elements_obj["Fon"].show_image(screen)
             # Функция движения облоков
-            move_cloud()
+            
 
             # отрисовывае всее виды блоков 
             for i in dict_list_border["list_border_cor"]:
@@ -982,7 +988,7 @@ def move_map(direction):
             # Отрисовываем фон
             dict_Graphic_elements_obj["Fon"].show_image(screen)
             # Функция движения облоков
-            move_cloud()
+            
 
             # отрисовывае всее виды блоков 
             for i in dict_list_border["list_border_cor"]:
@@ -1027,7 +1033,7 @@ def shooting_lvl(screen,min_count_point,ammo_count,barriers):
     
     left_side_stand_for_manniquens = Graphic_elements(0,0,dict_argument["BLOCK_SIZE"],dict_argument["BLOCK_SIZE"]*2.269,"image/left_side_stand_for_mannequins.png")
     right_side_stand_for_manniquens = Graphic_elements(0,0,dict_argument["BLOCK_SIZE"],dict_argument["BLOCK_SIZE"]*2.269,"image/right_side_stand_for_mannequins.png")
-    middle_stand_for_manniquens = Graphic_elements(0,0,0,right_side_stand_for_manniquens.HEIGHT//9.83,"image/middle_stand_stand_for_mannequins.png")
+    middle_stand_for_manniquens = Graphic_elements(0,0,0,right_side_stand_for_manniquens.HEIGHT//9.83,"image/middle_stand_for_mannequins.png")
     
     list_down_stand_for_manniquens = [left_side_stand_for_manniquens,right_side_stand_for_manniquens,middle_stand_for_manniquens,[[Graphic_elements(None,0,SCREEN_W//10,SCREEN_W//10*1.693,None),"right",[]],[Graphic_elements(None,0,SCREEN_W//10,SCREEN_W//10*1.693,None),"right",[]]],[]]                 
     list_midle_stand_for_manniquens = copy.deepcopy(list_down_stand_for_manniquens)
@@ -1049,6 +1055,7 @@ def shooting_lvl(screen,min_count_point,ammo_count,barriers):
     statstic = Font("font/pixel_font.ttf",SCREEN_W//30,"black",str(count_point) +"/" + str(min_count_point),SCREEN_W-SCREEN_W//7,0,1,True)
     ammo_statistic = Font('font/pixel_font.ttf',SCREEN_W//30,"black",str(ammo_count),0 + SCREEN_W//15,SCREEN_W//100,1,True)
     while game:
+        
         screen.fill("black")
         Background_shooting.show_image(screen)
         
@@ -1182,7 +1189,7 @@ def shooting_lvl(screen,min_count_point,ammo_count,barriers):
         for event1 in event.get(): # Получаем значение события из "списка событий" 
             
             if event1.type == QUIT:
-                game = False
+                pygame.quit()
             if event1.type == MOUSEMOTION:
                 
                 Background_shooting.X += int(event1.rel[0]) * -1
@@ -1250,10 +1257,11 @@ def shooting_lvl(screen,min_count_point,ammo_count,barriers):
         clock.tick(FPS*2)
         if ammo_count <= 0:
             mouse.set_visible(True)
+            save_game()
             return count_point
+        function_dimming()
         display.update()
     mouse.set_visible(True)
-
 
 list_part_puzzle = []
 background = Graphic_elements(SCREEN_W//6.6,SCREEN_H//4,SCREEN_W//1.5,SCREEN_H//2,"image/puzzle/background.png")
@@ -1337,7 +1345,6 @@ def puzzle(event):
         if dict_argument["count_final_puzzle"] <= 0:
             dict_argument["flag_puzzle_location"] = False
             
-
 def slider(sound_power, flag_mouse_volume_sound, rect_volume_sound, mouse_volume_sound, mouse_cor, text, win, divider = 1 , plus = 0):
     sound_power.show_text(win)
     if flag_mouse_volume_sound:
@@ -1369,16 +1376,20 @@ def slider(sound_power, flag_mouse_volume_sound, rect_volume_sound, mouse_volume
 def menu(run_game):
     win = pygame.display.set_mode((SCREEN_W, SCREEN_H))
     def option():
+        with open('saves/config.json','r') as file:
+            config = json.load(file)
+        MUSIC_VOLUME = int(config["MUSIC_VOLUME"])
+        SOUNDS_VOLUME = int(config["SOUNDS_VOLUME"])
         bg_option = Graphic_elements(0, 0, SCREEN_W, SCREEN_H, 'image/menu/option_not.png')
         flag_option = "not"
-        sound_power = Font("font/pixel_font.ttf",SCREEN_W//30,"black","Громкость звука 50",SCREEN_W//3.2,SCREEN_H//8,bold=False)
-        music_power = Font("font/pixel_font.ttf",SCREEN_W//30,"black","Громкость музики 50",SCREEN_W//3.2,SCREEN_H//3,bold=False)
+        sound_power = Font("font/pixel_font.ttf",SCREEN_W//30,"black","Громкость звука "+str(SOUNDS_VOLUME),SCREEN_W//3.2,SCREEN_H//8,bold=False)
+        music_power = Font("font/pixel_font.ttf",SCREEN_W//30,"black","Громкость музики "+str(MUSIC_VOLUME),SCREEN_W//3.2,SCREEN_H//3,bold=False)
         flag_mouse_volume_sound = False
         rect_volume_sound = pygame.Rect(SCREEN_W//3.2,SCREEN_H//4.5,SCREEN_W//1.6,SCREEN_H//25)
-        mouse_volume_sound = pygame.Rect(50*rect_volume_sound.width/100+rect_volume_sound.x,rect_volume_sound.top-(SCREEN_H//45*3-rect_volume_sound.height)//2,SCREEN_H//72*2,SCREEN_H//45*3)
+        mouse_volume_sound = pygame.Rect(SOUNDS_VOLUME*rect_volume_sound.width/100+rect_volume_sound.x,rect_volume_sound.top-(SCREEN_H//45*3-rect_volume_sound.height)//2,SCREEN_H//72*2,SCREEN_H//45*3)
         flag_mouse_volume_music = False
         rect_volume_music = pygame.Rect(SCREEN_W//3.2,SCREEN_H//2.3,SCREEN_W//1.6,SCREEN_H//25)
-        mouse_volume_music = pygame.Rect(50*rect_volume_music.width/100+rect_volume_music.x,rect_volume_music.top-(SCREEN_H//45*3-rect_volume_music.height)//2,SCREEN_H//72*2,SCREEN_H//45*3)
+        mouse_volume_music = pygame.Rect(MUSIC_VOLUME*rect_volume_music.width/100+rect_volume_music.x,rect_volume_music.top-(SCREEN_H//45*3-rect_volume_music.height)//2,SCREEN_H//72*2,SCREEN_H//45*3)
         
         
         button_display_size = Font("font/pixel_font.ttf",SCREEN_W//20,'black','Разрешение:',SCREEN_W//3.2,SCREEN_H//8)
@@ -1403,8 +1414,12 @@ def menu(run_game):
             Font("font/pixel_font.ttf",SCREEN_W//25,'black','Нет',SCREEN_W//3.2*1.2,button_display_fullsize.font_y + SCREEN_H//8)
         ]
 
-        if FULLSCREEN:
+        print(int(config["SCREEN_WIDTH"]),int(config["SCREEN_HEIGHT"]))
+        if int(config["SCREEN_WIDTH"]) == 1920 and int(config["SCREEN_HEIGHT"]) == 1080:
             list_button_display_fullsize[0].font_color = 'red'
+            for obj in list_buttons_display_size:
+                obj.font_color = (93, 93, 93)
+            
         else:
             list_button_display_fullsize[1].font_color = 'red'
         run_option = True
@@ -1413,20 +1428,39 @@ def menu(run_game):
                 #Услове выхода из игры
                 mouse_cor = pygame.mouse.get_pos() 
                 
-                if event.type == pygame.QUIT:
-                    pygame.quit()
+
                 if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                     obj_button_option = pygame.Rect(0, 0, SCREEN_W//3.8, SCREEN_H) 
                     obj_video = pygame.Rect(SCREEN_W//67.3, SCREEN_H//10.3, SCREEN_W//4.3, SCREEN_H//12.2)
                     obj_back = pygame.Rect(SCREEN_W//91.4, SCREEN_H//130, SCREEN_W//10.24, SCREEN_H//20.571)
                     obj_audio = pygame.Rect(SCREEN_W//67.3, SCREEN_H//5.15, SCREEN_W//4.3, SCREEN_H//12.2)
                     if obj_button_option.collidepoint(mouse_cor[0],mouse_cor[1]):
-                        if obj_back.collidepoint(mouse_cor[0],mouse_cor[1]):
+                        if obj_back.collidepoint(mouse_cor[0],mouse_cor[1]) :
                             #СДЕСЬ СОХРАНЯЕМ ДАННЫЕ
+                            if list_button_display_fullsize[0].font_color == 'red':
+                                FULLSCREEN = True
+                                SCREEN_WIDTH = 0
+                                SCREEN_HEIGHT = 0
+                            else:
+                                FULLSCREEN = False
+                                for obj in list_buttons_display_size:
+                                    if obj.font_color == 'red':
+                                        SCREEN_WIDTH = obj.font_content[0].split('x')[0]
+                                        SCREEN_HEIGHT = obj.font_content[0].split('x')[1]
+                                        break
+                            MUSIC_VOLUME = music_power.font_content[0].split("Громкость музики ")[-1]
+                            SOUNDS_VOLUME = sound_power.font_content[0].split("Громкость звука ")[-1]
+                            
                             settings = {
-                                "FULLSCREEN":list_button_display_fullsize[0].font_color == "red"
+                                "SCREEN_WIDTH": SCREEN_WIDTH,
+                                "SCREEN_HEIGHT": SCREEN_HEIGHT,
+                                "SOUNDS_VOLUME": SOUNDS_VOLUME,
+                                "FULLSCREEN": FULLSCREEN,
+                                "MUSIC_VOLUME": MUSIC_VOLUME
                             }
-                            #
+                            with open('saves/config.json','w') as file:
+                                json.dump(settings,file,indent=4,ensure_ascii=True)
+                            # СОХРАНИЛИ ДАННЫЕ
                             run_option = False
                         elif obj_video.collidepoint(mouse_cor[0],mouse_cor[1]):
                             flag_option = "video"
@@ -1474,7 +1508,7 @@ def menu(run_game):
             bg_option.show_image(win)
             
             if flag_option == "not":
-                help_text = Font("font/pixel_font.ttf",SCREEN_W//30,"black","Выберите категорию ;в которой хотите внести изменение;;Изменения вступят в игру;после нажатия кнопки назад",SCREEN_W//3.2,SCREEN_H//8,bold=False,index=5)
+                help_text = Font("font/pixel_font.ttf",SCREEN_W//30,"black","Выберите категорию ;в которой хотите внести изменение;;Изменения вступят в игру;после перезахода в игру",SCREEN_W//3.2,SCREEN_H//8,bold=False,index=5)
                 help_text.show_text(win)
             if flag_option == "video":
                 button_display_size.show_text(win)
@@ -1574,7 +1608,7 @@ def book():
 def finish_shooting():
     game = True
     mouse.set_visible(False)
-    criminal = Graphic_elements(Background_shooting.WIDTH //2 ,Background_shooting.HEIGHT-dict_argument["BLOCK_SIZE"]*6.64,dict_argument["BLOCK_SIZE"]*5,dict_argument["BLOCK_SIZE"]*8.3,"image/Персонажи/Преступник/1.png")
+    criminal = Graphic_elements(Background_shooting.WIDTH //2 ,Background_shooting.HEIGHT-dict_argument["BLOCK_SIZE"]*6.64,dict_argument["BLOCK_SIZE"]*5,dict_argument["BLOCK_SIZE"]*8.3,"image/criminal/1.png")
     direction_move_criminal = None
     count_move_criminal = 0 
     count_change_direction_criminal = 15
@@ -1604,7 +1638,7 @@ def finish_shooting():
         for event1 in event.get(): # Получаем значение события из "списка событий" 
             
             if event1.type == QUIT:
-                game = False
+                pygame.quit()
             if event1.type == MOUSEMOTION:
                 
                 Background_shooting.X += int(event1.rel[0]) * -1
@@ -1653,9 +1687,267 @@ def finish_shooting():
         display.update() #Обновление экрана
         count_change_direction_criminal += 1
 
-import json
-def save_game(sprite1): 
-    print(sprite1.image_sprite.Y)
+def safe():
+    dict_argument["sprite_x"] = sprite1.image_sprite.X
+    dict_argument["sprite_y"] = sprite1.image_sprite.Y
+    with open('saves/saves.json','w') as file:
+        json.dump(dict_argument,file,indent=4,ensure_ascii=True)
+    bk = Graphic_elements(0,0,SCREEN_W,SCREEN_H,"image/room_1.png")
+    rect = Rect(SCREEN_W//6.71,SCREEN_H//5,SCREEN_W//8.28,SCREEN_H//6)
+    bg_safe = Graphic_elements(SCREEN_W//6,SCREEN_H//6,SCREEN_W//1.5,SCREEN_H//1.5,"image/safe/bg.png")
+    big_part_minigame_safe = Graphic_elements(bg_safe.X + bg_safe.WIDTH//2 - SCREEN_W//12,bg_safe.Y + bg_safe.HEIGHT//2 - SCREEN_W//12,SCREEN_W//6,SCREEN_W//6,"image/safe/big_part_minigame_safe.png")
+    smalle_part_minigame_safe = Graphic_elements(bg_safe.X + bg_safe.WIDTH//2 - SCREEN_W//12,bg_safe.Y + bg_safe.HEIGHT//2 - SCREEN_W//12,SCREEN_W//6,SCREEN_W//6,"image/safe/smalle_part_minigame_safe.png")
+    red_zone_safe_minigame = Graphic_elements(bg_safe.X + bg_safe.WIDTH//2 - SCREEN_W//4,bg_safe.Y + bg_safe.HEIGHT//2,SCREEN_W//2,SCREEN_W//20,"image/safe/red_zone_safe_minigame.png")
+    green_zone_safe_minigame = Graphic_elements(random.randint(red_zone_safe_minigame.X + SCREEN_W//100,red_zone_safe_minigame.X + red_zone_safe_minigame.WIDTH - SCREEN_W//20 - SCREEN_W//100),red_zone_safe_minigame.Y,red_zone_safe_minigame.HEIGHT,red_zone_safe_minigame.HEIGHT,"image/safe/green_zone_safe_minigame.png")
+    arrow_safe_minigame = Graphic_elements(red_zone_safe_minigame.X + SCREEN_W//100,red_zone_safe_minigame.Y + red_zone_safe_minigame.HEIGHT - green_zone_safe_minigame.HEIGHT//2.5,green_zone_safe_minigame.HEIGHT//2.5,green_zone_safe_minigame.HEIGHT//2.5,"image/safe/arrow_safe_minigame.png")
+    direction_arrow_safe_minigame = "R"
+    direction_green_zone_safe_minigame = "R"
+    flag_safe = False
+    number_completed_lvl_safe = 0
+    comleted_safe = 0 
+    list_red_led = []
+    for i in range(5):
+        list_red_led.append(Graphic_elements(bg_safe.X + bg_safe.WIDTH - SCREEN_W//30,bg_safe.Y + SCREEN_W//30 * (i+1),SCREEN_W//50,SCREEN_W//50,"image/safe/red_led_off.png"))
+    angle_safe = 0
+    list_angle_safe = [random.randint(1,359),random.randint(1,359),random.randint(1,359)]
+    for i in list_angle_safe:
+        if i % 2:
+            list_angle_safe[list_angle_safe.index(i)] += 1
+    text_presed_f = Font("font/pixel_font.ttf",SCREEN_W//40,"black","Нажмите кнопку [F]",big_part_minigame_safe.X - SCREEN_W//20,big_part_minigame_safe.Y + SCREEN_W//5)
+    run = True
+    presed_f_last = False
+    open_safe = Graphic_elements(bg_safe.X + bg_safe.WIDTH//3,bg_safe.Y + bg_safe.HEIGHT//3,bg_safe.WIDTH//3,bg_safe.WIDTH//3//1.5,"image/safe/open_safe_book.png")
+    time_count = 0
+    text_time = Font("font/pixel_font.ttf",SCREEN_W//40,"red","45",bg_safe.X + SCREEN_W//30,bg_safe.Y + SCREEN_W//30)
+    while run:
+        screen.fill("blue")
+        move_cloud()
+        bk.show_image(screen)
+        clock.tick(30)
+        if flag_safe:
+            
+
+            bg_safe.show_image(screen)
+            text_time.show_text(screen)
+            for red_led in list_red_led:
+                red_led.show_image(screen)
+            keys = key.get_pressed()  
+
+            if comleted_safe > 1:
+                comleted_safe -=1
+                open_safe.show_image(screen)
+            
+            if comleted_safe == 1:
+                flag_safe = False
+                dict_argument["flag_book"] = True
+
+            if comleted_safe == 0:
+                time_count += 1
+                if int(text_time.font_content[0]) <= 0:
+                    text_time.font_content = ["45"]
+                    number_completed_lvl_safe = 0
+                    for i in list_red_led:
+                        i.path = "image/safe/red_led_off.png"
+                        i.image_load()
+                if time_count == 30:
+                    time_count = 0
+                    text_time.font_content = [str(int(text_time.font_content[0]) - 1)]
+                if number_completed_lvl_safe <= 2:
+                 
+                    if keys[K_RIGHT]:
+                        angle_safe +=2
+                    if keys[K_LEFT]:
+                        angle_safe -=2
+                    big_part_minigame_safe.show_image(screen)
+                    smalle_part_minigame_safe.image_load()
+                    smalle_part_minigame_safe_copy = transform.rotate(smalle_part_minigame_safe.IMG, angle_safe*-1) 
+                    screen.blit(smalle_part_minigame_safe_copy, (smalle_part_minigame_safe.X + smalle_part_minigame_safe.WIDTH//2 - int(smalle_part_minigame_safe_copy.get_width() / 2), smalle_part_minigame_safe.Y + smalle_part_minigame_safe.HEIGHT//2 - int(smalle_part_minigame_safe_copy.get_height() / 2)))
+                    
+
+                    if angle_safe > 360:
+                        angle_safe -= 360
+                    elif angle_safe < 0:
+                        angle_safe += 360
+
+                        
+                    if angle_safe == list_angle_safe[number_completed_lvl_safe]:
+                        list_red_led[number_completed_lvl_safe].path = "image/safe/red_led_on.png"
+                        list_red_led[number_completed_lvl_safe].image_load()
+                        text_presed_f.show_text(screen)
+                        if keys[K_f] and not presed_f_last:
+                            presed_f_last = True
+                            number_completed_lvl_safe += 1
+                            angle_safe = 0
+                        if not keys[K_f]:
+                            presed_f_last = False
+                        
+                        
+                    else:
+                        list_red_led[number_completed_lvl_safe].path = "image/safe/red_led_off.png"
+                        list_red_led[number_completed_lvl_safe].image_load()
+            
+                else:
+                    
+                    if direction_arrow_safe_minigame == "R":
+                        arrow_safe_minigame.X += SCREEN_W//70
+                    elif direction_arrow_safe_minigame == "L":    
+                        arrow_safe_minigame.X -= SCREEN_W//70
+                    if arrow_safe_minigame.X >= red_zone_safe_minigame.X + red_zone_safe_minigame.WIDTH - SCREEN_W//20 - SCREEN_W//100:
+                        direction_arrow_safe_minigame = "L"
+                    elif arrow_safe_minigame.X <= red_zone_safe_minigame.X + SCREEN_W//100:
+                        direction_arrow_safe_minigame = "R"
+                    if number_completed_lvl_safe == 4:
+                        if direction_green_zone_safe_minigame == "R":
+                            green_zone_safe_minigame.X += SCREEN_W//140
+                        elif direction_green_zone_safe_minigame == "L":    
+                            green_zone_safe_minigame.X -= SCREEN_W//140
+                        if green_zone_safe_minigame.X >= red_zone_safe_minigame.X + red_zone_safe_minigame.WIDTH - SCREEN_W//20 - SCREEN_W//100:
+                            direction_green_zone_safe_minigame = "L"
+                        elif green_zone_safe_minigame.X <= red_zone_safe_minigame.X + SCREEN_W//100:
+                            direction_green_zone_safe_minigame = "R"
+                    if keys[K_f] and presed_f_last == False:
+                        presed_f_last = True
+                        if Rect.colliderect(arrow_safe_minigame.RECT,green_zone_safe_minigame.RECT):
+                            list_red_led[number_completed_lvl_safe].path = "image/safe/red_led_on.png"
+                            list_red_led[number_completed_lvl_safe].image_load()
+                            if number_completed_lvl_safe == 4: 
+                                comleted_safe = 100
+                            else:
+                                green_zone_safe_minigame.X = random.randint(red_zone_safe_minigame.X + SCREEN_W//100,red_zone_safe_minigame.X + red_zone_safe_minigame.WIDTH - SCREEN_W//20 - SCREEN_W//100)
+                                number_completed_lvl_safe += 1
+
+                        else:
+                            text_time.font_content = ["45"]
+                            number_completed_lvl_safe = 0
+                            for i in list_red_led:
+                                i.path = "image/safe/red_led_off.png"
+                                i.image_load()
+                    if not keys[K_f]:
+                        presed_f_last = False
+                    text_presed_f.font_content = ["Нажмите кнопку [F]","  чтоб остановить"]
+                    red_zone_safe_minigame.show_image(screen)
+                    green_zone_safe_minigame.show_image(screen)
+                    arrow_safe_minigame.show_image(screen)
+                    text_presed_f.show_text(screen)
+
+        if dict_argument["flag_book"]:
+            if not book():
+                dict_spawn_and_finish_point["lvl2_location_2"][1][0] = Rect(0,0,0,0)
+                run = False
+        for event1 in event.get():
+            print(mouse.get_pos())
+            if event1.type == MOUSEBUTTONDOWN:
+                if Rect.collidepoint(rect,mouse.get_pos()[0],mouse.get_pos()[1]):
+                    flag_safe = True
+            if event1.type == QUIT:
+                quit()
+                                    
+        display.update()
+
+def flappy_bird():
+
+    flappy_bird = Graphic_elements(SCREEN_W//2-SCREEN_W//40,SCREEN_H//2,SCREEN_W//20,SCREEN_W//20//1.41,"image/flappy_bird/bird_1.png")
+    border = Graphic_elements(0,0,SCREEN_W,SCREEN_H,"image/flappy_bird/border.png")
+    index_img_bird = 1
+    count_change_img_bird = 3
+    count_append_pipe = -30
+    count_up_bird = 0
+    list_pipe = []
+    run = True
+    number_point = 0
+    run_move_bird = False
+    direction_not_run_move_bird = "D"
+    change_not_run_move_bird = 5
+    angle = 0
+    flappy_bird.image_load()
+    text = Font("font/pixel_font.ttf",SCREEN_W//30,"black",str(number_point),SCREEN_W//2,SCREEN_H//4)
+    while run:
+        
+        screen.fill("blue")
+        if run_move_bird:
+            count_append_pipe += 1
+            if count_append_pipe >= 50:
+                count_append_pipe = random.randint(0,10)
+                list = [
+                    Graphic_elements(SCREEN_W,0,SCREEN_H//7,SCREEN_H,"image/flappy_bird/pipe.png"),
+                    Graphic_elements(SCREEN_W,0,SCREEN_H//7,SCREEN_H,"image/flappy_bird/pipe.png")
+                ]
+                random_number = random.randint(SCREEN_H//3,SCREEN_H-SCREEN_H//6)
+                list[-1].Y = random_number
+                list[-1].image_load(rotate_y = True)
+                list[0].Y = list[-1].Y - flappy_bird.HEIGHT * 4.5 - list[0].HEIGHT
+                list_pipe.append(list)
+            for l in list_pipe:
+                for obj in l:
+                    obj.X -= SCREEN_W // 100
+                    obj.show_image(screen)  
+                    if obj.X < flappy_bird.X and l.index(obj) == 0 and obj.NAME != False:
+                        number_point += 1
+                        obj.NAME = False
+                        text.font_content = [str(number_point)]
+                    if obj.X - obj.WIDTH < 0 :
+                        list_pipe.pop(list_pipe.index(l))
+                        break
+                    if Rect.colliderect(obj.RECT,flappy_bird.RECT):
+                        return number_point
+        for event1 in event.get():
+            if event1.type == MOUSEBUTTONDOWN:
+                run_move_bird = True
+                count_up_bird = 10
+                angle = 0
+            if event1.type == QUIT:
+                quit()
+        flappy_bird.show_image(screen)
+        count_change_img_bird -= 1
+        if count_change_img_bird <= 0:
+            count_change_img_bird = 3
+            index_img_bird += 1
+            if index_img_bird >= 4:
+                index_img_bird = 1
+            flappy_bird.path = "image/flappy_bird/bird_"+str(index_img_bird)+".png"
+            flappy_bird.image_load()
+
+                
+        
+        if count_up_bird > 0 and not flappy_bird.Y < 0 :
+            flappy_bird.Y -= SCREEN_W // 120
+            count_up_bird -= 1
+            angle += 5
+            flappy_bird.image_load()
+            flappy_bird.IMG = transform.rotate(flappy_bird.IMG,angle)
+        else:
+            count_up_bird = 0
+            
+        
+        if run_move_bird:
+            if count_up_bird <= 0:
+                flappy_bird.Y += SCREEN_W // 80
+                if angle >= -70:
+                    angle -= 10
+                flappy_bird.image_load()
+                flappy_bird.IMG = transform.rotate(flappy_bird.IMG,angle)
+        else:
+
+            if direction_not_run_move_bird == "U":
+                if change_not_run_move_bird <= 0:
+                    change_not_run_move_bird = 6
+                    direction_not_run_move_bird = "D"
+                flappy_bird.Y -= SCREEN_W // 700
+            elif direction_not_run_move_bird == "D":
+                if change_not_run_move_bird <= 0:
+                    change_not_run_move_bird = 6
+                    direction_not_run_move_bird = "U"
+                flappy_bird.Y += SCREEN_W // 700
+        change_not_run_move_bird -= 1
+        
+        if flappy_bird.Y+ flappy_bird.HEIGHT > SCREEN_H:
+            return number_point
+        text.show_text(screen)
+        clock.tick(30)
+        border.show_image(screen)
+        display.update()
+
+def save_game(): 
     dict_argument["sprite_x"] = sprite1.image_sprite.X
     dict_argument["sprite_y"] = sprite1.image_sprite.Y
     with open('saves/saves.json','w') as file:

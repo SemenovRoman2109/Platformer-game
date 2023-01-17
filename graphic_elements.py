@@ -48,5 +48,3 @@ class Graphic_elements():
         #Условие наведения мышкой на объект
         if mouse_cor[0] > self.X and mouse_cor[0] < self.X + self.WIDTH and mouse_cor[1] > self.Y and mouse_cor[1] < self.Y + self.HEIGHT:
             return True
-
-    

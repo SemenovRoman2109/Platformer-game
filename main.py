@@ -6,12 +6,12 @@ def run_game():
     
     #Рисуем поверхности
     drawSurfaces()
-
+    flappy_bird()
     #y передвигающийся плаформы+
     #Основной цыкл игры
     dict_argument["list_surface"] = list_surface[dict_argument["index_lvl"]][dict_argument["index_location"]]
-
     while dict_argument["game"]:
+        
         clock.tick(FPS)
 
         for event1 in event.get(): # Получаем значение события из "списка событий" 
@@ -20,13 +20,14 @@ def run_game():
             
             if dict_argument["flag_puzzle_location"]:
                 puzzle(event1)
+
             if event1.type == MOUSEBUTTONDOWN and event1.button == 1:
                 if sprite1.ghost_img.check_mouse_cor(mouse_cor):
                     sprite1.count_pressing_ghost += 1
                 if dict_argument["flag_collid_npc"]:
                     for i in list_button_collid:
                         if i.check_mouse_cor_font(mouse_cor):
-                            if list_NPC[dict_argument["index_npc_collid"]].path == "image/Персонажи/Преступник/model.png":
+                            if list_NPC[dict_argument["index_npc_collid"]].path == "image/criminal/model.png":
                                 if i.font_content == ["Да"]:
                                     if finish_shooting():
                                         dict_argument["screen_dimming_flag"] =  "+"
@@ -65,14 +66,15 @@ def run_game():
             
             if event1.type == QUIT: # если событие равно "закрыть" выполняем метод exit()
                 dict_argument["game"] = False #Отключает игру
-                save_game(sprite1)
+                pygame.quit() #Отключает игру
+                save_game()
 
         
         if dict_argument["scene"] == "game": #Сцена игры
 
             
             dict_Graphic_elements_obj["Fon"].show_image(screen) #Отображаем фон 
-            move_cloud() #Функция передвежения облоков
+            # move_cloud() #Функция передвежения облоков
 
             #Перебераем все списки блоков и отррисовываем их
             for i in dict_list_border["list_border_cor"]:
@@ -134,7 +136,7 @@ def run_game():
                 sprite1.fly_up = False
             sprite1.spring()
             sprite1.shield(screen)
-            direction_move_map = sprite1.finish_lvl(shooting_lvl,dict_Graphic_elements_obj["Fon"],move_cloud,book)
+            direction_move_map = sprite1.finish_lvl(shooting_lvl,move_cloud,safe)
             if direction_move_map != "False" and direction_move_map != "finish_lvl":
                 dict_argument["index_location"] += 1
                 move_map(direction_move_map)
@@ -230,7 +232,17 @@ def run_game():
             if dict_argument["flag_puzzle_location"]:
                 puzzle(False)
 
-        # print(clock.get_fps()) #Пишит в терминале количество кадров в секунду
+
+        dict_argument["count_change_bg"] += 1
+        if dict_argument["count_change_bg"] >= 10:
+            dict_argument["count_change_bg"] = 0
+            number = random.randint(2,7)
+            if number > 3:
+                number = 1
+            dict_Graphic_elements_obj["Fon"].path = "image/backgroubd_"+str(number)+".bmp"
+            dict_Graphic_elements_obj["Fon"].image_load()
+
+        print(clock.get_fps()) #Пишит в терминале количество кадров в секунду
         display.update() #Обновление экрана
 #Запускает игру
 menu(run_game)
