@@ -43,7 +43,6 @@ class Sprite:
         self.random_direction_ghost_number = None
         self.random_direction_ghost_count = [10,15]
         self.image_sprite = Graphic_elements(sprite_x,sprite_y,sprite_width,sprite_height,self.image_path)   
-        self.List_layout = [[K_LEFT,K_RIGHT,K_UP,K_DOWN],[K_a,K_d,K_w,K_s],[K_RIGHT,K_LEFT,K_DOWN,K_UP],[K_d,K_a,K_s,K_w]]
         self.flag_spring = 0
         self.ghost_img = Graphic_elements(0,0,dict_argument["BLOCK_SIZE"],dict_argument["BLOCK_SIZE"]*1.86,"image/ghost_1.png")
         self.count_pressing_ghost = 0
@@ -85,14 +84,14 @@ class Sprite:
                 break
         keys = key.get_pressed()   
         if self.flag_leader == False:
-            if keys[self.List_layout[self.index_layout][3]] and self.flag_squat2 == 3 and self.gravity == False:
+            if keys[dict_argument["keys"][2]] and self.flag_squat2 == 3 and self.gravity == False:
                 if self.flag_squat == 1:
                     self.flag_squat = 0
                     self.flag_squat2 = 1
                 elif self.flag_squat == 0:
                     self.flag_squat = 1
                     self.flag_squat2 = 1
-            if not keys[self.List_layout[self.index_layout][3]]:
+            if not keys[dict_argument["keys"][2]]:
                 if self.flag_squat2 == 1:
                     self.flag_squat2 = 0
             
@@ -117,7 +116,7 @@ class Sprite:
     # Функция которая отвечает за анимации персонажа
     def sprite_move(self):  
         keys = key.get_pressed()        
-        if keys[self.List_layout[self.index_layout][0]] and self.image_sprite.X > SCREEN_W//80 and self.move_left:
+        if keys[dict_argument["keys"][3]] and self.image_sprite.X > SCREEN_W//80 and self.move_left:
             self.image_sprite.X -= self.speed
             self.flag = "L"
             if self.index == 10:
@@ -129,7 +128,7 @@ class Sprite:
                 self.index2 = 0
             self.index2 += 1
             
-        elif keys[self.List_layout[self.index_layout][1]] and self.image_sprite.X < SCREEN_W - self.image_sprite.WIDTH - SCREEN_W//80 and self.move_right:
+        elif keys[dict_argument["keys"][4]] and self.image_sprite.X < SCREEN_W - self.image_sprite.WIDTH - SCREEN_W//80 and self.move_right:
             self.image_sprite.X += self.speed
             self.flag = "R"  
             if self.index == 10:
@@ -153,7 +152,7 @@ class Sprite:
     def jump_pressed(self): 
         keys = key.get_pressed() 
         if self.flag_leader == False:
-            if keys[self.List_layout[self.index_layout][2]] and self.jump_now == 0:
+            if keys[dict_argument["keys"][1]] and self.jump_now == 0:
                 
                 self.jump_now = 1
                 if self.double_jump and self.double_jump != None:
@@ -162,7 +161,7 @@ class Sprite:
                 self.fly_up = True
                 
 
-            if keys[self.List_layout[self.index_layout][2]] and self.jump_now == 5 and self.fly_up == False and self.double_jump != None: 
+            if keys[dict_argument["keys"][1]] and self.jump_now == 5 and self.fly_up == False and self.double_jump != None: 
                 self.jump_now = 1
                 self.fly_up = True
                 
@@ -460,7 +459,7 @@ class Sprite:
         keys = key.get_pressed() 
         if self.flag_hook < 20:
             self.flag_hook += 1
-        if Rect.colliderect(rect,self.image_sprite.RECT) and self.flag_hook == 20 and not keys[self.List_layout[self.index_layout][3]]:
+        if Rect.colliderect(rect,self.image_sprite.RECT) and self.flag_hook == 20 and not keys[dict_argument["keys"][2]]:
             self.image_sprite.X = rect.x-self.image_sprite.WIDTH//2+rect.width//2
             self.image_sprite.Y = rect.y-self.image_sprite.HEIGHT//2+rect.height//2
             self.image_sprite.RECT.x = rect.x-self.image_sprite.WIDTH//2+rect.width//2
@@ -470,7 +469,7 @@ class Sprite:
     # Функция для спрыгивания с вервки
     def hook(self,rect):
         keys = key.get_pressed() 
-        if keys[self.List_layout[self.index_layout][2]]:
+        if keys[dict_argument["keys"][1]]:
             if Rect.colliderect(rect,self.image_sprite.RECT):
                 self.flag_hook = 0
     # Функция лесницы    
@@ -484,9 +483,9 @@ class Sprite:
                 
                 self.gravity = False
                 self.flag_leader = True
-                if keys[self.List_layout[self.index_layout][2]] and self.move_up:
+                if keys[dict_argument["keys"][1]] and self.move_up:
                     self.image_sprite.Y -= SCREEN_H//100
-                if keys[self.List_layout[self.index_layout][3]]:
+                if keys[dict_argument["keys"][2]]:
                     self.image_sprite.Y += SCREEN_H//100
                 break
             else:

@@ -124,7 +124,7 @@ if dict_argument["defolt"] == "true":
     dict_argument = {
         "defolt":"False",
         "ghost": False, 
-        "keys": key.get_pressed(), 
+        "keys": [K_f,K_w,K_s,K_a,K_d], 
         "ded": True,    
         "game": True,
         "scene":"game",

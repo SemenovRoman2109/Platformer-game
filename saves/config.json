@@ -1,7 +1,14 @@
 {
-    "SCREEN_WIDTH": "1280",
-    "SCREEN_HEIGHT": "720",
-    "SOUNDS_VOLUME": "41",
-    "FULLSCREEN": false,
-    "MUSIC_VOLUME": "0"
+    "SCREEN_WIDTH": 0,
+    "SCREEN_HEIGHT": 0,
+    "SOUNDS_VOLUME": "100",
+    "FULLSCREEN": true,
+    "MUSIC_VOLUME": "100",
+    "list_text_button_control": [
+        "f",
+        "up",
+        "down",
+        "left",
+        "right"
+    ]
 }
