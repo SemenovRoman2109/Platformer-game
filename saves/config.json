@@ -1,6 +1,6 @@
 {
-    "SCREEN_WIDTH": "1920",
-    "SCREEN_HEIGHT": "1080",
+    "SCREEN_WIDTH": "1280",
+    "SCREEN_HEIGHT": "720",
     "SOUNDS_VOLUME": "41",
     "FULLSCREEN": false,
     "MUSIC_VOLUME": "0"

@@ -1390,15 +1390,26 @@ def menu(run_game):
         flag_mouse_volume_music = False
         rect_volume_music = pygame.Rect(SCREEN_W//3.2,SCREEN_H//2.3,SCREEN_W//1.6,SCREEN_H//25)
         mouse_volume_music = pygame.Rect(MUSIC_VOLUME*rect_volume_music.width/100+rect_volume_music.x,rect_volume_music.top-(SCREEN_H//45*3-rect_volume_music.height)//2,SCREEN_H//72*2,SCREEN_H//45*3)
-        
-        
+        distation_button = SCREEN_H//5.15-SCREEN_H//10.3
+        button_video = Graphic_elements(SCREEN_W//67.3, SCREEN_H//10.3, SCREEN_W//4.3, SCREEN_H//11.7,"image/menu/button/video_w.png")
+        button_audio = Graphic_elements(SCREEN_W//67.3, SCREEN_H//10.3+distation_button, SCREEN_W//4.3, SCREEN_H//11.7,"image/menu/button/audio_w.png")
+        button_control = Graphic_elements(SCREEN_W//67.3, SCREEN_H//10.3+distation_button*2, SCREEN_W//4.3, SCREEN_H//11.7,"image/menu/button/control_w.png")
+        text_control = Font("font/pixel_font.ttf",SCREEN_W//20,'black','Раскладка клавиатуры:',SCREEN_W//3.2,SCREEN_H//8)
         button_display_size = Font("font/pixel_font.ttf",SCREEN_W//20,'black','Разрешение:',SCREEN_W//3.2,SCREEN_H//8)
         list_buttons_display_size =[
                         Font("font/pixel_font.ttf",SCREEN_W//38,'black','1280x720',button_display_size.font_x,button_display_size.font_y+SCREEN_H//8),
                         Font("font/pixel_font.ttf",SCREEN_W//38,'black','1600x920',button_display_size.font_x+SCREEN_W//14.2*2,button_display_size.font_y+SCREEN_H//8),
                         Font("font/pixel_font.ttf",SCREEN_W//38,'black','1920x1080',button_display_size.font_x+SCREEN_W//14.2*4,button_display_size.font_y+SCREEN_H//8),
         ]
-
+        list_control = []
+        list_text_control = ["Использовать","Вверх","Пригнуться","Влево","Вправо"]
+        list_text_button_control = ["  F","  W","  S","  A","  D"]
+        for i in range(5):
+            obj = Graphic_elements(SCREEN_W//3.2,SCREEN_H//4 + SCREEN_W//15 * i,SCREEN_W//2, SCREEN_W//20, "image/menu/menu_button_change.png")
+            text = Font("font/pixel_font.ttf",SCREEN_W//40,'white',list_text_control[i],obj.X + SCREEN_W//40,obj.Y + SCREEN_W//90)
+            text_button = Font("font/pixel_font.ttf",SCREEN_W//40,'black',list_text_button_control[i],obj.X + SCREEN_W//3,obj.Y + SCREEN_W//90)
+            list_control.append([obj,text,text_button])
+        
         for obj in list_buttons_display_size:
             width = SCREEN_W
             height = SCREEN_H
@@ -1415,7 +1426,7 @@ def menu(run_game):
         ]
 
         print(int(config["SCREEN_WIDTH"]),int(config["SCREEN_HEIGHT"]))
-        if int(config["SCREEN_WIDTH"]) == 1920 and int(config["SCREEN_HEIGHT"]) == 1080:
+        if int(config["SCREEN_WIDTH"]) == 0 and int(config["SCREEN_HEIGHT"]) == 0:
             list_button_display_fullsize[0].font_color = 'red'
             for obj in list_buttons_display_size:
                 obj.font_color = (93, 93, 93)
@@ -1427,13 +1438,65 @@ def menu(run_game):
             for event in pygame.event.get():
                 #Услове выхода из игры
                 mouse_cor = pygame.mouse.get_pos() 
-                
+
+                if event.type == pygame.QUIT:
+                    run_option = False
+                if event.type == pygame.KEYDOWN:
+                    for obj in list_control:
+                        if obj[2].font_color == "yellow":
+                            if event.key == 13:#ЕНТЕР
+                                obj[2].font_content[0] = "Enter"
+                            elif event.key == 9:#ТАБ  
+                                obj[2].font_content[0] = "Tab"
+                            elif event.key == 32:#ПРОБЕЛ 
+                                obj[2].font_content[0] = "Space"
+                            elif event.key == 1073742048 or event.key == 1073742052:#КОНТРАЛ
+                                obj[2].font_content[0] = "Ctrl"
+                            elif event.key == 1073742049 or event.key == 1073742053:#ШИФТ
+                                obj[2].font_content[0] = "Shift"
+                            elif event.key == 1073742050 or event.key == 1073742054:#АЛЬТ
+                                obj[2].font_content[0] = "Alt"
+                            elif event.key == 1073741906:#Вверх
+                                obj[2].font_content[0] = "up"
+                            elif event.key == 1073741905:#вниз
+                                obj[2].font_content[0] = "down"
+                            elif event.key == 1073741904:#влево
+                                obj[2].font_content[0] = "left"
+                            elif event.key == 1073741903:#вправо
+                                obj[2].font_content[0] = "right"
+                            else:
+                                obj[2].font_content[0] = str(event.unicode)
+                            
+                            obj[2].start_content = obj[2].font_content[0]
+                            obj[2].font_content[0] = "> "+obj[2].font_content[0]+" <"
+                            print(event)
+
+                            break
 
                 if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                     obj_button_option = pygame.Rect(0, 0, SCREEN_W//3.8, SCREEN_H) 
-                    obj_video = pygame.Rect(SCREEN_W//67.3, SCREEN_H//10.3, SCREEN_W//4.3, SCREEN_H//12.2)
                     obj_back = pygame.Rect(SCREEN_W//91.4, SCREEN_H//130, SCREEN_W//10.24, SCREEN_H//20.571)
-                    obj_audio = pygame.Rect(SCREEN_W//67.3, SCREEN_H//5.15, SCREEN_W//4.3, SCREEN_H//12.2)
+                    if flag_option == "control":
+                        for obj in list_control:
+                            if obj[0].RECT.collidepoint(mouse_cor[0],mouse_cor[1]):
+                                for obj2 in list_control:
+                                    obj2[0].path = "image/menu/menu_button_change.png"
+                                    obj2[0].image_load()
+                                    obj2[2].font_content[0] = obj2[2].start_content
+                                    obj2[2].font_color = "black"
+                                obj[0].path = "image/menu/presed_menu_button_change.png"
+                                obj[0].image_load()
+                                if not ">" in obj[2].font_content[0]:
+                                    obj[2].font_content[0] = "> "+obj[2].font_content[0].split("  ")[-1]+" <"
+                                obj[2].font_color = "yellow"
+                                break
+                            else:
+                                for obj2 in list_control:
+                                    obj2[0].path = "image/menu/menu_button_change.png"
+                                    obj2[0].image_load()
+                                    obj2[2].font_content[0] = obj2[2].start_content
+                                    obj2[2].font_color = "black"
+
                     if obj_button_option.collidepoint(mouse_cor[0],mouse_cor[1]):
                         if obj_back.collidepoint(mouse_cor[0],mouse_cor[1]) :
                             #СДЕСЬ СОХРАНЯЕМ ДАННЫЕ
@@ -1462,10 +1525,12 @@ def menu(run_game):
                                 json.dump(settings,file,indent=4,ensure_ascii=True)
                             # СОХРАНИЛИ ДАННЫЕ
                             run_option = False
-                        elif obj_video.collidepoint(mouse_cor[0],mouse_cor[1]):
+                        elif button_video.RECT.collidepoint(mouse_cor[0],mouse_cor[1]):
                             flag_option = "video"
-                        elif obj_audio.collidepoint(mouse_cor[0],mouse_cor[1]):
+                        elif button_audio.RECT.collidepoint(mouse_cor[0],mouse_cor[1]):
                             flag_option = "audio"
+                        elif button_control.RECT.collidepoint(mouse_cor[0],mouse_cor[1]):
+                            flag_option = "control"
                         else:
                             flag_option = "not"
                     if flag_option == "audio":        
@@ -1503,24 +1568,53 @@ def menu(run_game):
                         if flag_mouse_volume_music:
                             flag_mouse_volume_music = False
             
-            bg_option.path = 'image/menu/option_'+flag_option+'.png'
-            bg_option.image_load()
-            bg_option.show_image(win)
             
+            bg_option.show_image(win)
+            button_video.show_image(win)
+            button_audio.show_image(win)
+            button_control.show_image(win)
             if flag_option == "not":
                 help_text = Font("font/pixel_font.ttf",SCREEN_W//30,"black","Выберите категорию ;в которой хотите внести изменение;;Изменения вступят в игру;после перезахода в игру",SCREEN_W//3.2,SCREEN_H//8,bold=False,index=5)
                 help_text.show_text(win)
+
+                
             if flag_option == "video":
+                if button_video.path != "image/menu/button/video_b.png":
+                    button_video.path = "image/menu/button/video_b.png"
+                    button_video.image_load()
                 button_display_size.show_text(win)
                 for i in list_buttons_display_size:
                     i.show_text(win)
                 button_display_fullsize.show_text(win)
                 for i in list_button_display_fullsize:
                     i.show_text(win)
+            else:
+                if button_video.path != "image/menu/button/video_w.png":
+                    button_video.path = "image/menu/button/video_w.png"
+                    button_video.image_load()
             if flag_option == "audio":
-                
+                if button_audio.path != "image/menu/button/audio_b.png":
+                    button_audio.path = "image/menu/button/audio_b.png"
+                    button_audio.image_load()
                 slider(sound_power, flag_mouse_volume_sound, rect_volume_sound, mouse_volume_sound, mouse_cor, "Громкость звука ",win)
                 slider(music_power, flag_mouse_volume_music, rect_volume_music, mouse_volume_music, mouse_cor, "Громкость музики ",win)
+            else:
+                if button_audio.path != "image/menu/button/audio_w.png":
+                    button_audio.path = "image/menu/button/audio_w.png"
+                    button_audio.image_load()
+            if flag_option == "control":
+                if button_control.path != "image/menu/button/control_b.png":
+                    button_control.path = "image/menu/button/control_b.png"
+                    button_control.image_load() 
+                text_control.show_text(win)
+                for obj in list_control:
+                    obj[0].show_image(win)
+                    obj[1].show_text(win)
+                    obj[2].show_text(win)
+            else:
+                if button_control.path != "image/menu/button/control_w.png":
+                    button_control.path = "image/menu/button/control_w.png"
+                    button_control.image_load() 
             pygame.display.flip()
 
   
