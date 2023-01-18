@@ -573,7 +573,8 @@ class Sprite:
                             break
                         
                         else:
-                            print("У тебя не получилось пройти первый уровень вот тебе еще попытка")
+                            dict_argument["screen_dimming_flag"] = "+"
+                            dict_argument["index_text_drimming"] = "lose_shooting"
                             flag_first_shooting_lvl_point = shooting_lvl(screen,100,20,False)
                     dict_argument["screen_dimming_flag"] = "+"
                     dict_argument["index_text_drimming"] = "second_shooting"
@@ -584,7 +585,8 @@ class Sprite:
                             break
                         
                         else:
-                            print("У тебя не получилось пройти второй уровень вот тебе еще попытка")
+                            dict_argument["screen_dimming_flag"] = "+"
+                            dict_argument["index_text_drimming"] = "lose_shooting"
                             flag_second_shooting_lvl_point = shooting_lvl(screen,150,30,3)
                     return "finish_lvl"
                 

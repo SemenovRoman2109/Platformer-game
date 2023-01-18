@@ -242,7 +242,6 @@ def run_game():
             dict_Graphic_elements_obj["Fon"].path = "image/backgroubd_"+str(number)+".bmp"
             dict_Graphic_elements_obj["Fon"].image_load()
 
-        print(clock.get_fps()) #Пишит в терминале количество кадров в секунду
         display.update() #Обновление экрана
 #Запускает игру
 menu(run_game)

@@ -1086,24 +1086,18 @@ def shooting_lvl(screen,min_count_point,ammo_count,barriers):
                         for obj_barier in list_s[-1]:
                             
                             obj_barier_another_flag = True
-                            # print("Входит в цикл вайл")
                             while obj_barier_another_flag:
-                                # print("Входит в цикл фор")
                                 for obj_barier_another in list_s[-1]:
                                     if list_s[-1].index(obj_barier_another) != list_s[-1].index(obj_barier):
-                                        # print("зашло в цикл с индексом ",list_s[-1].index(obj_barier_another))
                                         if obj_barier.start_x <= obj_barier_another.start_x and obj_barier.start_x >= obj_barier_another.start_x - obj_barier_another.WIDTH *1.5:
                                             obj_barier.start_x = random.randint(0,int(list_s[2].WIDTH - obj_barier.WIDTH)) 
                                             obj_barier_another_flag = True
-                                            # print("Меняем")
                                             break
                                         elif obj_barier.start_x >= obj_barier_another.start_x and obj_barier.start_x <= obj_barier_another.start_x - obj_barier_another.WIDTH *1.5:
                                             obj_barier.start_x = random.randint(0,int(list_s[2].WIDTH - obj_barier.WIDTH))
                                             obj_barier_another_flag = True
-                                            # print("Меняем")
                                             break
                                         else:
-                                            # print(" НЕ Меняем")
                                             obj_barier_another_flag = False
                     
                         
@@ -1467,7 +1461,6 @@ def menu(run_game):
                                 if not event.unicode in "йцукенгшщзхъфывапролджэячсмитьбю":
                                     obj[2].font_content[0] = str(event.unicode)
                             dict_argument["keys"][list_control.index(obj)] = event.key
-                            print(obj[2].font_content[0].lower())
                             list_text_button_control[list_control.index(obj)] = obj[2].font_content[0].lower()
                             obj[2].start_content = obj[2].font_content[0]
                             obj[2].font_content[0] = "> "+obj[2].font_content[0]+" <"
@@ -1789,6 +1782,8 @@ def safe():
     dict_argument["sprite_y"] = sprite1.image_sprite.Y
     with open('saves/saves.json','w') as file:
         json.dump(dict_argument,file,indent=4,ensure_ascii=True)
+    with open('saves/config.json','r') as file:
+        config = json.load(file)
     bk = Graphic_elements(0,0,SCREEN_W,SCREEN_H,"image/room_1.png")
     rect = Rect(SCREEN_W//6.71,SCREEN_H//5,SCREEN_W//8.28,SCREEN_H//6)
     bg_safe = Graphic_elements(SCREEN_W//6,SCREEN_H//6,SCREEN_W//1.5,SCREEN_H//1.5,"image/safe/bg.png")
@@ -1810,7 +1805,7 @@ def safe():
     for i in list_angle_safe:
         if i % 2:
             list_angle_safe[list_angle_safe.index(i)] += 1
-    text_presed_f = Font("font/pixel_font.ttf",SCREEN_W//40,"black","Нажмите кнопку [F]",big_part_minigame_safe.X - SCREEN_W//20,big_part_minigame_safe.Y + SCREEN_W//5)
+    text_presed_f = Font("font/pixel_font.ttf",SCREEN_W//40,"black","Нажмите кнопку ["+str(config["list_text_button_control"][0])+"]",big_part_minigame_safe.X - SCREEN_W//20,big_part_minigame_safe.Y + SCREEN_W//5)
     run = True
     presed_f_last = False
     open_safe = Graphic_elements(bg_safe.X + bg_safe.WIDTH//3,bg_safe.Y + bg_safe.HEIGHT//3,bg_safe.WIDTH//3,bg_safe.WIDTH//3//1.5,"image/safe/open_safe_book.png")
@@ -1851,9 +1846,9 @@ def safe():
                     text_time.font_content = [str(int(text_time.font_content[0]) - 1)]
                 if number_completed_lvl_safe <= 2:
                  
-                    if keys[K_RIGHT]:
+                    if keys[dict_argument["keys"][4]]:
                         angle_safe +=2
-                    if keys[K_LEFT]:
+                    if keys[dict_argument["keys"][3]]:
                         angle_safe -=2
                     big_part_minigame_safe.show_image(screen)
                     smalle_part_minigame_safe.image_load()
@@ -1871,11 +1866,11 @@ def safe():
                         list_red_led[number_completed_lvl_safe].path = "image/safe/red_led_on.png"
                         list_red_led[number_completed_lvl_safe].image_load()
                         text_presed_f.show_text(screen)
-                        if keys[dict_argument["keys"][2]] and not presed_f_last:
+                        if keys[dict_argument["keys"][0]] and not presed_f_last:
                             presed_f_last = True
                             number_completed_lvl_safe += 1
                             angle_safe = 0
-                        if not keys[dict_argument["keys"][2]]:
+                        if not keys[dict_argument["keys"][0]]:
                             presed_f_last = False
                         
                         
@@ -1902,7 +1897,7 @@ def safe():
                             direction_green_zone_safe_minigame = "L"
                         elif green_zone_safe_minigame.X <= red_zone_safe_minigame.X + SCREEN_W//100:
                             direction_green_zone_safe_minigame = "R"
-                    if keys[dict_argument["keys"][2]] and presed_f_last == False:
+                    if keys[dict_argument["keys"][0]] and presed_f_last == False:
                         presed_f_last = True
                         if Rect.colliderect(arrow_safe_minigame.RECT,green_zone_safe_minigame.RECT):
                             list_red_led[number_completed_lvl_safe].path = "image/safe/red_led_on.png"
@@ -1919,9 +1914,9 @@ def safe():
                             for i in list_red_led:
                                 i.path = "image/safe/red_led_off.png"
                                 i.image_load()
-                    if not keys[dict_argument["keys"][2]]:
+                    if not keys[dict_argument["keys"][0]]:
                         presed_f_last = False
-                    text_presed_f.font_content = ["Нажмите кнопку [F]","  чтоб остановить"]
+                    text_presed_f.font_content = ["Нажмите кнопку ["+str(config["list_text_button_control"])+"]","  чтоб остановить"]
                     red_zone_safe_minigame.show_image(screen)
                     green_zone_safe_minigame.show_image(screen)
                     arrow_safe_minigame.show_image(screen)
@@ -1932,7 +1927,6 @@ def safe():
                 dict_spawn_and_finish_point["lvl2_location_2"][1][0] = Rect(0,0,0,0)
                 run = False
         for event1 in event.get():
-            print(mouse.get_pos())
             if event1.type == MOUSEBUTTONDOWN:
                 if Rect.collidepoint(rect,mouse.get_pos()[0],mouse.get_pos()[1]):
                     flag_safe = True
