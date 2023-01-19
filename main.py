@@ -2,6 +2,7 @@ from module import * #Подключаем модуль с модулями
 from sprite import Sprite
 init() #Инициализируем pygame
 #Создаем функцию запуска игры
+
 def run_game():    
     
     #Рисуем поверхности
@@ -20,6 +21,12 @@ def run_game():
             
             if dict_argument["flag_puzzle_location"]:
                 puzzle(event1)
+
+            if event1.type == KEYDOWN:
+                if event1.key == K_ESCAPE:
+                    dict_argument["game"] = False
+                    save_game()
+
 
             if event1.type == MOUSEBUTTONDOWN and event1.button == 1:
                 if sprite1.ghost_img.check_mouse_cor(mouse_cor):
@@ -244,6 +251,7 @@ def run_game():
 
         display.update() #Обновление экрана
 #Запускает игру
-menu(run_game)
-
-
+import sys
+if menu(run_game) == "stop":
+    print("ААААААААААААААА")
+    os.execv(sys.executable, [sys.executable] + sys.argv)

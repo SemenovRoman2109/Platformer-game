@@ -124,7 +124,6 @@ if dict_argument["defolt"] == "true":
     dict_argument = {
         "defolt":"False",
         "ghost": False, 
-        "keys": [K_f,K_w,K_s,K_a,K_d], 
         "ded": True,    
         "game": True,
         "scene":"game",
@@ -156,7 +155,7 @@ if dict_argument["defolt"] == "true":
         "sprite_x":dict_spawn_and_finish_point["lvl"+str(index_lvl+1)+"_location_"+str(index_location+1)][0][0],
         "sprite_y":dict_spawn_and_finish_point["lvl1_location_1"][0][1],
         "count_change_bg":0
-}
+    }
 
 
 #Словарь аргументов ангелов

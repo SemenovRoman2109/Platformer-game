@@ -674,8 +674,10 @@ def cracking_platform(sprite):
 #Функция невидимой платформы
 def invisibility_block(element_door,element_door_empty,sprite1):
     keys = key.get_pressed() 
-    
-    if keys[dict_argument["keys"][0]]:
+    with open('saves/config.json','r') as file:
+            config = json.load(file)
+    list_keys = config["keys"]
+    if keys[list_keys[0]]:
         if dict_argument_block["count_load"] == 24: 
             for el in range(len(dict_argument["list_surface"])):
                 for element in range(len(dict_argument["list_surface"][el])):
@@ -1372,6 +1374,9 @@ def menu(run_game):
     def option():
         with open('saves/config.json','r') as file:
             config = json.load(file)
+        with open('saves/saves.json','r') as file:
+            saves = json.load(file)
+        
         MUSIC_VOLUME = int(config["MUSIC_VOLUME"])
         SOUNDS_VOLUME = int(config["SOUNDS_VOLUME"])
         bg_option = Graphic_elements(0, 0, SCREEN_W, SCREEN_H, 'image/menu/option_not.png')
@@ -1388,6 +1393,9 @@ def menu(run_game):
         button_video = Graphic_elements(SCREEN_W//67.3, SCREEN_H//10.3, SCREEN_W//4.3, SCREEN_H//11.7,"image/menu/button/video_w.png")
         button_audio = Graphic_elements(SCREEN_W//67.3, SCREEN_H//10.3+distation_button, SCREEN_W//4.3, SCREEN_H//11.7,"image/menu/button/audio_w.png")
         button_control = Graphic_elements(SCREEN_W//67.3, SCREEN_H//10.3+distation_button*2, SCREEN_W//4.3, SCREEN_H//11.7,"image/menu/button/control_w.png")
+        button_delete = Graphic_elements(SCREEN_W//67.3, SCREEN_H-distation_button*1.1, SCREEN_W//4.3, SCREEN_H//11.7,"image/menu/button/delete_w.png")
+        if saves["defolt"] == "true":
+            button_delete.path = "image/menu/button/delete_not_work.png"
         text_control = Font("font/pixel_font.ttf",SCREEN_W//20,'black','Раскладка клавиатуры:',SCREEN_W//3.2,SCREEN_H//8)
         button_display_size = Font("font/pixel_font.ttf",SCREEN_W//20,'black','Разрешение:',SCREEN_W//3.2,SCREEN_H//8)
         list_buttons_display_size =[
@@ -1397,6 +1405,7 @@ def menu(run_game):
         ]
         list_control = []
         list_text_control = ["Использовать","Вверх","Пригнуться","Влево","Вправо"]
+        list_keys = config["keys"]
         list_text_button_control = config["list_text_button_control"]
         for i in range(5):
             obj = Graphic_elements(SCREEN_W//3.2,SCREEN_H//4 + SCREEN_W//15 * i,SCREEN_W//2, SCREEN_W//20, "image/menu/menu_button_change.png")
@@ -1436,7 +1445,7 @@ def menu(run_game):
                     run_option = False
                 if event.type == pygame.KEYDOWN:
                     for obj in list_control:
-                        if obj[2].font_color == "yellow":
+                        if obj[2].font_color == "yellow" and event.key != 1073741881:
                             if event.key == 13:#ЕНТЕР
                                 obj[2].font_content[0] = "Enter"
                             elif event.key == 9:#ТАБ  
@@ -1460,13 +1469,14 @@ def menu(run_game):
                             else:
                                 if not event.unicode in "йцукенгшщзхъфывапролджэячсмитьбю":
                                     obj[2].font_content[0] = str(event.unicode)
-                            dict_argument["keys"][list_control.index(obj)] = event.key
-                            list_text_button_control[list_control.index(obj)] = obj[2].font_content[0].lower()
-                            obj[2].start_content = obj[2].font_content[0]
-                            obj[2].font_content[0] = "> "+obj[2].font_content[0]+" <"
-                            
+                            if not event.unicode in "йцукенгшщзхъфывапролджэячсмитьбю":
+                                list_keys[list_control.index(obj)] = event.key
+                                list_text_button_control[list_control.index(obj)] = obj[2].font_content[0].lower()
+                                obj[2].start_content = obj[2].font_content[0]
+                                obj[2].font_content[0] = "> "+obj[2].font_content[0]+" <"
 
-                            break
+    
+                                break
 
                 if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                     obj_button_option = pygame.Rect(0, 0, SCREEN_W//3.8, SCREEN_H) 
@@ -1515,18 +1525,34 @@ def menu(run_game):
                                 "SOUNDS_VOLUME": SOUNDS_VOLUME,
                                 "FULLSCREEN": FULLSCREEN,
                                 "MUSIC_VOLUME": MUSIC_VOLUME,
-                                "list_text_button_control":list_text_button_control
+                                "list_text_button_control":list_text_button_control,
+                                "keys":list_keys
+
                             }
                             with open('saves/config.json','w') as file:
                                 json.dump(settings,file,indent=4,ensure_ascii=True)
+
                             # СОХРАНИЛИ ДАННЫЕ
                             run_option = False
+                            return "stop"
                         elif button_video.RECT.collidepoint(mouse_cor[0],mouse_cor[1]):
                             flag_option = "video"
                         elif button_audio.RECT.collidepoint(mouse_cor[0],mouse_cor[1]):
                             flag_option = "audio"
                         elif button_control.RECT.collidepoint(mouse_cor[0],mouse_cor[1]):
                             flag_option = "control"
+                        
+                        elif button_delete.RECT.collidepoint(mouse_cor[0],mouse_cor[1]) and button_delete.path != "image/menu/button/delete_not_work.png":
+                            button_delete.path = "image/menu/button/delete_not_work.png"
+                            button_delete.image_load()
+                            
+                            
+
+                            with open('saves/saves.json','w') as file:                                
+                                json.dump({"defolt":"true"},file,indent=4,ensure_ascii=True)
+                            
+
+                                
                         else:
                             flag_option = "not"
                     if flag_option == "audio":        
@@ -1569,8 +1595,9 @@ def menu(run_game):
             button_video.show_image(win)
             button_audio.show_image(win)
             button_control.show_image(win)
+            button_delete.show_image(win)
             if flag_option == "not":
-                help_text = Font("font/pixel_font.ttf",SCREEN_W//30,"black","Выберите категорию ;в которой хотите внести изменение;;Изменения вступят в игру;после перезахода в игру",SCREEN_W//3.2,SCREEN_H//8,bold=False,index=5)
+                help_text = Font("font/pixel_font.ttf",SCREEN_W//30,"black","Выберите категорию ;в которой хотите внести изменение;;Изменения вступят в игру;после нажатия на кнопку Back",SCREEN_W//3.2,SCREEN_H//8,bold=False,index=5)
                 help_text.show_text(win)
 
                 
@@ -1633,7 +1660,8 @@ def menu(run_game):
                 if button_exit.check_mouse_cor(mouse_cor):
                     run = False
                 if button_option.check_mouse_cor(mouse_cor):
-                    option()
+                    if option() == "stop":
+                        return "stop"
                 if button_play.check_mouse_cor(mouse_cor):
                     sprite1.image_sprite.X = dict_argument["sprite_x"]
                     sprite1.image_sprite.Y = dict_argument["sprite_y"]
@@ -1811,6 +1839,9 @@ def safe():
     open_safe = Graphic_elements(bg_safe.X + bg_safe.WIDTH//3,bg_safe.Y + bg_safe.HEIGHT//3,bg_safe.WIDTH//3,bg_safe.WIDTH//3//1.5,"image/safe/open_safe_book.png")
     time_count = 0
     text_time = Font("font/pixel_font.ttf",SCREEN_W//40,"red","45",bg_safe.X + SCREEN_W//30,bg_safe.Y + SCREEN_W//30)
+    with open('saves/config.json','r') as file:
+            config = json.load(file)
+    list_keys = config["keys"]
     while run:
         screen.fill("blue")
         move_cloud()
@@ -1846,9 +1877,9 @@ def safe():
                     text_time.font_content = [str(int(text_time.font_content[0]) - 1)]
                 if number_completed_lvl_safe <= 2:
                  
-                    if keys[dict_argument["keys"][4]]:
+                    if keys[list_keys[4]]:
                         angle_safe +=2
-                    if keys[dict_argument["keys"][3]]:
+                    if keys[list_keys[3]]:
                         angle_safe -=2
                     big_part_minigame_safe.show_image(screen)
                     smalle_part_minigame_safe.image_load()
@@ -1866,11 +1897,11 @@ def safe():
                         list_red_led[number_completed_lvl_safe].path = "image/safe/red_led_on.png"
                         list_red_led[number_completed_lvl_safe].image_load()
                         text_presed_f.show_text(screen)
-                        if keys[dict_argument["keys"][0]] and not presed_f_last:
+                        if keys[list_keys[0]] and not presed_f_last:
                             presed_f_last = True
                             number_completed_lvl_safe += 1
                             angle_safe = 0
-                        if not keys[dict_argument["keys"][0]]:
+                        if not keys[list_keys[0]]:
                             presed_f_last = False
                         
                         
@@ -1897,7 +1928,7 @@ def safe():
                             direction_green_zone_safe_minigame = "L"
                         elif green_zone_safe_minigame.X <= red_zone_safe_minigame.X + SCREEN_W//100:
                             direction_green_zone_safe_minigame = "R"
-                    if keys[dict_argument["keys"][0]] and presed_f_last == False:
+                    if keys[list_keys[0]] and presed_f_last == False:
                         presed_f_last = True
                         if Rect.colliderect(arrow_safe_minigame.RECT,green_zone_safe_minigame.RECT):
                             list_red_led[number_completed_lvl_safe].path = "image/safe/red_led_on.png"
@@ -1914,7 +1945,7 @@ def safe():
                             for i in list_red_led:
                                 i.path = "image/safe/red_led_off.png"
                                 i.image_load()
-                    if not keys[dict_argument["keys"][0]]:
+                    if not keys[list_keys[0]]:
                         presed_f_last = False
                     text_presed_f.font_content = ["Нажмите кнопку ["+str(config["list_text_button_control"])+"]","  чтоб остановить"]
                     red_zone_safe_minigame.show_image(screen)
