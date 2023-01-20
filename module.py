@@ -1473,7 +1473,7 @@ def menu(run_game):
                                 list_keys[list_control.index(obj)] = event.key
                                 list_text_button_control[list_control.index(obj)] = obj[2].font_content[0].lower()
                                 obj[2].start_content = obj[2].font_content[0]
-                                print("И Я ФОТОГРАФ")
+                                
                                 obj[2].font_content[0] = "> "+obj[2].font_content[0]+" <"
 
     
