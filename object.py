@@ -11,8 +11,8 @@ init() #Инициализируем pygame
 
 sprite1 = Sprite(
                     name_image="1", #Имя картинки
-                    sprite_x = dict_argument["sprite_x"],
-                    sprite_y = dict_argument["sprite_y"],
+                    sprite_x = dict_argument["BLOCK_SIZE"]*dict_argument["sprite_x"],
+                    sprite_y = dict_argument["BLOCK_SIZE"]*dict_argument["sprite_y"],
                     sprite_speed = dict_argument["BLOCK_SIZE"]//5, #Скорость спрайта
                     sprite_width = dict_argument["BLOCK_SIZE"], #Ширина спрайта
                     sprite_height = dict_argument["BLOCK_SIZE"]*1.66, #Высота спрайта
@@ -39,9 +39,20 @@ dimming.IMG.set_alpha(round(dict_argument["screen_dimming_count"]))
 aim = Graphic_elements(SCREEN_W//2-SCREEN_W//40,SCREEN_H//2-SCREEN_W//40,dict_argument["BLOCK_SIZE"],dict_argument["BLOCK_SIZE"],"image/aim.png")
 #Обекты текста
 text_transition_new_lvl = Font("font/pixel_font.ttf",SCREEN_W//20,"white",None,0,0,None)
+text_select_complexity = Font("font/pixel_font.ttf",SCREEN_W//20,"white","Выберите уровень сложности:",SCREEN_W//20,SCREEN_W//20)
 list_button_collid = [
     Font("font/pixel_font.ttf",SCREEN_W//20,"darkgrey","Да",SCREEN_W//2.3,SCREEN_H-SCREEN_W//18),
     Font("font/pixel_font.ttf",SCREEN_W//20,"darkgrey","Нет",SCREEN_W//1.95,SCREEN_H-SCREEN_W//18)
+]
+list_emodji = [
+    Graphic_elements(SCREEN_W//20,SCREEN_W//6,SCREEN_W//12,SCREEN_W//12,path="image/Green_emoji.png"),
+    Graphic_elements(SCREEN_W//20,SCREEN_W//6 + SCREEN_W//8,SCREEN_W//12,SCREEN_W//12,path="image/Yellow_emoji.png"),
+    Graphic_elements(SCREEN_W//20,SCREEN_W//6 + SCREEN_W//4,SCREEN_W//12,SCREEN_W//12,path="image/Red_emoji.png")                 
+]   
+list_text_emodji = [
+    Font("font/pixel_font.ttf",SCREEN_W//20,"white","Легкая",list_emodji[0].X+SCREEN_W//10,list_emodji[0].Y+SCREEN_W//42),
+    Font("font/pixel_font.ttf",SCREEN_W//20,"white","Средняя",list_emodji[1].X+SCREEN_W//10,list_emodji[1].Y+SCREEN_W//42),
+    Font("font/pixel_font.ttf",SCREEN_W//20,"white","Сложная",list_emodji[2].X+SCREEN_W//10,list_emodji[2].Y+SCREEN_W//42),
 ]
 #Создаем список графических елементов шипов
 list_spikes = []

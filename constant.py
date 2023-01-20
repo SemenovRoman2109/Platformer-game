@@ -18,6 +18,7 @@ else:
     SCREEN_H = int(config["SCREEN_HEIGHT"])
 MUSIC_VOLUME = int(config["MUSIC_VOLUME"])
 SOUNDS_VOLUME = int(config["SOUNDS_VOLUME"])
+
 #Индексы уровней
 index_lvl = 0
 index_location = 0
@@ -126,7 +127,7 @@ if dict_argument["defolt"] == "true":
         "ghost": False, 
         "ded": True,    
         "game": True,
-        "scene":"game",
+        "scene":"complexity",
         "full_surface":list_surface,
         "list_surface":list_surface[index_lvl][index_location],
         "max_number_beard":max_number_beard,
@@ -152,12 +153,13 @@ if dict_argument["defolt"] == "true":
         "number_click_npc":number_click_npc,
         "flag_false_criminal_selected":flag_false_criminal_selected,
         "index_npc_collid":index_npc_collid,
-        "sprite_x":dict_spawn_and_finish_point["lvl"+str(index_lvl+1)+"_location_"+str(index_location+1)][0][0],
-        "sprite_y":dict_spawn_and_finish_point["lvl1_location_1"][0][1],
-        "count_change_bg":0
+        "sprite_x":(dict_spawn_and_finish_point["lvl"+str(index_lvl+1)+"_location_"+str(index_location+1)][0][0])//BLOCK_SIZE,
+        "sprite_y":(dict_spawn_and_finish_point["lvl1_location_1"][0][1])//BLOCK_SIZE,
+        "count_change_bg":0,
+        "complexity":None
     }
 
-
+dict_argument["BLOCK_SIZE"] = BLOCK_SIZE
 #Словарь аргументов ангелов
 dict_argument_angle = {
     "angle_saw":0,

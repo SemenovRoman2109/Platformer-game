@@ -1467,12 +1467,13 @@ def menu(run_game):
                             elif event.key == 1073741903:#вправо
                                 obj[2].font_content[0] = "right"
                             else:
-                                if not event.unicode in "йцукенгшщзхъфывапролджэячсмитьбю":
+                                if not event.unicode in list("йцукенгшщзхъфывапролджэячсмитьбю"):
                                     obj[2].font_content[0] = str(event.unicode)
-                            if not event.unicode in "йцукенгшщзхъфывапролджэячсмитьбю":
+                            if not event.unicode in list("йцукенгшщзхъфывапролджэячсмитьбю"):
                                 list_keys[list_control.index(obj)] = event.key
                                 list_text_button_control[list_control.index(obj)] = obj[2].font_content[0].lower()
                                 obj[2].start_content = obj[2].font_content[0]
+                                print("И Я ФОТОГРАФ")
                                 obj[2].font_content[0] = "> "+obj[2].font_content[0]+" <"
 
     
@@ -1663,8 +1664,8 @@ def menu(run_game):
                     if option() == "stop":
                         return "stop"
                 if button_play.check_mouse_cor(mouse_cor):
-                    sprite1.image_sprite.X = dict_argument["sprite_x"]
-                    sprite1.image_sprite.Y = dict_argument["sprite_y"]
+                    sprite1.image_sprite.X = dict_argument["BLOCK_SIZE"]*dict_argument["sprite_x"]
+                    sprite1.image_sprite.Y = dict_argument["BLOCK_SIZE"]*dict_argument["sprite_y"]
                     dict_argument["game"] = True
                     run_game()
                     
@@ -1806,8 +1807,8 @@ def finish_shooting():
         count_change_direction_criminal += 1
 
 def safe():
-    dict_argument["sprite_x"] = sprite1.image_sprite.X
-    dict_argument["sprite_y"] = sprite1.image_sprite.Y
+    dict_argument["sprite_x"] = sprite1.image_sprite.X//dict_argument["BLOCK_SIZE"]
+    dict_argument["sprite_y"] = sprite1.image_sprite.Y//dict_argument["BLOCK_SIZE"]
     with open('saves/saves.json','w') as file:
         json.dump(dict_argument,file,indent=4,ensure_ascii=True)
     with open('saves/config.json','r') as file:
@@ -2070,7 +2071,7 @@ def flappy_bird():
         display.update()
 
 def save_game(): 
-    dict_argument["sprite_x"] = sprite1.image_sprite.X
-    dict_argument["sprite_y"] = sprite1.image_sprite.Y
+    dict_argument["sprite_x"] = sprite1.image_sprite.X//dict_argument["BLOCK_SIZE"]
+    dict_argument["sprite_y"] = sprite1.image_sprite.Y//dict_argument["BLOCK_SIZE"]
     with open('saves/saves.json','w') as file:
         json.dump(dict_argument,file,indent=4,ensure_ascii=True)

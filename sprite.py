@@ -54,8 +54,7 @@ class Sprite:
             config = json.load(file)
         self.list_keys = config["keys"]
         print(self.list_keys)
-        print("АВАААААААААААААА")
-        print(config["keys"])
+
 
 
     # Отображает статистику персонажа
@@ -528,8 +527,8 @@ class Sprite:
 
 
                 if Rect.colliderect(dict_spawn_and_finish_point["lvl2_location_2"][1][1],self.image_sprite.RECT):
-                    dict_argument["sprite_x"] = self.image_sprite.X
-                    dict_argument["sprite_y"] = self.image_sprite.Y
+                    dict_argument["sprite_x"] = dict_argument["BLOCK_SIZE"]*self.image_sprite.X
+                    dict_argument["sprite_y"] = dict_argument["BLOCK_SIZE"]*self.image_sprite.Y
                     with open('saves/saves.json','w') as file:
                         json.dump(dict_argument,file,indent=4,ensure_ascii=True)
                     bk = Graphic_elements(0,0,SCREEN_W,SCREEN_H,"image/room_2.png")

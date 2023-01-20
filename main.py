@@ -14,10 +14,10 @@ def run_game():
     while dict_argument["game"]:
         
         clock.tick(FPS)
-
+        mouse_cor = mouse.get_pos()
         for event1 in event.get(): # Получаем значение события из "списка событий" 
             # и записываем в переменную event1 
-            mouse_cor = mouse.get_pos() #Включаем поддержку действия мыши
+             #Включаем поддержку действия мыши
             
             if dict_argument["flag_puzzle_location"]:
                 puzzle(event1)
@@ -29,6 +29,12 @@ def run_game():
 
 
             if event1.type == MOUSEBUTTONDOWN and event1.button == 1:
+                if dict_argument["scene"] == "complexity":
+                    for obj in list_text_emodji:
+                        if obj.check_mouse_cor_font(mouse_cor):
+                            dict_argument["scene"] = "game"
+                            list = ["easy","mid","hard"]
+                            dict_argument["complexity"] = list[list_text_emodji.index(obj)]
                 if sprite1.ghost_img.check_mouse_cor(mouse_cor):
                     sprite1.count_pressing_ghost += 1
                 if dict_argument["flag_collid_npc"]:
@@ -76,7 +82,17 @@ def run_game():
                 pygame.quit() #Отключает игру
                 save_game()
 
-        
+        if dict_argument["scene"] == "complexity":
+            dict_Graphic_elements_obj["Fon"].show_image(screen)
+            text_select_complexity.show_text(screen)
+            for obj in list_emodji:
+                obj.show_image(screen)
+            for obj in list_text_emodji:
+                if obj.check_mouse_cor_font(mouse_cor):
+                    obj.font_color = "yellow"
+                else:
+                    obj.font_color = "white"     
+                obj.show_text(screen)
         if dict_argument["scene"] == "game": #Сцена игры
 
             
@@ -240,18 +256,17 @@ def run_game():
                 puzzle(False)
 
 
-        dict_argument["count_change_bg"] += 1
-        if dict_argument["count_change_bg"] >= 10:
-            dict_argument["count_change_bg"] = 0
-            number = random.randint(2,7)
-            if number > 3:
-                number = 1
-            dict_Graphic_elements_obj["Fon"].path = "image/backgroubd_"+str(number)+".bmp"
-            dict_Graphic_elements_obj["Fon"].image_load()
+            dict_argument["count_change_bg"] += 1
+            if dict_argument["count_change_bg"] >= 10:
+                dict_argument["count_change_bg"] = 0
+                number = random.randint(2,7)
+                if number > 3:
+                    number = 1
+                dict_Graphic_elements_obj["Fon"].path = "image/backgroubd_"+str(number)+".bmp"
+                dict_Graphic_elements_obj["Fon"].image_load()
 
         display.update() #Обновление экрана
 #Запускает игру
 import sys
 if menu(run_game) == "stop":
-    print("ААААААААААААААА")
     os.execv(sys.executable, [sys.executable] + sys.argv)

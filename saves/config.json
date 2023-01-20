@@ -1,21 +1,21 @@
 {
-    "SCREEN_WIDTH": "1280",
-    "SCREEN_HEIGHT": "720",
-    "SOUNDS_VOLUME": "100",
-    "FULLSCREEN": false,
-    "MUSIC_VOLUME": "100",
+    "SCREEN_WIDTH": 0,
+    "SCREEN_HEIGHT": 0,
+    "SOUNDS_VOLUME": "0",
+    "FULLSCREEN": true,
+    "MUSIC_VOLUME": "67",
     "list_text_button_control": [
-        "f",
-        "w",
-        "s",
-        "a",
-        "d"
+        "enter",
+        "up",
+        "down",
+        "left",
+        "right"
     ],
     "keys": [
-        102,
-        119,
-        115,
-        97,
-        100
+        13,
+        1073741906,
+        1073741905,
+        1073741904,
+        1073741903
     ]
 }
