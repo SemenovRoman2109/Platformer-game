@@ -38,7 +38,7 @@ dimming.image_load()
 dimming.IMG.set_alpha(round(dict_argument["screen_dimming_count"]))
 aim = Graphic_elements(SCREEN_W//2-SCREEN_W//40,SCREEN_H//2-SCREEN_W//40,dict_argument["BLOCK_SIZE"],dict_argument["BLOCK_SIZE"],"image/aim.png")
 #Обекты текста
-text_transition_new_lvl = Font("font/pixel_font.ttf",SCREEN_W//35,"white",None,0,0,None)
+text_transition_new_lvl = Font("font/pixel_font.ttf",SCREEN_W//28,"white",None,0,0,None)
 text_select_complexity = Font("font/pixel_font.ttf",SCREEN_W//20,"white","Выберите уровень сложности:",SCREEN_W//20,SCREEN_W//20)
 list_button_collid = [
     Font("font/pixel_font.ttf",SCREEN_W//20,"darkgrey","Да",SCREEN_W//2.3,SCREEN_H-SCREEN_W//18),

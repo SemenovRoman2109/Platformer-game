@@ -157,6 +157,7 @@ if dict_argument["defolt"] == "true":
         "sprite_y":(dict_spawn_and_finish_point["lvl1_location_1"][0][1])//BLOCK_SIZE,
         "count_change_bg":0,
         "complexity":None,
+        # настройки на средней сложности
         "max_count_spike":150,
         "criminal_speed":SCREEN_W//250,
         "speed_save":45,    

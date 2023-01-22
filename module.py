@@ -1370,15 +1370,16 @@ def slider(sound_power, flag_mouse_volume_sound, rect_volume_sound, mouse_volume
         pygame.draw.rect(win,"white",mouse_volume_sound)
   
 def menu(run_game):
+    with open('saves/config.json','r') as file:
+        config = json.load(file)
     win = pygame.display.set_mode((SCREEN_W, SCREEN_H))
     def option():
-        with open('saves/config.json','r') as file:
-            config = json.load(file)
+        
         with open('saves/saves.json','r') as file:
             saves = json.load(file)
         MUSIC_VOLUME = int(config["MUSIC_VOLUME"])
         SOUNDS_VOLUME = int(config["SOUNDS_VOLUME"])
-        bg_option = Graphic_elements(0, 0, SCREEN_W, SCREEN_H, 'image/menu/option_not.png')
+        bg_option = Graphic_elements(0, 0, SCREEN_W, SCREEN_H, 'image/menu/option_bg_'+config["language"]+'.png')
         flag_option = "not"
         sound_power = Font("font/pixel_font.ttf",SCREEN_W//30,"black",dict_languages_settings["1"][config["language"]]+str(SOUNDS_VOLUME),SCREEN_W//3.2,SCREEN_H//8,bold=False)
         music_power = Font("font/pixel_font.ttf",SCREEN_W//30,"black",dict_languages_settings["2"][config["language"]]+str(MUSIC_VOLUME),SCREEN_W//3.2,SCREEN_H//3,bold=False)
@@ -1389,13 +1390,13 @@ def menu(run_game):
         rect_volume_music = pygame.Rect(SCREEN_W//3.2,SCREEN_H//2.3,SCREEN_W//1.6,SCREEN_H//25)
         mouse_volume_music = pygame.Rect(MUSIC_VOLUME*rect_volume_music.width/100+rect_volume_music.x,rect_volume_music.top-(SCREEN_H//45*3-rect_volume_music.height)//2,SCREEN_H//72*2,SCREEN_H//45*3)
         distation_button = SCREEN_H//5.15-SCREEN_H//10.3
-        button_video = Graphic_elements(SCREEN_W//67.3, SCREEN_H//10.3, SCREEN_W//4.3, SCREEN_H//11.7,"image/menu/button/video_w.png")
-        button_audio = Graphic_elements(SCREEN_W//67.3, SCREEN_H//10.3+distation_button, SCREEN_W//4.3, SCREEN_H//11.7,"image/menu/button/audio_w.png")
-        button_control = Graphic_elements(SCREEN_W//67.3, SCREEN_H//10.3+distation_button*2, SCREEN_W//4.3, SCREEN_H//11.7,"image/menu/button/control_w.png")
-        button_language = Graphic_elements(SCREEN_W//67.3, SCREEN_H//10.3+distation_button*3, SCREEN_W//4.3, SCREEN_H//11.7,"image/menu/button/language_w.png")
-        button_delete = Graphic_elements(SCREEN_W//67.3, SCREEN_H-distation_button*1.1, SCREEN_W//4.3, SCREEN_H//11.7,"image/menu/button/delete_w.png")
+        button_video = Graphic_elements(SCREEN_W//67.3, SCREEN_H//10.3, SCREEN_W//4.3, SCREEN_H//11.7,"image/menu/button_"+config["language"]+"/video_w.png")
+        button_audio = Graphic_elements(SCREEN_W//67.3, SCREEN_H//10.3+distation_button, SCREEN_W//4.3, SCREEN_H//11.7,"image/menu/button_"+config["language"]+"/audio_w.png")
+        button_control = Graphic_elements(SCREEN_W//67.3, SCREEN_H//10.3+distation_button*2, SCREEN_W//4.3, SCREEN_H//11.7,"image/menu/button_"+config["language"]+"/control_w.png")
+        button_language = Graphic_elements(SCREEN_W//67.3, SCREEN_H//10.3+distation_button*3, SCREEN_W//4.3, SCREEN_H//11.7,"image/menu/button_"+config["language"]+"/language_w.png")
+        button_delete = Graphic_elements(SCREEN_W//67.3, SCREEN_H-distation_button*1.6, SCREEN_W//4.3, SCREEN_H//11.7*1.5,"image/menu/button_"+config["language"]+"/delete_w.png")
         if saves["defolt"] == "true":
-            button_delete.path = "image/menu/button/delete_not_work.png"
+            button_delete.path = "image/menu/button_"+config["language"]+"/delete_not_work.png"
         text_control = Font("font/pixel_font.ttf",SCREEN_W//20,'black',dict_languages_settings["3"][config["language"]],SCREEN_W//3.2,SCREEN_H//8)
         button_display_size = Font("font/pixel_font.ttf",SCREEN_W//20,'black',dict_languages_settings["4"][config["language"]],SCREEN_W//3.2,SCREEN_H//8)
         list_buttons_display_size =[
@@ -1567,8 +1568,8 @@ def menu(run_game):
                         elif button_language.RECT.collidepoint(mouse_cor[0],mouse_cor[1]):
                             flag_option = "language"
                         
-                        elif button_delete.RECT.collidepoint(mouse_cor[0],mouse_cor[1]) and button_delete.path != "image/menu/button/delete_not_work.png":
-                            button_delete.path = "image/menu/button/delete_not_work.png"
+                        elif button_delete.RECT.collidepoint(mouse_cor[0],mouse_cor[1]) and button_delete.path != "image/menu/button_"+config["language"]+"/delete_not_work.png":
+                            button_delete.path = "image/menu/button_"+config["language"]+"/delete_not_work.png"
                             button_delete.image_load()
                             
                             
@@ -1628,8 +1629,8 @@ def menu(run_game):
 
                 
             if flag_option == "video":
-                if button_video.path != "image/menu/button/video_b.png":
-                    button_video.path = "image/menu/button/video_b.png"
+                if button_video.path != "image/menu/button_"+config["language"]+"/video_b.png":
+                    button_video.path = "image/menu/button_"+config["language"]+"/video_b.png"
                     button_video.image_load()
                 button_display_size.show_text(win)
                 for i in list_buttons_display_size:
@@ -1638,22 +1639,22 @@ def menu(run_game):
                 for i in list_button_display_fullsize:
                     i.show_text(win)
             else:
-                if button_video.path != "image/menu/button/video_w.png":
-                    button_video.path = "image/menu/button/video_w.png"
+                if button_video.path != "image/menu/button_"+config["language"]+"/video_w.png":
+                    button_video.path = "image/menu/button_"+config["language"]+"/video_w.png"
                     button_video.image_load()
             if flag_option == "audio":
-                if button_audio.path != "image/menu/button/audio_b.png":
-                    button_audio.path = "image/menu/button/audio_b.png"
+                if button_audio.path != "image/menu/button_"+config["language"]+"/audio_b.png":
+                    button_audio.path = "image/menu/button_"+config["language"]+"/audio_b.png"
                     button_audio.image_load()
                 slider(sound_power, flag_mouse_volume_sound, rect_volume_sound, mouse_volume_sound, mouse_cor, dict_languages_settings["1"][config["language"]],win)
                 slider(music_power, flag_mouse_volume_music, rect_volume_music, mouse_volume_music, mouse_cor, dict_languages_settings["2"][config["language"]],win)
             else:
-                if button_audio.path != "image/menu/button/audio_w.png":
-                    button_audio.path = "image/menu/button/audio_w.png"
+                if button_audio.path != "image/menu/button_"+config["language"]+"/audio_w.png":
+                    button_audio.path = "image/menu/button_"+config["language"]+"/audio_w.png"
                     button_audio.image_load()
             if flag_option == "control":
-                if button_control.path != "image/menu/button/control_b.png":
-                    button_control.path = "image/menu/button/control_b.png"
+                if button_control.path != "image/menu/button_"+config["language"]+"/control_b.png":
+                    button_control.path = "image/menu/button_"+config["language"]+"/control_b.png"
                     button_control.image_load() 
                 text_control.show_text(win)
                 for obj in list_control:
@@ -1661,12 +1662,12 @@ def menu(run_game):
                     obj[1].show_text(win)
                     obj[2].show_text(win)
             else:
-                if button_control.path != "image/menu/button/control_w.png":
-                    button_control.path = "image/menu/button/control_w.png"
+                if button_control.path != "image/menu/button_"+config["language"]+"/control_w.png":
+                    button_control.path = "image/menu/button_"+config["language"]+"/control_w.png"
                     button_control.image_load() 
             if flag_option == "language":
-                if button_language.path != "image/menu/button/language_b.png":
-                    button_language.path = "image/menu/button/language_b.png"
+                if button_language.path != "image/menu/button_"+config["language"]+"/language_b.png":
+                    button_language.path = "image/menu/button_"+config["language"]+"/language_b.png"
                     button_language.image_load() 
                 text_language.show_text(win)
                 for i in list_button_text_language:
@@ -1680,8 +1681,8 @@ def menu(run_game):
                             i[0].path = "image/menu/square.png"
                             i[0].image_load() 
             else:
-                if button_language.path != "image/menu/button/language_w.png":
-                    button_language.path = "image/menu/button/language_w.png"
+                if button_language.path != "image/menu/button_"+config["language"]+"/language_w.png":
+                    button_language.path = "image/menu/button_"+config["language"]+"/language_w.png"
                     button_language.image_load() 
             pygame.display.flip()
 
@@ -1689,9 +1690,9 @@ def menu(run_game):
     bg = Graphic_elements(0, 0, SCREEN_W, SCREEN_H, 'image/menu/bg.png')
     
     name_menu = Graphic_elements(SCREEN_W//20,SCREEN_H//40, SCREEN_W//1.7, SCREEN_H//7, 'image/menu/name.png')
-    button_play = Graphic_elements(SCREEN_W//1.395,SCREEN_H//6.1, SCREEN_W//3.5, SCREEN_H//7.8, 'image/menu/button_play.png')
-    button_option = Graphic_elements(SCREEN_W//1.395,SCREEN_H//2 - SCREEN_H//15.6, SCREEN_W//3.5, SCREEN_H//7.8, 'image/menu/button_option.png')
-    button_exit = Graphic_elements(SCREEN_W//1.395,SCREEN_H//1.4, SCREEN_W//3.5, SCREEN_H//7.8, 'image/menu/button_exit.png')
+    button_play = Graphic_elements(SCREEN_W//1.395,SCREEN_H//6.1, SCREEN_W//3.5, SCREEN_H//7.8, 'image/menu/button_'+config["language"]+'/button_play.png')
+    button_option = Graphic_elements(SCREEN_W//1.395,SCREEN_H//2 - SCREEN_H//15.6, SCREEN_W//3.5, SCREEN_H//7.8, 'image/menu/button_'+config["language"]+'/button_option.png')
+    button_exit = Graphic_elements(SCREEN_W//1.395,SCREEN_H//1.4, SCREEN_W//3.5, SCREEN_H//7.8, 'image/menu/button_'+config["language"]+'/button_exit.png')
     run = True
     
     while run: 
