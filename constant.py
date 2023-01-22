@@ -93,13 +93,12 @@ list_spikes_outside = []
 dict_argument_block = {
     "flag_move_cloud": 1,
     "count_motion_block": 0,
-    "max_count_motion_block": 7,
     "count_spinning_motion_block":0,
     "count_img_spinning_motion_block":1,
     "flag_direction_spinning_motion_block":"+",
     "flag_load": 0,
     "count_load": 24,
-    "count_spike":150,
+    "count_spike":0,
     "direction_spike":"U",
     
 }
@@ -114,7 +113,8 @@ dict_spawn_and_finish_point = {
 }
 
 
-
+with open('saves/config.json','r') as file:
+    config = json.load(file)
 with open('saves/saves.json','r') as file:
     dict_argument = json.load(file)
 
@@ -156,7 +156,18 @@ if dict_argument["defolt"] == "true":
         "sprite_x":(dict_spawn_and_finish_point["lvl"+str(index_lvl+1)+"_location_"+str(index_location+1)][0][0])//BLOCK_SIZE,
         "sprite_y":(dict_spawn_and_finish_point["lvl1_location_1"][0][1])//BLOCK_SIZE,
         "count_change_bg":0,
-        "complexity":None
+        "complexity":None,
+        "max_count_spike":150,
+        "criminal_speed":SCREEN_W//250,
+        "speed_save":45,    
+        "duration_invisible_block":12,
+        "count_point_hit":100,    
+        "count_fences":3,
+        "count_ammo":20,
+        "duration_door":100,
+        "count_click_on_ghost":10,
+        "max_count_motion_block": 7,
+        "speed_transparency_broken_platforms":20,
     }
 
 dict_argument["BLOCK_SIZE"] = BLOCK_SIZE
@@ -179,27 +190,68 @@ dict_list_border = {
     "list_border_cor":list_border_cor,
     "list_flag":list_flag
 }
-
+dict_languages_mission = {
+    "1":{"ua":["Ви приїхали на місце злочину"," знайдіть зачіпки ",""," Натисніть кнопку [F] "," щоб з'явилися нові платформи "],"uk":["You have arrived at the scene of the crime","find the clues","","Press the [F] button ","for new platforms to appear"]},
+    "2":{"ua":["Ви приїхали в будинок до вбивці", "огляньте всі кімнати"],"uk":["You have arrived at the killer's houke", "look around all the rooms"]},
+    "3":{"ua":["Ви приїхали на рейс до вбивці", "Дізнайтеся хто вбивця", "Вбивця міг змінити свою зовнішність"],"uk":["You're on a flight to see a killer","Find out who the killer is","The killer could have changed his appearance"]}
+}
 
 dict_mision_lvl_1 = {
-    "location_0":["Вы приехали на место преступления","          найдите зацепки        ","","        Нажмите кнопку [F]        ","  чтоб появились новые платформы  "],
-    "location_1":["    Вы приехали в дом к убийце    ","       осмотрите все комнаты      "],
-    "location_2":["   Вы приехали на рейс к убийце   ","        Узнайте кто убийца        ","Убийца мог изменить свою внешность"],
-}
-dict_text_drimming = {
-    "dead":[" Вы не смогли удержать свою душу ","  возвращайтесь в начало уровня  "],
-    "lose_game":["   Преступнику удалось скрыться  ","           Вы проиграли          "],
-    "win_game" :["Вам удалось задержать преступника","          Вы прошли игру         "],
-    "drive":[" Вы правильно выбрали преступника","И он начал убегать подстрелите его"],
-    "incorrectly_selected_criminal":["     Вы выбрали не правильно     ","    У тебя осталась одна попытка   ","             до рейса             "],
-    "lose_all_hp_0":["      Вы не прошли академию      ","        попробуйте еще раз       "],
-    "lose_all_hp_1":["Вы умерли во время раскрытия дела","        попробуйте еще раз       "],
-    "first_entry_into_the_game":["Вы прибыли в полицейскую академию","        Пройдите обучение        ","     чтоб преступить к работе    "],
-    "first_shooting" :["     Вы практически закончили    ","       обучение в академии       "," осталось проверить вашу меткость "],
-    "second_shooting":["Вы прошли первый уровень стрельбы","     следующий будет сложнее     "],
-    "lose_shooting":["  У тебя не вышло пройти уровень ","          Попробуй снова         "]
+    "location_0":dict_languages_mission["1"][config["language"]],
+    "location_1":dict_languages_mission["2"][config["language"]],
+    "location_2":dict_languages_mission["3"][config["language"]],
 }
 
+dict_languages_drimming = {
+    "1":{"ua":["Ви не змогли утримати свою душу", "повертайтеся на початок рівня"],"uk":["You couldn't hold your soul", "go back to the beginning of the level"]},
+    "2":{'ua':[" Преступнику вдалося скрити "," Ви програли "],'uk':["The killer managed to escape", "You lost"]},
+    "3":{'ua':["Вам вдалося затримати злочинця", "Ви пройшли гру"],"uk":["You managed to apprehend the killer", "You completed the game"]},
+    "4":{"ua":["Ви правильно вибрали злочинця","І він почав тікати підстреліть його"],"uk":["You chose the right criminal","And he started to run away, shoot him"]},
+    "5":{'ua':["      Ви вибрали неправильно      ", "    У тебе залишилася одна спроба    ", "             до рейсу             "],"uk":["     You chose wrong     ","   You have one try left   ","             until the flight"             ]},
+    "6":{'ua':["Ви не пройшли академію", "спробуйте ще раз"],"uk":["You didn't pass the academy", "try again"]},
+    "7":{"ua":["Ви померли під час розкриття справи"," спробуйте ще раз "],"uk":["You died while solving the case", "try again"]},
+    "8":{'ua':["Ви прибули до поліцейської академії", "Пройдіть навчання", "щоб переступити до роботи"],'uk':["You have arrived at the police academy," "Get your training," "to go to work"]},
+    "9":{"ua":["Ви практично закінчили", "навчання в академії"," залишилося перевірити вашу влучність "],"uk":["You are almost done","training at the academy"," to test your marksmanship "]},
+    "10":{'ua':["Ви пройшли перший рівень стрілянини","     наступний буде складніше     "],"uk":["You have passed the first shooting level", "     the next one will be harder     "]},
+    "11":{'ua':["  У тебе не вийшло пройти рівень ", "          Спробуй знову          "],"uk":["  You failed the level ", "          Try again          "]}
+}
+
+dict_text_drimming = {
+    "dead":dict_languages_drimming["1"][config["language"]],
+    "lose_game":dict_languages_drimming["2"][config["language"]],
+    "win_game" :dict_languages_drimming["3"][config["language"]],
+    "drive":dict_languages_drimming["4"][config["language"]],
+    "incorrectly_selected_criminal":dict_languages_drimming["5"][config["language"]],
+    "lose_all_hp_0":dict_languages_drimming["6"][config["language"]],
+    "lose_all_hp_1":dict_languages_drimming["7"][config["language"]],
+    "first_entry_into_the_game":dict_languages_drimming["8"][config["language"]],
+    "first_shooting" :dict_languages_drimming["9"][config["language"]],
+    "second_shooting":dict_languages_drimming["10"][config["language"]],
+    "lose_shooting":dict_languages_drimming["11"][config["language"]]
+}
+
+
+dict_languages_settings = {
+    "1":{"ua":"Гучність звуку:","uk":"Volume Sound:"},
+    "2":{'ua':'Гучність музики:','uk':'Volume Music:'},
+    "3":{'ua':"Розкладка клавіатури:","uk":"Keyboard Control:"},
+    "4":{'ua':"Здатність:","uk":"Resolution:"},
+    "5":{'ua':["Використовувати","Вгору","Пригнутися","Вліво","Вправо"],"uk":["Use","Jump","Crawl","Left","Right"]},
+    "6":{'ua':"Повноекранний режим:",'uk':"Full Screen:"},
+    "7":{"ua":"Так","uk":"Yes"},
+    "8":{'ua':"Ні","uk":'No'},
+    "9":{'ua':"Виберіть категорію ;у якій хочете внести зміну;;Зміни вступлять у гру;після натискання на кнопку Back","uk":"Select the category ;in which you want to make a change;;Changes will come into play;after clicking on the Back button"},
+    "10":{"ua":"Мова:","uk":"language:"},
+}
+dict_languages_book = {
+    "1":{"ua":"Сьогодні я зроблю;;свою останню справу;;після якої я влечу;;до себе на батьківщину;;Нарешті я побачу;;свою дочку;;у неї через 3 міцяться;;день народженя. ","uk":"Today I will do;;my last thing;;after which I drag;;to my homeland;;Finally I will see;;my daughter;;her birthday will change in 3."},
+    "2":{"ua":"Вона напевно скучила;;за мною.","uk":"She mukt have;;missed me."},
+}
+dict_laungues_save = {
+    'ua':["Натисніть кнопку ["+str(config["list_text_button_control"][0])+"]"," щоб зупинити"],
+    "uk":["Press button ["+str(config["list_text_button_control"][0])+"]"," to stop"]
+
+}
 dict_direction_door = dict()
 #Словари аргументов и ломания платформ
 broken_cracking_platform = dict()

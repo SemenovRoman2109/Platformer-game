@@ -312,8 +312,8 @@ def drawSurfaces():
                     dict_list_border["list_flag"][i][j].append(X + flag_pf.WIDTH)#правая часть платформы 
                     # Значения которые нужны только трескающимся платформерам а именно счетчики востановления и ломания    
                     if dict_argument["list_surface"][i][j] in list_cracking_platform:
-                        dict_list_border["list_flag"][i][j].append(20)
-                        dict_list_border["list_flag"][i][j].append(40)
+                        dict_list_border["list_flag"][i][j].append(dict_argument["speed_transparency_broken_platforms"])
+                        dict_list_border["list_flag"][i][j].append(dict_argument["speed_transparency_broken_platforms"]*2)
                     else:
                         dict_list_border["list_flag"][i][j].append(None)
                         dict_list_border["list_flag"][i][j].append(None)
@@ -639,7 +639,7 @@ def cracking_platform(sprite):
                 # Изменяем счетчик трескания платформы   
                 dict_list_border["list_border_cor_cracking"][dict_list_border["list_border_cor_cracking"].index(i)][6] -=1       
                 # Анулируем шкалу востановления платформы
-                dict_list_border["list_border_cor_cracking"][dict_list_border["list_border_cor_cracking"].index(i)][7] = 40
+                dict_list_border["list_border_cor_cracking"][dict_list_border["list_border_cor_cracking"].index(i)][7] = dict_argument["speed_transparency_broken_platforms"]*2
             else:
                 # Изменяем счетчик востановления платформы  если на ней не стоять
                 dict_list_border["list_border_cor_cracking"][dict_list_border["list_border_cor_cracking"].index(i)][7] -= 1
@@ -650,7 +650,7 @@ def cracking_platform(sprite):
                     dict_argument["list_surface"][i[0]//(dict_argument["BLOCK_SIZE"])][i[4]//(dict_argument["BLOCK_SIZE"])] = list_cracking[number+1]
                     dict_list_border["list_border_cor_cracking"][dict_list_border["list_border_cor_cracking"].index(i)][-2].path = "image/cracking_platform_"+str(number+1)+".png"
                     dict_list_border["list_border_cor_cracking"][dict_list_border["list_border_cor_cracking"].index(i)][-2].image_load()
-                    dict_list_border["list_border_cor_cracking"][dict_list_border["list_border_cor_cracking"].index(i)][6] = 20
+                    dict_list_border["list_border_cor_cracking"][dict_list_border["list_border_cor_cracking"].index(i)][6] = dict_argument["speed_transparency_broken_platforms"]
                 # Если нет то удаляем платформу
                 else:
                     # Убираем букву на матрицу заменяя её нулем(пустым местом)
@@ -698,7 +698,7 @@ def invisibility_block(element_door,element_door_empty,sprite1):
             dict_argument_block["flag_load"] = 0
         dict_argument_block["flag_load"] += 1 
     
-        if dict_argument_block["count_load"] == 12 and dict_argument_block["flag_load"] == 1:
+        if dict_argument_block["count_load"] == dict_argument["duration_invisible_block"] and dict_argument_block["flag_load"] == 1:
                 
             for el in range(len(dict_argument["list_surface"])):
                 for element in range(len(dict_argument["list_surface"][el])):
@@ -748,7 +748,7 @@ def spike():
 
     # Щетчик смены направления шипов
     if dict_argument_block["count_spike"] <= 0:
-        dict_argument_block["count_spike"] = 150
+        dict_argument_block["count_spike"] = dict_argument["max_count_spike"]
         # Меняем направление шипов
         if dict_argument_block["direction_spike"] == "U":
             dict_argument_block["direction_spike"] = "D"
@@ -1376,13 +1376,12 @@ def menu(run_game):
             config = json.load(file)
         with open('saves/saves.json','r') as file:
             saves = json.load(file)
-        
         MUSIC_VOLUME = int(config["MUSIC_VOLUME"])
         SOUNDS_VOLUME = int(config["SOUNDS_VOLUME"])
         bg_option = Graphic_elements(0, 0, SCREEN_W, SCREEN_H, 'image/menu/option_not.png')
         flag_option = "not"
-        sound_power = Font("font/pixel_font.ttf",SCREEN_W//30,"black","Громкость звука "+str(SOUNDS_VOLUME),SCREEN_W//3.2,SCREEN_H//8,bold=False)
-        music_power = Font("font/pixel_font.ttf",SCREEN_W//30,"black","Громкость музики "+str(MUSIC_VOLUME),SCREEN_W//3.2,SCREEN_H//3,bold=False)
+        sound_power = Font("font/pixel_font.ttf",SCREEN_W//30,"black",dict_languages_settings["1"][config["language"]]+str(SOUNDS_VOLUME),SCREEN_W//3.2,SCREEN_H//8,bold=False)
+        music_power = Font("font/pixel_font.ttf",SCREEN_W//30,"black",dict_languages_settings["2"][config["language"]]+str(MUSIC_VOLUME),SCREEN_W//3.2,SCREEN_H//3,bold=False)
         flag_mouse_volume_sound = False
         rect_volume_sound = pygame.Rect(SCREEN_W//3.2,SCREEN_H//4.5,SCREEN_W//1.6,SCREEN_H//25)
         mouse_volume_sound = pygame.Rect(SOUNDS_VOLUME*rect_volume_sound.width/100+rect_volume_sound.x,rect_volume_sound.top-(SCREEN_H//45*3-rect_volume_sound.height)//2,SCREEN_H//72*2,SCREEN_H//45*3)
@@ -1393,18 +1392,26 @@ def menu(run_game):
         button_video = Graphic_elements(SCREEN_W//67.3, SCREEN_H//10.3, SCREEN_W//4.3, SCREEN_H//11.7,"image/menu/button/video_w.png")
         button_audio = Graphic_elements(SCREEN_W//67.3, SCREEN_H//10.3+distation_button, SCREEN_W//4.3, SCREEN_H//11.7,"image/menu/button/audio_w.png")
         button_control = Graphic_elements(SCREEN_W//67.3, SCREEN_H//10.3+distation_button*2, SCREEN_W//4.3, SCREEN_H//11.7,"image/menu/button/control_w.png")
+        button_language = Graphic_elements(SCREEN_W//67.3, SCREEN_H//10.3+distation_button*3, SCREEN_W//4.3, SCREEN_H//11.7,"image/menu/button/language_w.png")
         button_delete = Graphic_elements(SCREEN_W//67.3, SCREEN_H-distation_button*1.1, SCREEN_W//4.3, SCREEN_H//11.7,"image/menu/button/delete_w.png")
         if saves["defolt"] == "true":
             button_delete.path = "image/menu/button/delete_not_work.png"
-        text_control = Font("font/pixel_font.ttf",SCREEN_W//20,'black','Раскладка клавиатуры:',SCREEN_W//3.2,SCREEN_H//8)
-        button_display_size = Font("font/pixel_font.ttf",SCREEN_W//20,'black','Разрешение:',SCREEN_W//3.2,SCREEN_H//8)
+        text_control = Font("font/pixel_font.ttf",SCREEN_W//20,'black',dict_languages_settings["3"][config["language"]],SCREEN_W//3.2,SCREEN_H//8)
+        button_display_size = Font("font/pixel_font.ttf",SCREEN_W//20,'black',dict_languages_settings["4"][config["language"]],SCREEN_W//3.2,SCREEN_H//8)
         list_buttons_display_size =[
                         Font("font/pixel_font.ttf",SCREEN_W//38,'black','1280x720',button_display_size.font_x,button_display_size.font_y+SCREEN_H//8),
                         Font("font/pixel_font.ttf",SCREEN_W//38,'black','1600x920',button_display_size.font_x+SCREEN_W//14.2*2,button_display_size.font_y+SCREEN_H//8),
                         Font("font/pixel_font.ttf",SCREEN_W//38,'black','1920x1080',button_display_size.font_x+SCREEN_W//14.2*4,button_display_size.font_y+SCREEN_H//8),
         ]
+        text_language = Font("font/pixel_font.ttf",SCREEN_W//20,'black',dict_languages_settings["10"][config["language"]],SCREEN_W//3.2,SCREEN_H//8)
+        list_button_text_language = [
+            [Graphic_elements(SCREEN_W//3.2,SCREEN_H//7+SCREEN_W//18,SCREEN_W//38,SCREEN_W//38,"image/menu/square.png"),Font("font/pixel_font.ttf",SCREEN_W//38,'black','English',SCREEN_W//2.8,SCREEN_H//7+SCREEN_W//18)],
+            [Graphic_elements(SCREEN_W//3.2,SCREEN_H//7+SCREEN_W//20*2,SCREEN_W//38,SCREEN_W//38,"image/menu/square.png"),Font("font/pixel_font.ttf",SCREEN_W//38,'black','Українська',SCREEN_W//2.8,SCREEN_H//7+SCREEN_W//20*2)]
+        ]
+        
+        
         list_control = []
-        list_text_control = ["Использовать","Вверх","Пригнуться","Влево","Вправо"]
+        list_text_control = dict_languages_settings["5"][config["language"]]
         list_keys = config["keys"]
         list_text_button_control = config["list_text_button_control"]
         for i in range(5):
@@ -1422,12 +1429,15 @@ def menu(run_game):
                 obj.font_color = 'red'
                 break
 
-        button_display_fullsize = Font("font/pixel_font.ttf",SCREEN_W//25,'black','Полноэкранный режим:',SCREEN_W//3.2,SCREEN_H//3)
+        button_display_fullsize = Font("font/pixel_font.ttf",SCREEN_W//25,'black',dict_languages_settings["6"][config["language"]],SCREEN_W//3.2,SCREEN_H//3)
         list_button_display_fullsize = [
-            Font("font/pixel_font.ttf",SCREEN_W//25,'black','Да',SCREEN_W//3.2*1.5,button_display_fullsize.font_y + SCREEN_H//8),
-            Font("font/pixel_font.ttf",SCREEN_W//25,'black','Нет',SCREEN_W//3.2*1.2,button_display_fullsize.font_y + SCREEN_H//8)
+            Font("font/pixel_font.ttf",SCREEN_W//25,'black',dict_languages_settings["7"][config["language"]],SCREEN_W//3.2*1.5,button_display_fullsize.font_y + SCREEN_H//8),
+            Font("font/pixel_font.ttf",SCREEN_W//25,'black',dict_languages_settings["8"][config["language"]],SCREEN_W//3.2*1.2,button_display_fullsize.font_y + SCREEN_H//8)
         ]
-
+        if config["language"] == "uk":
+            list_button_text_language[0][0].path = "image/menu/square_selected.png"
+        elif config["language"] == "ua":
+            list_button_text_language[1][0].path = "image/menu/square_selected.png"
         if int(config["SCREEN_WIDTH"]) == 0 and int(config["SCREEN_HEIGHT"]) == 0:
             list_button_display_fullsize[0].font_color = 'red'
             for obj in list_buttons_display_size:
@@ -1482,6 +1492,14 @@ def menu(run_game):
                 if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                     obj_button_option = pygame.Rect(0, 0, SCREEN_W//3.8, SCREEN_H) 
                     obj_back = pygame.Rect(SCREEN_W//91.4, SCREEN_H//130, SCREEN_W//10.24, SCREEN_H//20.571)
+                    if flag_option == "language":
+                        for i in list_button_text_language:
+                            if i[0].check_mouse_cor(mouse_cor):
+                                for obj in list_button_text_language:
+                                    obj[0].path = "image/menu/square.png"
+                                    obj[0].image_load()
+                                i[0].path = "image/menu/square_selected.png"
+                                i[0].image_load()
                     if flag_option == "control":
                         for obj in list_control:
                             if obj[0].RECT.collidepoint(mouse_cor[0],mouse_cor[1]):
@@ -1517,9 +1535,12 @@ def menu(run_game):
                                         SCREEN_WIDTH = obj.font_content[0].split('x')[0]
                                         SCREEN_HEIGHT = obj.font_content[0].split('x')[1]
                                         break
-                            MUSIC_VOLUME = music_power.font_content[0].split("Громкость музики ")[-1]
-                            SOUNDS_VOLUME = sound_power.font_content[0].split("Громкость звука ")[-1]
-                            
+                            MUSIC_VOLUME = music_power.font_content[0].split(dict_languages_settings["2"][config["language"]])[-1]
+                            SOUNDS_VOLUME = sound_power.font_content[0].split(dict_languages_settings["1"][config["language"]])[-1]
+                            if list_button_text_language[0][0].path == "image/menu/square_selected.png":
+                                language = "uk"
+                            elif list_button_text_language[1][0].path == "image/menu/square_selected.png":
+                                language = "ua"
                             settings = {
                                 "SCREEN_WIDTH": SCREEN_WIDTH,
                                 "SCREEN_HEIGHT": SCREEN_HEIGHT,
@@ -1527,7 +1548,8 @@ def menu(run_game):
                                 "FULLSCREEN": FULLSCREEN,
                                 "MUSIC_VOLUME": MUSIC_VOLUME,
                                 "list_text_button_control":list_text_button_control,
-                                "keys":list_keys
+                                "keys":list_keys,
+                                "language":language
 
                             }
                             with open('saves/config.json','w') as file:
@@ -1542,6 +1564,8 @@ def menu(run_game):
                             flag_option = "audio"
                         elif button_control.RECT.collidepoint(mouse_cor[0],mouse_cor[1]):
                             flag_option = "control"
+                        elif button_language.RECT.collidepoint(mouse_cor[0],mouse_cor[1]):
+                            flag_option = "language"
                         
                         elif button_delete.RECT.collidepoint(mouse_cor[0],mouse_cor[1]) and button_delete.path != "image/menu/button/delete_not_work.png":
                             button_delete.path = "image/menu/button/delete_not_work.png"
@@ -1573,7 +1597,7 @@ def menu(run_game):
                             if i.check_mouse_cor_font(mouse_cor):
                                 for obj in list_button_display_fullsize:
                                     obj.font_color = "black"
-                                if i.font_content[0] == "Да":
+                                if i.font_content[0] == dict_languages_settings["7"][config["language"]]:
                                     for obj2 in list_buttons_display_size:
                                         obj2.font_color = (93, 93, 93)
                                         
@@ -1596,9 +1620,10 @@ def menu(run_game):
             button_video.show_image(win)
             button_audio.show_image(win)
             button_control.show_image(win)
+            button_language.show_image(win)
             button_delete.show_image(win)
             if flag_option == "not":
-                help_text = Font("font/pixel_font.ttf",SCREEN_W//30,"black","Выберите категорию ;в которой хотите внести изменение;;Изменения вступят в игру;после нажатия на кнопку Back",SCREEN_W//3.2,SCREEN_H//8,bold=False,index=5)
+                help_text = Font("font/pixel_font.ttf",SCREEN_W//30,"black",dict_languages_settings["9"][config["language"]],SCREEN_W//3.2,SCREEN_H//8,bold=False,index=5)
                 help_text.show_text(win)
 
                 
@@ -1620,8 +1645,8 @@ def menu(run_game):
                 if button_audio.path != "image/menu/button/audio_b.png":
                     button_audio.path = "image/menu/button/audio_b.png"
                     button_audio.image_load()
-                slider(sound_power, flag_mouse_volume_sound, rect_volume_sound, mouse_volume_sound, mouse_cor, "Громкость звука ",win)
-                slider(music_power, flag_mouse_volume_music, rect_volume_music, mouse_volume_music, mouse_cor, "Громкость музики ",win)
+                slider(sound_power, flag_mouse_volume_sound, rect_volume_sound, mouse_volume_sound, mouse_cor, dict_languages_settings["1"][config["language"]],win)
+                slider(music_power, flag_mouse_volume_music, rect_volume_music, mouse_volume_music, mouse_cor, dict_languages_settings["2"][config["language"]],win)
             else:
                 if button_audio.path != "image/menu/button/audio_w.png":
                     button_audio.path = "image/menu/button/audio_w.png"
@@ -1639,6 +1664,25 @@ def menu(run_game):
                 if button_control.path != "image/menu/button/control_w.png":
                     button_control.path = "image/menu/button/control_w.png"
                     button_control.image_load() 
+            if flag_option == "language":
+                if button_language.path != "image/menu/button/language_b.png":
+                    button_language.path = "image/menu/button/language_b.png"
+                    button_language.image_load() 
+                text_language.show_text(win)
+                for i in list_button_text_language:
+                    i[0].show_image(win)
+                    i[1].show_text(win)
+                    if i[0].path != "image/menu/square_selected.png":
+                        if i[0].check_mouse_cor(mouse_cor):
+                            i[0].path = "image/menu/square_aiming.png"
+                            i[0].image_load() 
+                        else:
+                            i[0].path = "image/menu/square.png"
+                            i[0].image_load() 
+            else:
+                if button_language.path != "image/menu/button/language_w.png":
+                    button_language.path = "image/menu/button/language_w.png"
+                    button_language.image_load() 
             pygame.display.flip()
 
   
@@ -1698,7 +1742,8 @@ def menu(run_game):
         pygame.display.flip()
   
 def book():
-
+    with open('saves/config.json','r') as file:
+        config = json.load(file)
     dict_argument["count_animation_book"] += 1
     
     if dict_argument["count_animation_book"] < 45:
@@ -1712,8 +1757,8 @@ def book():
         element = Graphic_elements(0,0,width*SCREEN_W//500,height*SCREEN_W//500,"image/book_4.png")
         element.X = (SCREEN_W - element.WIDTH ) //2
         element.Y = (SCREEN_H - element.HEIGHT) //2
-        text_book = Font("font/pixel_font.ttf",SCREEN_W//65,'black',"Сьогодні я зроблю;;свою останню справу;;після якої я влечу;;до себе на батьківщину;;Нарешті я побачу;;свою дочку;;у неї через 3 міцяться;;день народженя. ",element.X + SCREEN_W//30,element.Y + SCREEN_W//30,7)
-        text_book_2 = Font("font/pixel_font.ttf",SCREEN_W//65,'black',"Вона напевно скучила;;за мною.",element.X + SCREEN_W//4,element.Y + SCREEN_W//30,7)
+        text_book = Font("font/pixel_font.ttf",SCREEN_W//65,'black',dict_languages_book["1"][config["language"]],element.X + SCREEN_W//30,element.Y + SCREEN_W//30,7)
+        text_book_2 = Font("font/pixel_font.ttf",SCREEN_W//65,'black',dict_languages_book["2"][config["language"]],element.X + SCREEN_W//4,element.Y + SCREEN_W//30,7)
         element.show_image(screen)
         text_book.show_text(screen)
         text_book_2.show_text(screen)
@@ -1743,7 +1788,7 @@ def finish_shooting():
         criminal.X = Background_shooting.X + criminal.start_x
         criminal.Y = Background_shooting.Y + criminal.start_y
         
-        criminal.start_y -= SCREEN_W//250
+        criminal.start_y -= dict_argument["criminal_speed"]
         criminal.WIDTH -= SCREEN_W/(1706*1.5)
         criminal.HEIGHT -= SCREEN_H/(578*1.5)
         if criminal.WIDTH > 0 and criminal.HEIGHT > 0:
@@ -1834,12 +1879,12 @@ def safe():
     for i in list_angle_safe:
         if i % 2:
             list_angle_safe[list_angle_safe.index(i)] += 1
-    text_presed_f = Font("font/pixel_font.ttf",SCREEN_W//40,"black","Нажмите кнопку ["+str(config["list_text_button_control"][0])+"]",big_part_minigame_safe.X - SCREEN_W//20,big_part_minigame_safe.Y + SCREEN_W//5)
+    text_presed_f = Font("font/pixel_font.ttf",SCREEN_W//40,"black",dict_laungues_save[config["language"]],big_part_minigame_safe.X - SCREEN_W//20,big_part_minigame_safe.Y + SCREEN_W//5)
     run = True
     presed_f_last = False
     open_safe = Graphic_elements(bg_safe.X + bg_safe.WIDTH//3,bg_safe.Y + bg_safe.HEIGHT//3,bg_safe.WIDTH//3,bg_safe.WIDTH//3//1.5,"image/safe/open_safe_book.png")
     time_count = 0
-    text_time = Font("font/pixel_font.ttf",SCREEN_W//40,"red","45",bg_safe.X + SCREEN_W//30,bg_safe.Y + SCREEN_W//30)
+    text_time = Font("font/pixel_font.ttf",SCREEN_W//40,"red",str(dict_argument["speed_save"]),bg_safe.X + SCREEN_W//30,bg_safe.Y + SCREEN_W//30)
     with open('saves/config.json','r') as file:
             config = json.load(file)
     list_keys = config["keys"]
@@ -1868,7 +1913,7 @@ def safe():
             if comleted_safe == 0:
                 time_count += 1
                 if int(text_time.font_content[0]) <= 0:
-                    text_time.font_content = ["45"]
+                    text_time.font_content = [str(dict_argument["speed_save"])]
                     number_completed_lvl_safe = 0
                     for i in list_red_led:
                         i.path = "image/safe/red_led_off.png"
@@ -1941,14 +1986,14 @@ def safe():
                                 number_completed_lvl_safe += 1
 
                         else:
-                            text_time.font_content = ["45"]
+                            text_time.font_content = [str(dict_argument["speed_save"])]
                             number_completed_lvl_safe = 0
                             for i in list_red_led:
                                 i.path = "image/safe/red_led_off.png"
                                 i.image_load()
                     if not keys[list_keys[0]]:
                         presed_f_last = False
-                    text_presed_f.font_content = ["Нажмите кнопку ["+str(config["list_text_button_control"])+"]","  чтоб остановить"]
+                    text_presed_f.font_content = [dict_laungues_save[config["language"]],"  чтоб остановить"]
                     red_zone_safe_minigame.show_image(screen)
                     green_zone_safe_minigame.show_image(screen)
                     arrow_safe_minigame.show_image(screen)

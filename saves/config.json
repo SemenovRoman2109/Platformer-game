@@ -1,21 +1,22 @@
 {
     "SCREEN_WIDTH": 0,
     "SCREEN_HEIGHT": 0,
-    "SOUNDS_VOLUME": "0",
+    "SOUNDS_VOLUME": "100",
     "FULLSCREEN": true,
-    "MUSIC_VOLUME": "67",
+    "MUSIC_VOLUME": "100",
     "list_text_button_control": [
-        "enter",
+        "f",
         "up",
         "down",
         "left",
         "right"
     ],
     "keys": [
-        13,
+        102,
         1073741906,
         1073741905,
         1073741904,
         1073741903
-    ]
+    ],
+    "language": "ua"
 }

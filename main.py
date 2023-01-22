@@ -220,7 +220,7 @@ def run_game():
             if dict_argument_block["count_img_spinning_motion_block"] == 5:
                 dict_argument_block["flag_direction_spinning_motion_block"] = "-"
                     
-            if dict_argument_block["count_motion_block"] == dict_argument_block["max_count_motion_block"]:
+            if dict_argument_block["count_motion_block"] == dict_argument["max_count_motion_block"]:
 
                 block_motion_right_left(list_surface=dict_argument["list_surface"],dict_argument_block=dict_argument_block,platform_length=2,sprite=sprite1 )
                 block_motion_down_up(list_surface=dict_argument["list_surface"],dict_argument_block=dict_argument_block,sprite=sprite1)
@@ -235,7 +235,7 @@ def run_game():
                 i[-2].show_image(screen)
             if dict_argument["index_location"] == 0 and dict_argument["index_lvl"] == 0:
                 #Создаем дверь и кнопку
-                door_and_button(4,7,None,None,"Д","д",sprite1,"r",100)
+                door_and_button(4,7,None,None,"Д","д",sprite1,"r",dict_argument["duration_door"])
 
             # bird() #Включает метод птицы
             

@@ -406,7 +406,7 @@ class Sprite:
     def ghost(self,screen):
         if dict_argument["ghost"]:
             self.ghost_img.show_image(screen)
-            if self.count_pressing_ghost == 10:
+            if self.count_pressing_ghost == dict_argument["count_click_on_ghost"]:
                 self.count_duration_shield = dict_argument["duration_shield"] - 1
                 dict_argument["ghost"] = False
                 self.can_move = True
@@ -570,29 +570,29 @@ class Sprite:
                 if Rect.colliderect(dict_spawn_and_finish_point[key1][1],self.image_sprite.RECT):
                     dict_argument["screen_dimming_flag"] = "+"
                     dict_argument["index_text_drimming"] = "first_shooting"
-                    flag_first_shooting_lvl_point = shooting_lvl(screen,100,20,False)
+                    flag_first_shooting_lvl_point = shooting_lvl(screen,dict_argument["count_point_hit"],dict_argument["count_ammo"],False)
                     
                     while True:
                         
-                        if flag_first_shooting_lvl_point >= 100:
+                        if flag_first_shooting_lvl_point >= dict_argument["count_point_hit"]:
                             break
                         
                         else:
                             dict_argument["screen_dimming_flag"] = "+"
                             dict_argument["index_text_drimming"] = "lose_shooting"
-                            flag_first_shooting_lvl_point = shooting_lvl(screen,100,20,False)
+                            flag_first_shooting_lvl_point = shooting_lvl(screen,dict_argument["count_point_hit"],dict_argument["count_ammo"],False)
                     dict_argument["screen_dimming_flag"] = "+"
                     dict_argument["index_text_drimming"] = "second_shooting"
-                    flag_second_shooting_lvl_point = shooting_lvl(screen,150,30,3)
+                    flag_second_shooting_lvl_point = shooting_lvl(screen,int(dict_argument["count_point_hit"]*1.5),int(dict_argument["count_ammo"]*1.5),dict_argument["count_fences"])
                     while True:
                         
-                        if flag_second_shooting_lvl_point >= 150:
+                        if flag_second_shooting_lvl_point >= int(dict_argument["count_point_hit"]*1.5):
                             break
                         
                         else:
                             dict_argument["screen_dimming_flag"] = "+"
                             dict_argument["index_text_drimming"] = "lose_shooting"
-                            flag_second_shooting_lvl_point = shooting_lvl(screen,150,30,3)
+                            flag_second_shooting_lvl_point = shooting_lvl(screen,int(dict_argument["count_point_hit"]*1.5),int(dict_argument["count_ammo"]*1.5),dict_argument["count_fences"])
                     return "finish_lvl"
                 
         return "False"
