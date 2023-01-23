@@ -201,6 +201,11 @@ def drawSurfaces():
                 list_noot_colision_platphorm.append(Graphic_elements(X,Y,WIDTH,HEIGHT,PATH))
                 if dict_argument["list_surface"][i][j] == "d":
                     list_noot_colision_platphorm[-1].image_load(rotate_x= True)
+            elif dict_argument["list_surface"][i][j] == "G": 
+                WIDTH = dict_argument["BLOCK_SIZE"]*1.5
+                HEIGHT = dict_argument["BLOCK_SIZE"]*3
+                PATH = "image/Game_machine.png"
+                list_noot_colision_platphorm.append(Graphic_elements(X,Y-dict_argument["BLOCK_SIZE"]*2,WIDTH,HEIGHT,PATH))
             elif dict_argument["list_surface"][i][j] == "P": 
                 PATH = "image/block/solo_block.png"
                 if dict_argument["list_surface"][i][j+1] == "P":

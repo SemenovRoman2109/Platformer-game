@@ -4,15 +4,21 @@ init() #Инициализируем pygame
 #Создаем функцию запуска игры
 
 def run_game():    
-    
+    with open('saves/config.json','r') as file:
+        config = json.load(file)
     #Рисуем поверхности
     drawSurfaces()
-    flappy_bird()
+    
+    list_music_name[dict_argument["index_music"]].load_music()
+
+
+    
     #y передвигающийся плаформы+
     #Основной цыкл игры
     dict_argument["list_surface"] = list_surface[dict_argument["index_lvl"]][dict_argument["index_location"]]
     while dict_argument["game"]:
-        
+        if not list_music_name[dict_argument["index_music"]].music_play() and not dict_argument["flag_pause"]:
+            list_music_name[dict_argument["index_music"]].play_music()
         clock.tick(FPS)
         mouse_cor = mouse.get_pos()
         for event1 in event.get(): # Получаем значение события из "списка событий" 
@@ -24,11 +30,43 @@ def run_game():
 
             if event1.type == KEYDOWN:
                 if event1.key == K_ESCAPE:
+                    list_music_name[dict_argument["index_music"]].stop_music()
                     dict_argument["game"] = False
                     save_game()
 
 
             if event1.type == MOUSEBUTTONDOWN and event1.button == 1:
+                if rect_music_left.collidepoint(mouse_cor[0],mouse_cor[1]): 
+                    list_music_name[dict_argument["index_music"]].stop_music()
+                    dict_argument["index_music"] -= 1 
+                    if dict_argument["index_music"] < 0: 
+                        dict_argument["index_music"] = len(list_music_name)-1 
+                    dict_argument["flag_pause"] = False 
+                    img_music_player.path = "image/music.png" 
+                    img_music_player.image_load() 
+                    list_music_name[dict_argument["index_music"]].load_music()
+                elif rect_music_right.collidepoint(mouse_cor[0],mouse_cor[1]): 
+                    list_music_name[dict_argument["index_music"]].stop_music()
+                    dict_argument["index_music"] += 1 
+                    if dict_argument["index_music"] > len(list_music_name)-1: 
+                        dict_argument["index_music"] = 0 
+                    dict_argument["flag_pause"] = False 
+                    img_music_player.path = "image/music.png" 
+                    img_music_player.image_load() 
+                    list_music_name[dict_argument["index_music"]].load_music()
+                elif rect_music_pause.collidepoint(mouse_cor[0],mouse_cor[1]): 
+                    if dict_argument["flag_pause"]: 
+                        dict_argument["flag_pause"] = False 
+                        img_music_player.path = "image/music.png" 
+                        img_music_player.image_load()
+                        list_music_name[dict_argument["index_music"]].unpause_music()
+                         
+                    else: 
+                        dict_argument["flag_pause"] = True 
+                        img_music_player.path = "image/music_pause.png" 
+                        img_music_player.image_load()
+                        list_music_name[dict_argument["index_music"]].pause_music()
+                    
                 if dict_argument["scene"] == "complexity":
                     for obj in list_text_emodji:
                         if obj.check_mouse_cor_font(mouse_cor):
@@ -112,6 +150,15 @@ def run_game():
             dict_argument["flag_collid_npc"] = False
             for p in list_noot_colision_platphorm:
                 p.show_image(screen)
+                if p.path == "image/Game_machine.png":
+                    if Rect.colliderect(sprite1.image_sprite.RECT,p.RECT) :
+                        if not dict_argument["flag_colision_game_machine"]:
+                            dict_argument["flag_colision_game_machine"] = True
+                            flappy_bird()
+
+                    else:
+                        dict_argument["flag_colision_game_machine"] = False
+
             for i in list_NPC:
                 i.show_image(screen)
                 if Rect.colliderect(sprite1.image_sprite.RECT,i.RECT) :
@@ -264,7 +311,7 @@ def run_game():
                     number = 1
                 dict_Graphic_elements_obj["Fon"].path = "image/backgroubd_"+str(number)+".bmp"
                 dict_Graphic_elements_obj["Fon"].image_load()
-
+            img_music_player.show_image(screen)
         display.update() #Обновление экрана
 #Запускает игру
 import sys

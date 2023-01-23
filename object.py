@@ -6,6 +6,7 @@ from constant import * #Подключаем модуль файл constant
 from sprite import Sprite #Подключаем модуль файл sprite
 from graphic_elements import Graphic_elements #Подключаем модуль файл graphic_elements
 from text import Font #Подключаем модуль файл text
+from sounds import * #Подключаем модуль файл sounds
 init() #Инициализируем pygame
 #Создаем спрайт и его настройки для создание графических елементов
 
@@ -54,6 +55,19 @@ list_text_emodji = [
     Font("font/pixel_font.ttf",SCREEN_W//20,"white","Средняя",list_emodji[1].X+SCREEN_W//10,list_emodji[1].Y+SCREEN_W//42),
     Font("font/pixel_font.ttf",SCREEN_W//20,"white","Сложная",list_emodji[2].X+SCREEN_W//10,list_emodji[2].Y+SCREEN_W//42),
 ]
+img_music_player = Graphic_elements(SCREEN_W//50,SCREEN_H-SCREEN_W//25,SCREEN_W//8,SCREEN_W//32,"image/music.png") 
+rect_music_left = Rect(img_music_player.X,img_music_player.Y,img_music_player.WIDTH//5,img_music_player.HEIGHT) 
+rect_music_right = Rect(img_music_player.X+img_music_player.WIDTH-img_music_player.WIDTH//5,img_music_player.Y,img_music_player.WIDTH//5,img_music_player.HEIGHT) 
+rect_music_pause = Rect(img_music_player.X+img_music_player.WIDTH//2.32,img_music_player.Y,img_music_player.WIDTH//7,img_music_player.HEIGHT) 
+list_music_name = [
+    Music("sounds/bg_1.wav",int(config["MUSIC_VOLUME"])/1000),
+    Music("sounds/bg_2.wav",int(config["MUSIC_VOLUME"])/1000),
+    Music("sounds/bg_3.wav",int(config["MUSIC_VOLUME"])/1000),
+    Music("sounds/bg_4.wav",int(config["MUSIC_VOLUME"])/1000),
+    Music("sounds/bg_5.wav",int(config["MUSIC_VOLUME"])/1000),
+    Music("sounds/bg_6.wav",int(config["MUSIC_VOLUME"])/1000),
+    Music("sounds/bg_7.wav",int(config["MUSIC_VOLUME"])/1000)
+    ] 
 #Создаем список графических елементов шипов
 list_spikes = []
 #Создаем словарь графических елементов

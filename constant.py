@@ -20,8 +20,8 @@ MUSIC_VOLUME = int(config["MUSIC_VOLUME"])
 SOUNDS_VOLUME = int(config["SOUNDS_VOLUME"])
 
 #Индексы уровней
-index_lvl = 0
-index_location = 0
+index_lvl = 1
+index_location = 2
 if index_lvl == 0:
     BLOCK_SIZE = round(SCREEN_W/20)
 if index_lvl == 1:
@@ -148,6 +148,9 @@ if dict_argument["defolt"] == "true":
         "flag_book":False,
         "picture_flag":False,
         "picture_count":150,
+        "flag_colision_game_machine":False,
+        "index_music":0,
+        "flag_pause":False,
         "BLOCK_SIZE":BLOCK_SIZE,
         "flag_collid_npc":flag_collid_npc,
         "number_click_npc":number_click_npc,
