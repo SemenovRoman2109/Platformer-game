@@ -157,13 +157,14 @@ if dict_argument["defolt"] == "true":
         "flag_false_criminal_selected":flag_false_criminal_selected,
         "index_npc_collid":index_npc_collid,
         "sprite_x":(dict_spawn_and_finish_point["lvl"+str(index_lvl+1)+"_location_"+str(index_location+1)][0][0])//BLOCK_SIZE,
-        "sprite_y":(dict_spawn_and_finish_point["lvl1_location_1"][0][1])//BLOCK_SIZE,
+        "sprite_y":(dict_spawn_and_finish_point["lvl"+str(index_lvl+1)+"_location_"+str(index_location+1)][0][1])//BLOCK_SIZE,
         "count_change_bg":0,
         "complexity":None,
         # настройки на средней сложности
+        "DOUBLE_JUMP":None,
         "max_count_spike":150,
         "criminal_speed":SCREEN_W//250,
-        "speed_save":45,    
+        "speed_safe":45,    
         "duration_invisible_block":12,
         "count_point_hit":100,    
         "count_fences":3,
@@ -207,17 +208,17 @@ dict_mision_lvl_1 = {
 }
 
 dict_languages_drimming = {
-    "1":{"ua":["Ви не змогли утримати свою душу", "повертайтеся на початок рівня"],"uk":["You couldn't hold your soul", "go back to the beginning of the level"]},
-    "2":{'ua':[" Преступнику вдалося скрити "," Ви програли "],'uk':["The killer managed to escape", "You lost"]},
-    "3":{'ua':["Вам вдалося затримати злочинця", "Ви пройшли гру"],"uk":["You managed to apprehend the killer", "You completed the game"]},
-    "4":{"ua":["Ви правильно вибрали злочинця","І він почав тікати підстреліть його"],"uk":["You chose the right criminal","And he started to run away, shoot him"]},
-    "5":{'ua':["      Ви вибрали неправильно      ", "    У тебе залишилася одна спроба    ", "             до рейсу             "],"uk":["     You chose wrong     ","   You have one try left   ","             until the flight"             ]},
-    "6":{'ua':["Ви не пройшли академію", "спробуйте ще раз"],"uk":["You didn't pass the academy", "try again"]},
-    "7":{"ua":["Ви померли під час розкриття справи"," спробуйте ще раз "],"uk":["You died while solving the case", "try again"]},
-    "8":{'ua':["Ви прибули до поліцейської академії", "Пройдіть навчання", "щоб переступити до роботи"],'uk':["You have arrived at the police academy," "Get your training," "to go to work"]},
+    "1":{"ua":["Ви не змогли утримати свою душу", " повертайтеся на початок рівня "],"uk":["     You couldn't hold your soul     ", "go back to the beginning of the level"]},
+    "2":{'ua':["Преступнику вдалося скрити","        Ви програли        "],'uk':["The killer managed to escape", "          You lost          "]},
+    "3":{'ua':["Вам вдалося затримати злочинця", "        Ви пройшли гру        "],"uk":["You managed to apprehend the killer", "       You completed the game      "]},
+    "4":{"ua":["   Ви правильно вибрали злочинця   ","І він почав тікати підстреліть його"],"uk":["     You chose the right criminal    ","And he started to run away, shoot him"]},
+    "5":{'ua':["    Ви вибрали неправильно   ", "У тебе залишилася одна спроба", "           до рейсу          "],"uk":["   You chose wrong   ","You have one try left","   until the flight  "]},
+    "6":{'ua':["Ви не пройшли академію", "   спробуйте ще раз   "],"uk":["You didn't pass the academy", "         try again         "]},
+    "7":{"ua":["Ви померли під час розкриття справи","          спробуйте ще раз         "],"uk":["You died while solving the case", "           try again           "]},
+    "8":{'ua':["Ви прибули до поліцейської академії", "         Пройдіть навчання         ", "     щоб переступити до роботи     "],'uk':["You have arrived at the police academy", "   Get your training to go to work    "]},
     "9":{"ua":["Ви практично закінчили", "навчання в академії"," залишилося перевірити вашу влучність "],"uk":["You are almost done","training at the academy"," to test your marksmanship "]},
-    "10":{'ua':["Ви пройшли перший рівень стрілянини","     наступний буде складніше     "],"uk":["You have passed the first shooting level", "     the next one will be harder     "]},
-    "11":{'ua':["  У тебе не вийшло пройти рівень ", "          Спробуй знову          "],"uk":["  You failed the level ", "          Try again          "]}
+    "10":{'ua':["Ви пройшли перший рівень стрілянини","наступний буде складніше"],"uk":["You have passed the first shooting level", "     the next one will be harder     "]},
+    "11":{'ua':["У тебе не вийшло пройти рівень ","Спробуй знову"],"uk":["You failed the level ","Try again"]}
 }
 
 dict_text_drimming = {
@@ -244,7 +245,7 @@ dict_languages_settings = {
     "6":{'ua':"Повноекранний режим:",'uk':"Full Screen:"},
     "7":{"ua":"Так","uk":"Yes"},
     "8":{'ua':"Ні","uk":'No'},
-    "9":{'ua':"Виберіть категорію ;у якій хочете внести зміну;;Зміни вступлять у гру;після натискання на кнопку Back","uk":"Select the category ;in which you want to make a change;;Changes will come into play;after clicking on the Back button"},
+    "9":{'ua':"Виберіть категорію ;у якій хочете внести зміну;;Зміни вступлять у гру;після натискання на кнопку Назад","uk":"Select the category ;in which you want to make a change;;Changes will come into play;after clicking on the Back button"},
     "10":{"ua":"Мова:","uk":"language:"},
 }
 dict_languages_book = {

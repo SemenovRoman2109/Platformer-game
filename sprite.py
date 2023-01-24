@@ -2,6 +2,7 @@ from pygame import*
 import os
 from graphic_elements import Graphic_elements
 from text import Font
+from sounds import Sounds
 init()
 from constant import *
 class Sprite:
@@ -53,7 +54,9 @@ class Sprite:
         with open('saves/config.json','r') as file:
             config = json.load(file)
         self.list_keys = config["keys"]
-        print(self.list_keys)
+        self.jump_sound = Sounds("sounds/jump.wav",int(config["SOUNDS_VOLUME"])//100)
+
+
 
 
 
@@ -121,7 +124,7 @@ class Sprite:
     # Функция которая отвечает за анимации персонажа
     def sprite_move(self):  
         keys = key.get_pressed()        
-        if keys[self.list_keys[3]] and self.image_sprite.X > SCREEN_W//80 and self.move_left:
+        if keys[self.list_keys[3]] and self.image_sprite.X > 0 and self.move_left:
             self.image_sprite.X -= self.speed
             self.flag = "L"
             if self.index == 10:
@@ -133,7 +136,7 @@ class Sprite:
                 self.index2 = 0
             self.index2 += 1
             
-        elif keys[self.list_keys[4]] and self.image_sprite.X < SCREEN_W - self.image_sprite.WIDTH - SCREEN_W//80 and self.move_right:
+        elif keys[self.list_keys[4]] and self.image_sprite.X < SCREEN_W - self.image_sprite.WIDTH - 0 and self.move_right:
             self.image_sprite.X += self.speed
             self.flag = "R"  
             if self.index == 10:
@@ -164,11 +167,13 @@ class Sprite:
                     self.jump_now = 5
                     self.double_jump = False
                 self.fly_up = True
+                self.jump_sound.play_sound()
                 
 
             if keys[self.list_keys[1]] and self.jump_now == 5 and self.fly_up == False and self.double_jump != None: 
                 self.jump_now = 1
                 self.fly_up = True
+                self.jump_sound.play_sound()
                 
             if self.fly_up:
                 if self.flag == "R":
@@ -177,8 +182,9 @@ class Sprite:
                 elif self.flag == "L":
                     self.image_sprite.image_load(rotate_x=True)
                 self.image_sprite.Y -= self.jummp_boost//15
+                
                 self.count += 1
-                if self.move_up == False or self.count == 15 or self.image_sprite.Y <= SCREEN_W//80:
+                if self.move_up == False or self.count == 15 or self.image_sprite.Y <= 0:
                     self.fly_up = False
                     self.count = 0
     # Гравитация  смена индексов и картинок   
@@ -327,7 +333,7 @@ class Sprite:
                 self.image_sprite.image_load(rotate_x=True)
             self.image_sprite.Y -= (self.jummp_boost//8 + self.gravity_speed)
             self.count += 1
-            if self.move_up == False or self.count == 10 or self.image_sprite.Y <= SCREEN_W//80:
+            if self.move_up == False or self.count == 10 or self.image_sprite.Y <= 0:
                 self.fly_up_spring = False
                 self.count = 0            
     # Проверка движения в право    
@@ -357,7 +363,7 @@ class Sprite:
     def can_move_up(self):
         for i in dict_list_border["list_border_cor"]:
             if i[-1] != "K":
-                i_rect = Rect(i[4]+ dict_argument["BLOCK_SIZE"]//5,i[1] + SCREEN_H//500,i[5]-i[4]- dict_argument["BLOCK_SIZE"]//2.5,1)
+                i_rect = Rect(i[4]+ dict_argument["BLOCK_SIZE"]//8,i[1] + SCREEN_H//500,i[5]-i[4]- dict_argument["BLOCK_SIZE"]//4,1)
                 rect_sprite = Rect(self.image_sprite.X,self.image_sprite.Y,self.image_sprite.WIDTH,self.image_sprite.HEIGHT)
                 if Rect.colliderect(rect_sprite,i_rect): 
                     self.move_up = False
@@ -368,7 +374,7 @@ class Sprite:
                 self.move_up = True
         if self.move_up == True:
             for i in dict_list_border["list_border_cor_cracking"]:
-                i_rect = Rect(i[4]+ dict_argument["BLOCK_SIZE"]//5,i[1] + SCREEN_H//500,i[5]-i[4]- dict_argument["BLOCK_SIZE"]//2.5,1)
+                i_rect = Rect(i[4]+ dict_argument["BLOCK_SIZE"]//8,i[1] + SCREEN_H//500,i[5]-i[4]- dict_argument["BLOCK_SIZE"]//4,1)
                 rect_sprite = Rect(self.image_sprite.X,self.image_sprite.Y,self.image_sprite.WIDTH,self.image_sprite.HEIGHT)
                 if Rect.colliderect(rect_sprite,i_rect): 
                     self.move_up = False

@@ -18,7 +18,7 @@ sprite1 = Sprite(
                     sprite_width = dict_argument["BLOCK_SIZE"], #Ширина спрайта
                     sprite_height = dict_argument["BLOCK_SIZE"]*1.66, #Высота спрайта
                     sprite_gravity_power = SCREEN_H//40, #Сила гравитации спрайта
-                    double_jump = True, #Двойной прыжок
+                    double_jump = dict_argument["DOUBLE_JUMP"], #Двойной прыжок
                     jump_boost = dict_argument["BLOCK_SIZE"]*1.1*3, #Сила прыжка 
                     index_layout = 0 #Индекс   0-стрелки 1 - WSDA
                 )                    
@@ -42,8 +42,8 @@ aim = Graphic_elements(SCREEN_W//2-SCREEN_W//40,SCREEN_H//2-SCREEN_W//40,dict_ar
 text_transition_new_lvl = Font("font/pixel_font.ttf",SCREEN_W//28,"white",None,0,0,None)
 text_select_complexity = Font("font/pixel_font.ttf",SCREEN_W//20,"white","Выберите уровень сложности:",SCREEN_W//20,SCREEN_W//20)
 list_button_collid = [
-    Font("font/pixel_font.ttf",SCREEN_W//20,"darkgrey","Да",SCREEN_W//2.3,SCREEN_H-SCREEN_W//18),
-    Font("font/pixel_font.ttf",SCREEN_W//20,"darkgrey","Нет",SCREEN_W//1.95,SCREEN_H-SCREEN_W//18)
+    Font("font/pixel_font.ttf",SCREEN_W//20,"darkgrey","Да",SCREEN_W//1.6,SCREEN_H-SCREEN_W//18),
+    Font("font/pixel_font.ttf",SCREEN_W//20,"darkgrey","Нет",SCREEN_W//1.4,SCREEN_H-SCREEN_W//18)
 ]
 list_emodji = [
     Graphic_elements(SCREEN_W//20,SCREEN_W//6,SCREEN_W//12,SCREEN_W//12,path="image/Green_emoji.png"),
@@ -56,6 +56,8 @@ list_text_emodji = [
     Font("font/pixel_font.ttf",SCREEN_W//20,"white","Сложная",list_emodji[2].X+SCREEN_W//10,list_emodji[2].Y+SCREEN_W//42),
 ]
 img_music_player = Graphic_elements(SCREEN_W//50,SCREEN_H-SCREEN_W//25,SCREEN_W//8,SCREEN_W//32,"image/music.png") 
+if dict_argument["flag_pause"]:
+    img_music_player.path = "image/music_pause.png"
 rect_music_left = Rect(img_music_player.X,img_music_player.Y,img_music_player.WIDTH//5,img_music_player.HEIGHT) 
 rect_music_right = Rect(img_music_player.X+img_music_player.WIDTH-img_music_player.WIDTH//5,img_music_player.Y,img_music_player.WIDTH//5,img_music_player.HEIGHT) 
 rect_music_pause = Rect(img_music_player.X+img_music_player.WIDTH//2.32,img_music_player.Y,img_music_player.WIDTH//7,img_music_player.HEIGHT) 
@@ -68,6 +70,7 @@ list_music_name = [
     Music("sounds/bg_6.wav",int(config["MUSIC_VOLUME"])/1000),
     Music("sounds/bg_7.wav",int(config["MUSIC_VOLUME"])/1000)
     ] 
+use_sound = Sounds("sounds/use.wav",int(config["SOUNDS_VOLUME"])//100)
 #Создаем список графических елементов шипов
 list_spikes = []
 #Создаем словарь графических елементов

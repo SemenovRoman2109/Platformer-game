@@ -684,6 +684,7 @@ def invisibility_block(element_door,element_door_empty,sprite1):
     list_keys = config["keys"]
     if keys[list_keys[0]]:
         if dict_argument_block["count_load"] == 24: 
+            use_sound.play_sound()
             for el in range(len(dict_argument["list_surface"])):
                 for element in range(len(dict_argument["list_surface"][el])):
                     if dict_argument["list_surface"][el][element] == element_door_empty:
@@ -859,7 +860,8 @@ def function_dimming():
             text_transition_new_lvl.font_content = dict_mision_lvl_1["location_"+str(dict_argument["index_location"])]
         else:
             text_transition_new_lvl.font_content = dict_text_drimming[dict_argument["index_text_drimming"]]
-            
+
+        text_transition_new_lvl.font_x = (SCREEN_W - text_transition_new_lvl.font_content[0] * text_transition_new_lvl.font_size) //2
         text_transition_new_lvl.font_y = SCREEN_H//2-text_transition_new_lvl.font_size
         if dict_argument["screen_dimming_flag"] == "+":
             dict_argument["screen_dimming_count"] += 3
@@ -881,6 +883,7 @@ def move_map(direction):
     if dict_argument["index_lvl"] == 1:
         dict_argument["screen_dimming_flag"] = "+"
         dict_argument["index_text_drimming"] = None
+    
     # Флаг направления оси
     flag_direction = None
     # Список в который будет помещена полная карта
@@ -1035,7 +1038,7 @@ def shooting_lvl(screen,min_count_point,ammo_count,barriers):
     
     if barriers > 5:
         barriers = 5
-
+    list_music_name[dict_argument["index_music"]].stop_music()
     ammo_img = Graphic_elements(SCREEN_W//100,SCREEN_W//100,dict_argument["BLOCK_SIZE"],dict_argument["BLOCK_SIZE"]//1.14,"image/ammo.png")
     
     left_side_stand_for_manniquens = Graphic_elements(0,0,dict_argument["BLOCK_SIZE"],dict_argument["BLOCK_SIZE"]*2.269,"image/left_side_stand_for_mannequins.png")
@@ -1057,12 +1060,14 @@ def shooting_lvl(screen,min_count_point,ammo_count,barriers):
     
 
     count_gun = 0
-    gun = Sounds("sounds/gun.wav",100)
-    coin = Sounds("sounds/coins.wav",100)
+    gun = Sounds("sounds/gun.wav",int(config["SOUNDS_VOLUME"])//100)
+    coin = Sounds("sounds/coins.wav",int(config["SOUNDS_VOLUME"])//100)
     statstic = Font("font/pixel_font.ttf",SCREEN_W//30,"black",str(count_point) +"/" + str(min_count_point),SCREEN_W-SCREEN_W//7,0,1,True)
     ammo_statistic = Font('font/pixel_font.ttf',SCREEN_W//30,"black",str(ammo_count),0 + SCREEN_W//15,SCREEN_W//100,1,True)
+    list_music_name[dict_argument["index_music"]].load_music()
     while game:
-        
+        if not list_music_name[dict_argument["index_music"]].music_play():
+            list_music_name[dict_argument["index_music"]].play_music()
         screen.fill("black")
         Background_shooting.show_image(screen)
         
@@ -1415,11 +1420,10 @@ def menu(run_game):
             [Graphic_elements(SCREEN_W//3.2,SCREEN_H//7+SCREEN_W//20*2,SCREEN_W//38,SCREEN_W//38,"image/menu/square.png"),Font("font/pixel_font.ttf",SCREEN_W//38,'black','Українська',SCREEN_W//2.8,SCREEN_H//7+SCREEN_W//20*2)]
         ]
         
-        
         list_control = []
         list_text_control = dict_languages_settings["5"][config["language"]]
-        list_keys = config["keys"]
-        list_text_button_control = config["list_text_button_control"]
+        list_keys = copy.deepcopy(config["keys"])
+        list_text_button_control = copy.deepcopy(config["list_text_button_control"])
         for i in range(5):
             obj = Graphic_elements(SCREEN_W//3.2,SCREEN_H//4 + SCREEN_W//15 * i,SCREEN_W//2, SCREEN_W//20, "image/menu/menu_button_change.png")
             text = Font("font/pixel_font.ttf",SCREEN_W//40,'white',list_text_control[i],obj.X + SCREEN_W//40,obj.Y + SCREEN_W//90)
@@ -1452,7 +1456,10 @@ def menu(run_game):
         else:
             list_button_display_fullsize[1].font_color = 'red'
         run_option = True
+        list_music_name[dict_argument["index_music"]].load_music()
         while run_option: 
+            if not list_music_name[dict_argument["index_music"]].music_play():
+                list_music_name[dict_argument["index_music"]].play_music()
             for event in pygame.event.get():
                 #Услове выхода из игры
                 mouse_cor = pygame.mouse.get_pos() 
@@ -1496,6 +1503,7 @@ def menu(run_game):
                                 break
 
                 if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                    use_sound.play_sound()
                     obj_button_option = pygame.Rect(0, 0, SCREEN_W//3.8, SCREEN_H) 
                     obj_back = pygame.Rect(SCREEN_W//91.4, SCREEN_H//130, SCREEN_W//10.24, SCREEN_H//20.571)
                     if flag_option == "language":
@@ -1558,12 +1566,16 @@ def menu(run_game):
                                 "language":language
 
                             }
+                            for obj in config.keys():
+                                print(settings[obj],config[obj])
+                                if settings[obj] != config[obj]:
+                                    run_option = False
+                                    with open('saves/config.json','w') as file:
+                                        json.dump(settings,file,indent=4,ensure_ascii=True)
+                                    return "stop"
+                            run_option = False
                             with open('saves/config.json','w') as file:
                                 json.dump(settings,file,indent=4,ensure_ascii=True)
-
-                            # СОХРАНИЛИ ДАННЫЕ
-                            run_option = False
-                            return "stop"
                         elif button_video.RECT.collidepoint(mouse_cor[0],mouse_cor[1]):
                             flag_option = "video"
                         elif button_audio.RECT.collidepoint(mouse_cor[0],mouse_cor[1]):
@@ -1699,8 +1711,10 @@ def menu(run_game):
     button_option = Graphic_elements(SCREEN_W//1.395,SCREEN_H//2 - SCREEN_H//15.6, SCREEN_W//3.5, SCREEN_H//7.8, 'image/menu/button_'+config["language"]+'/button_option.png')
     button_exit = Graphic_elements(SCREEN_W//1.395,SCREEN_H//1.4, SCREEN_W//3.5, SCREEN_H//7.8, 'image/menu/button_'+config["language"]+'/button_exit.png')
     run = True
-    
+    list_music_name[dict_argument["index_music"]].load_music()
     while run: 
+        if not list_music_name[dict_argument["index_music"]].music_play():
+            list_music_name[dict_argument["index_music"]].play_music()
         for event in pygame.event.get():
             #Услове выхода из игры
             mouse_cor = pygame.mouse.get_pos() 
@@ -1708,12 +1722,16 @@ def menu(run_game):
             if event.type == pygame.QUIT:
                 run = False
             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                
                 if button_exit.check_mouse_cor(mouse_cor):
                     run = False
+                    use_sound.play_sound()
                 if button_option.check_mouse_cor(mouse_cor):
+                    use_sound.play_sound()
                     if option() == "stop":
                         return "stop"
                 if button_play.check_mouse_cor(mouse_cor):
+                    use_sound.play_sound()
                     sprite1.image_sprite.X = dict_argument["BLOCK_SIZE"]*dict_argument["sprite_x"]
                     sprite1.image_sprite.Y = dict_argument["BLOCK_SIZE"]*dict_argument["sprite_y"]
                     dict_argument["game"] = True
@@ -1776,7 +1794,10 @@ def book():
     return True
     
 def finish_shooting():
+    with open('saves/config.json','r') as file:
+        config = json.load(file)
     game = True
+    list_music_name[dict_argument["index_music"]].stop_music()
     mouse.set_visible(False)
     criminal = Graphic_elements(Background_shooting.WIDTH //2 ,Background_shooting.HEIGHT-dict_argument["BLOCK_SIZE"]*6.64,dict_argument["BLOCK_SIZE"]*5,dict_argument["BLOCK_SIZE"]*8.3,"image/criminal/1.png")
     direction_move_criminal = None
@@ -1784,10 +1805,13 @@ def finish_shooting():
     count_change_direction_criminal = 15
     falg_motion = False
     health_criminal = 2
-    gun = Sounds("sounds/gun.wav",100)
-    coin = Sounds("sounds/coins.wav",100)
+    gun = Sounds("sounds/gun.wav",int(config["SOUNDS_VOLUME"])//100)
+    coin = Sounds("sounds/coins.wav",int(config["SOUNDS_VOLUME"])//100)
     count_gun = 0
+    list_music_name[dict_argument["index_music"]].load_music()
     while game:
+        if not list_music_name[dict_argument["index_music"]].music_play():
+            list_music_name[dict_argument["index_music"]].play_music()
         Background_shooting.show_image(screen)
         mouse_cor = mouse.get_pos()
         
@@ -1890,11 +1914,15 @@ def safe():
     presed_f_last = False
     open_safe = Graphic_elements(bg_safe.X + bg_safe.WIDTH//3,bg_safe.Y + bg_safe.HEIGHT//3,bg_safe.WIDTH//3,bg_safe.WIDTH//3//1.5,"image/safe/open_safe_book.png")
     time_count = 0
-    text_time = Font("font/pixel_font.ttf",SCREEN_W//40,"red",str(dict_argument["speed_save"]),bg_safe.X + SCREEN_W//30,bg_safe.Y + SCREEN_W//30)
+    text_time = Font("font/pixel_font.ttf",SCREEN_W//40,"red",str(dict_argument["speed_safe"]),bg_safe.X + SCREEN_W//30,bg_safe.Y + SCREEN_W//30)
     with open('saves/config.json','r') as file:
             config = json.load(file)
     list_keys = config["keys"]
+    list_music_name[dict_argument["index_music"]].stop_music()
+    list_music_name[dict_argument["index_music"]].load_music()
     while run:
+        if not list_music_name[dict_argument["index_music"]].music_play():
+            list_music_name[dict_argument["index_music"]].play_music()
         screen.fill("blue")
         move_cloud()
         bk.show_image(screen)
@@ -1919,7 +1947,7 @@ def safe():
             if comleted_safe == 0:
                 time_count += 1
                 if int(text_time.font_content[0]) <= 0:
-                    text_time.font_content = [str(dict_argument["speed_save"])]
+                    text_time.font_content = [str(dict_argument["speed_safe"])]
                     number_completed_lvl_safe = 0
                     for i in list_red_led:
                         i.path = "image/safe/red_led_off.png"
@@ -1950,6 +1978,7 @@ def safe():
                         list_red_led[number_completed_lvl_safe].image_load()
                         text_presed_f.show_text(screen)
                         if keys[list_keys[0]] and not presed_f_last:
+                            use_sound.play_sound()
                             presed_f_last = True
                             number_completed_lvl_safe += 1
                             angle_safe = 0
@@ -1981,6 +2010,7 @@ def safe():
                         elif green_zone_safe_minigame.X <= red_zone_safe_minigame.X + SCREEN_W//100:
                             direction_green_zone_safe_minigame = "R"
                     if keys[list_keys[0]] and presed_f_last == False:
+                        use_sound.play_sound()
                         presed_f_last = True
                         if Rect.colliderect(arrow_safe_minigame.RECT,green_zone_safe_minigame.RECT):
                             list_red_led[number_completed_lvl_safe].path = "image/safe/red_led_on.png"
@@ -1992,7 +2022,7 @@ def safe():
                                 number_completed_lvl_safe += 1
 
                         else:
-                            text_time.font_content = [str(dict_argument["speed_save"])]
+                            text_time.font_content = [str(dict_argument["speed_safe"])]
                             number_completed_lvl_safe = 0
                             for i in list_red_led:
                                 i.path = "image/safe/red_led_off.png"
@@ -2019,7 +2049,7 @@ def safe():
         display.update()
 
 def flappy_bird():
-
+    list_music_name[dict_argument["index_music"]].stop_music()
     flappy_bird = Graphic_elements(SCREEN_W//2-SCREEN_W//40,SCREEN_H//2,SCREEN_W//20,SCREEN_W//20//1.41,"image/flappy_bird/bird_1.png")
     border = Graphic_elements(0,0,SCREEN_W,SCREEN_H,"image/flappy_bird/border.png")
     index_img_bird = 1
@@ -2035,7 +2065,10 @@ def flappy_bird():
     angle = 0
     flappy_bird.image_load()
     text = Font("font/pixel_font.ttf",SCREEN_W//30,"black",str(number_point),SCREEN_W//2,SCREEN_H//4)
+    list_music_name[dict_argument["index_music"]].load_music()
     while run:
+        if not list_music_name[dict_argument["index_music"]].music_play():
+            list_music_name[dict_argument["index_music"]].play_music()
         
         screen.fill("blue")
         if run_move_bird:
@@ -2066,6 +2099,7 @@ def flappy_bird():
                         return number_point
         for event1 in event.get():
             if event1.type == MOUSEBUTTONDOWN:
+                use_sound.play_sound()
                 run_move_bird = True
                 count_up_bird = 10
                 angle = 0

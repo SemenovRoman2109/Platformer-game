@@ -37,6 +37,7 @@ def run_game():
 
             if event1.type == MOUSEBUTTONDOWN and event1.button == 1:
                 if rect_music_left.collidepoint(mouse_cor[0],mouse_cor[1]): 
+                    use_sound.play_sound()
                     list_music_name[dict_argument["index_music"]].stop_music()
                     dict_argument["index_music"] -= 1 
                     if dict_argument["index_music"] < 0: 
@@ -46,6 +47,7 @@ def run_game():
                     img_music_player.image_load() 
                     list_music_name[dict_argument["index_music"]].load_music()
                 elif rect_music_right.collidepoint(mouse_cor[0],mouse_cor[1]): 
+                    use_sound.play_sound()
                     list_music_name[dict_argument["index_music"]].stop_music()
                     dict_argument["index_music"] += 1 
                     if dict_argument["index_music"] > len(list_music_name)-1: 
@@ -55,6 +57,7 @@ def run_game():
                     img_music_player.image_load() 
                     list_music_name[dict_argument["index_music"]].load_music()
                 elif rect_music_pause.collidepoint(mouse_cor[0],mouse_cor[1]): 
+                    use_sound.play_sound()
                     if dict_argument["flag_pause"]: 
                         dict_argument["flag_pause"] = False 
                         img_music_player.path = "image/music.png" 
@@ -73,11 +76,39 @@ def run_game():
                             dict_argument["scene"] = "game"
                             list = ["easy","mid","hard"]
                             dict_argument["complexity"] = list[list_text_emodji.index(obj)]
+                            if dict_argument["complexity"] == "easy":
+                                dict_argument["max_count_spike"] = 200
+                                dict_argument["criminal_speed"] = SCREEN_W//350
+                                dict_argument["speed_save"] = 60
+                                dict_argument["duration_invisible_block"] = 16
+                                dict_argument["count_point_hit"] = 80
+                                dict_argument["count_fences"] = 2
+                                dict_argument["count_ammo"] = 30
+                                dict_argument["duration_door"] = 150
+                                dict_argument["count_click_on_ghost"] = 6
+                                dict_argument["max_count_motion_block"] =  12
+                                dict_argument["speed_transparency_broken_platforms"] = 30
+                                dict_argument["DOUBLE_JUMP"] = True
+                                sprite1.double_jump = True
+                            elif dict_argument["complexity"] == "hard":
+                                dict_argument["max_count_spike"] = 100
+                                dict_argument["criminal_speed"] = SCREEN_W//200
+                                dict_argument["speed_safe"] = 35
+                                dict_argument["duration_invisible_block"] = 8
+                                dict_argument["count_point_hit"] = 120
+                                dict_argument["count_fences"] = 5
+                                dict_argument["count_ammo"] = 20
+                                dict_argument["duration_door"] = 80
+                                dict_argument["count_click_on_ghost"] = 14
+                                dict_argument["max_count_motion_block"] =  5
+                                dict_argument["speed_transparency_broken_platforms"] = 15
+                                
                 if sprite1.ghost_img.check_mouse_cor(mouse_cor):
                     sprite1.count_pressing_ghost += 1
                 if dict_argument["flag_collid_npc"]:
                     for i in list_button_collid:
                         if i.check_mouse_cor_font(mouse_cor):
+                            use_sound.play_sound()
                             if list_NPC[dict_argument["index_npc_collid"]].path == "image/criminal/model.png":
                                 if i.font_content == ["Да"]:
                                     if finish_shooting():
@@ -154,6 +185,7 @@ def run_game():
                     if Rect.colliderect(sprite1.image_sprite.RECT,p.RECT) :
                         if not dict_argument["flag_colision_game_machine"]:
                             dict_argument["flag_colision_game_machine"] = True
+                            save_game()
                             flappy_bird()
 
                     else:
@@ -165,7 +197,7 @@ def run_game():
                     if not dict_argument["flag_false_criminal_selected"]:
                         dict_argument["flag_collid_npc"] = True
                         dict_argument["index_npc_collid"] = list_NPC.index(i)
-                        text_collid = Font("font/pixel_font.ttf",SCREEN_W//20,"red","Он преступник?",0,SCREEN_H-SCREEN_W//18)
+                        text_collid = Font("font/pixel_font.ttf",SCREEN_W//20,"red","Он преступник?",SCREEN_W//5,SCREEN_H-SCREEN_W//18)
                         text_collid.show_text(screen)
                         for i in list_button_collid:
                             i.show_text(screen)
