@@ -519,7 +519,7 @@ class Sprite:
         
         if index_lvl == 1:
             if index_location == 1:
-                if dict_spawn_and_finish_point["lvl2_location_2"][1][0] == Rect(0,0,0,0) and dict_spawn_and_finish_point["lvl2_location_2"][1][1] == Rect(0,0,0,0):
+                if dict_argument["list_flag_room"][0] and dict_argument["list_flag_room"][1]:
                     self.image_sprite.X = dict_spawn_and_finish_point["lvl2_location_3"][0][0]
                     self.image_sprite.start_x = dict_spawn_and_finish_point["lvl2_location_3"][0][0]
                     self.image_sprite.Y = dict_spawn_and_finish_point["lvl2_location_3"][0][1]
@@ -558,6 +558,7 @@ class Sprite:
                             if dict_argument["picture_count"] <= 0:
                                 dict_argument["picture_flag"] = False
                                 dict_spawn_and_finish_point["lvl2_location_2"][1][1] = Rect(0,0,0,0)
+                                dict_argument["list_flag_room"][1] = True
                                 break
 
                         display.update()

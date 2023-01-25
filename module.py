@@ -859,9 +859,15 @@ def function_dimming():
         if dict_argument["index_text_drimming"] == None:
             text_transition_new_lvl.font_content = dict_mision_lvl_1["location_"+str(dict_argument["index_location"])]
         else:
-            text_transition_new_lvl.font_content = dict_text_drimming[dict_argument["index_text_drimming"]]
-
-        text_transition_new_lvl.font_x = (SCREEN_W - text_transition_new_lvl.font_content[0] * text_transition_new_lvl.font_size) //2
+            text_transition_new_lvl.font_content = dict_text_drimming[dict_argument["index_text_drimming"]] 
+        for obj in text_transition_new_lvl.font_content:
+            if len(obj) < 38:
+                count_space = (38 - len(obj))//2
+                string = ""
+                for i in range(count_space):
+                    string += " "
+                text_transition_new_lvl.font_content[text_transition_new_lvl.font_content.index(obj)] = string+obj+string
+            
         text_transition_new_lvl.font_y = SCREEN_H//2-text_transition_new_lvl.font_size
         if dict_argument["screen_dimming_flag"] == "+":
             dict_argument["screen_dimming_count"] += 3
@@ -1045,7 +1051,7 @@ def shooting_lvl(screen,min_count_point,ammo_count,barriers):
     right_side_stand_for_manniquens = Graphic_elements(0,0,dict_argument["BLOCK_SIZE"],dict_argument["BLOCK_SIZE"]*2.269,"image/right_side_stand_for_mannequins.png")
     middle_stand_for_manniquens = Graphic_elements(0,0,0,right_side_stand_for_manniquens.HEIGHT//9.83,"image/middle_stand_for_mannequins.png")
     
-    list_down_stand_for_manniquens = [left_side_stand_for_manniquens,right_side_stand_for_manniquens,middle_stand_for_manniquens,[[Graphic_elements(None,0,SCREEN_W//10,SCREEN_W//10*1.693,None),"right",[]],[Graphic_elements(None,0,SCREEN_W//10,SCREEN_W//10*1.693,None),"right",[]]],[]]                 
+    list_down_stand_for_manniquens = [left_side_stand_for_manniquens,right_side_stand_for_manniquens,middle_stand_for_manniquens,[[Graphic_elements(None,0,SCREEN_W//10,SCREEN_W//10*1.693,None),"right",[],[]],[Graphic_elements(None,0,SCREEN_W//10,SCREEN_W//10*1.693,None),"right",[],[]]],[]]                 
     list_midle_stand_for_manniquens = copy.deepcopy(list_down_stand_for_manniquens)
     list_up_stand_for_manniquens = copy.deepcopy(list_down_stand_for_manniquens)
     list_stand = [
@@ -1088,7 +1094,9 @@ def shooting_lvl(screen,min_count_point,ammo_count,barriers):
             list_s[0].Y = list_y_stand[obj]
             list_s[1].Y = list_s[0].Y
             list_s[2].Y = list_s[0].Y
-
+            for i in list_s:
+                if type(i) != type([]):
+                    i.show_image(screen)
             if barriers != False:
                 if obj_barier_position_flag:
                     for obj_barier in list_s[-1]:
@@ -1112,15 +1120,12 @@ def shooting_lvl(screen,min_count_point,ammo_count,barriers):
                                         else:
                                             obj_barier_another_flag = False
                     
-                        
-                    
-                
-
-            
+   
             for i in list_s[-2]:
                 list_barier_obj = list_s[-1]
                 object = i[0]
                 direction = i[1]
+                list_hit = i[2]
                 object.Y = list_s[2].Y - object.HEIGHT//2
                 for obj_barier in list_barier_obj:
                     
@@ -1144,10 +1149,10 @@ def shooting_lvl(screen,min_count_point,ammo_count,barriers):
 
                                     
                     #Мы не можем это в цикле создать потому что разные координаты у каждой зоны
-                    i[2].append(Rect(object.X+object.WIDTH//2.578,object.Y+object.HEIGHT//16.6,object.WIDTH//3.769,object.WIDTH//3.769)) #Белая зона головы
-                    i[2].append(Rect(object.X+object.WIDTH//2.13,object.Y+object.HEIGHT//9.22,object.WIDTH//9.8,object.WIDTH//9.8)) #Красная зона головы
-                    i[2].append(Rect(object.X+object.WIDTH//9.8,object.Y+object.HEIGHT//2.184,object.WIDTH//1.195,object.WIDTH//1.195)) #Белая зона живота
-                    i[2].append(Rect(object.X+object.WIDTH//2.33,object.Y+object.HEIGHT//1.53,object.WIDTH//5.44,object.WIDTH//5.44)) #Красная зона живота
+                    i[-1].append(Rect(object.X+object.WIDTH//2.578,object.Y+object.HEIGHT//16.6,object.WIDTH//3.769,object.WIDTH//3.769)) #Белая зона головы
+                    i[-1].append(Rect(object.X+object.WIDTH//2.13,object.Y+object.HEIGHT//9.22,object.WIDTH//9.8,object.WIDTH//9.8)) #Красная зона головы
+                    i[-1].append(Rect(object.X+object.WIDTH//9.8,object.Y+object.HEIGHT//2.184,object.WIDTH//1.195,object.WIDTH//1.195)) #Белая зона живота
+                    i[-1].append(Rect(object.X+object.WIDTH//2.33,object.Y+object.HEIGHT//1.53,object.WIDTH//5.44,object.WIDTH//5.44)) #Красная зона живота
                     #
                     if list_s[-2].index(i) == 1 : 
                         while True:
@@ -1171,23 +1176,24 @@ def shooting_lvl(screen,min_count_point,ammo_count,barriers):
                     if object.start_x >= list_s[2].WIDTH - object.WIDTH:
                         i[1] = "left"
                 
+                
+                object.X = list_s[2].X + object.start_x
+                i[-1][0] = Rect(object.X+object.WIDTH//2.578,object.Y+object.HEIGHT//16.6,object.WIDTH//3.769,object.WIDTH//3.769) #Белая зона головы
+                i[-1][1] = Rect(object.X+object.WIDTH//2.13,object.Y+object.HEIGHT//9.22,object.WIDTH//9.8,object.WIDTH//9.8) #Красная зона головы
+                i[-1][2] = Rect(object.X+object.WIDTH//9.8,object.Y+object.HEIGHT//2.184,object.WIDTH//1.195,object.WIDTH//1.195) #Белая зона живота
+                i[-1][3] = Rect(object.X+object.WIDTH//2.33,object.Y+object.HEIGHT//1.53,object.WIDTH//5.44,object.WIDTH//5.44) #Красная зона живота
                 for obj_barier in list_barier_obj:
                     obj_barier.X = list_s[2].X + obj_barier.start_x
-                object.X = list_s[2].X + object.start_x
-                i[2][0] = Rect(object.X+object.WIDTH//2.578,object.Y+object.HEIGHT//16.6,object.WIDTH//3.769,object.WIDTH//3.769) #Белая зона головы
-                i[2][1] = Rect(object.X+object.WIDTH//2.13,object.Y+object.HEIGHT//9.22,object.WIDTH//9.8,object.WIDTH//9.8) #Красная зона головы
-                i[2][2] = Rect(object.X+object.WIDTH//9.8,object.Y+object.HEIGHT//2.184,object.WIDTH//1.195,object.WIDTH//1.195) #Белая зона живота
-                i[2][3] = Rect(object.X+object.WIDTH//2.33,object.Y+object.HEIGHT//1.53,object.WIDTH//5.44,object.WIDTH//5.44) #Красная зона живота
+                object.show_image(screen)
+                for hit in list_hit:
+                    hit.X = object.X + hit.start_x
+                    hit.Y = object.Y + hit.start_y
+                    hit.show_image(screen)
             
-            for i in list_s:
-                if type(i) != type([]):
-                    i.show_image(screen)
-                
-            for object in list_s[-2]:
-                object[0].show_image(screen)
 
             for object in list_s[-1]:
                 object.show_image(screen)
+            
             
         obj_barier_position_flag = False
         
@@ -1235,8 +1241,8 @@ def shooting_lvl(screen,min_count_point,ammo_count,barriers):
                                 if not flag_barier:
                                     if obj[0].check_mouse_cor((SCREEN_W//2,SCREEN_H//2)):
                                         factor_zone = 1
-                                        for i in obj[2]:
-                                            if obj[2].index(i) % 2:
+                                        for i in obj[-1]:
+                                            if obj[-1].index(i) % 2:
                                                 if SCREEN_W//2 > i.x and SCREEN_W//2 < i.x + i.width and SCREEN_H//2 > i.y and SCREEN_H//2 < i.y + i.height:
                                                     factor_zone = 3
                                                     break
@@ -1247,6 +1253,7 @@ def shooting_lvl(screen,min_count_point,ammo_count,barriers):
                                         count_point += factor_zone * int(obj[0].NAME//(SCREEN_W//400))
                                         statstic.font_content = [str(count_point) +"/" + str(min_count_point)]
                                         print("Ты попал! На тебе", factor_zone * int(obj[0].NAME//(SCREEN_W//400)), "монет!")
+                                        obj[2].append(Graphic_elements(SCREEN_W//2-obj[0].X-obj[0].WIDTH//11,SCREEN_H//2-obj[0].Y-obj[0].WIDTH//11,obj[0].WIDTH//5.5,obj[0].WIDTH//5.5,"image/hit_"+str(random.randint(1,5))+".png"))
                                         break
         if count_gun > 0:
             count_gun -= 1
@@ -1419,7 +1426,7 @@ def menu(run_game):
             [Graphic_elements(SCREEN_W//3.2,SCREEN_H//7+SCREEN_W//18,SCREEN_W//38,SCREEN_W//38,"image/menu/square.png"),Font("font/pixel_font.ttf",SCREEN_W//38,'black','English',SCREEN_W//2.8,SCREEN_H//7+SCREEN_W//18)],
             [Graphic_elements(SCREEN_W//3.2,SCREEN_H//7+SCREEN_W//20*2,SCREEN_W//38,SCREEN_W//38,"image/menu/square.png"),Font("font/pixel_font.ttf",SCREEN_W//38,'black','Українська',SCREEN_W//2.8,SCREEN_H//7+SCREEN_W//20*2)]
         ]
-        
+        flag_delete_saves = False
         list_control = []
         list_text_control = dict_languages_settings["5"][config["language"]]
         list_keys = copy.deepcopy(config["keys"])
@@ -1567,15 +1574,17 @@ def menu(run_game):
 
                             }
                             for obj in config.keys():
-                                print(settings[obj],config[obj])
                                 if settings[obj] != config[obj]:
                                     run_option = False
                                     with open('saves/config.json','w') as file:
                                         json.dump(settings,file,indent=4,ensure_ascii=True)
                                     return "stop"
+                            
                             run_option = False
                             with open('saves/config.json','w') as file:
                                 json.dump(settings,file,indent=4,ensure_ascii=True)
+                            if flag_delete_saves:
+                                return "stop"
                         elif button_video.RECT.collidepoint(mouse_cor[0],mouse_cor[1]):
                             flag_option = "video"
                         elif button_audio.RECT.collidepoint(mouse_cor[0],mouse_cor[1]):
@@ -1590,7 +1599,7 @@ def menu(run_game):
                             button_delete.image_load()
                             
                             
-
+                            flag_delete_saves = True
                             with open('saves/saves.json','w') as file:                                
                                 json.dump({"defolt":"true"},file,indent=4,ensure_ascii=True)
                             
@@ -1703,9 +1712,12 @@ def menu(run_game):
                     button_language.image_load() 
             pygame.display.flip()
 
-  
+    def achievement():
+        pass
     bg = Graphic_elements(0, 0, SCREEN_W, SCREEN_H, 'image/menu/bg.png')
-    
+    task_board =  Graphic_elements(SCREEN_W//3,SCREEN_H//3,SCREEN_W//3,SCREEN_H//3,"image/menu/task_board.png")
+    task_board.image_load()
+    task_board.IMG = transform.rotate(task_board.IMG,10)
     name_menu = Graphic_elements(SCREEN_W//20,SCREEN_H//40, SCREEN_W//1.7, SCREEN_H//7, 'image/menu/name.png')
     button_play = Graphic_elements(SCREEN_W//1.395,SCREEN_H//6.1, SCREEN_W//3.5, SCREEN_H//7.8, 'image/menu/button_'+config["language"]+'/button_play.png')
     button_option = Graphic_elements(SCREEN_W//1.395,SCREEN_H//2 - SCREEN_H//15.6, SCREEN_W//3.5, SCREEN_H//7.8, 'image/menu/button_'+config["language"]+'/button_option.png')
@@ -1722,7 +1734,8 @@ def menu(run_game):
             if event.type == pygame.QUIT:
                 run = False
             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-                
+                if task_board.check_mouse_cor(mouse_cor):
+                    achievement()
                 if button_exit.check_mouse_cor(mouse_cor):
                     run = False
                     use_sound.play_sound()
@@ -1749,6 +1762,7 @@ def menu(run_game):
         button_play.show_image(win)
         button_option.show_image(win)
         button_exit.show_image(win)
+        task_board.show_image(win)
         
         
         if button_play.check_mouse_cor(mouse_cor):
@@ -1909,7 +1923,7 @@ def safe():
     for i in list_angle_safe:
         if i % 2:
             list_angle_safe[list_angle_safe.index(i)] += 1
-    text_presed_f = Font("font/pixel_font.ttf",SCREEN_W//40,"black",dict_laungues_save[config["language"]],big_part_minigame_safe.X - SCREEN_W//20,big_part_minigame_safe.Y + SCREEN_W//5)
+    text_presed_f = Font("font/pixel_font.ttf",SCREEN_W//40,"black",dict_laungues_save[config["language"]][0],big_part_minigame_safe.X - SCREEN_W//20,big_part_minigame_safe.Y + SCREEN_W//5)
     run = True
     presed_f_last = False
     open_safe = Graphic_elements(bg_safe.X + bg_safe.WIDTH//3,bg_safe.Y + bg_safe.HEIGHT//3,bg_safe.WIDTH//3,bg_safe.WIDTH//3//1.5,"image/safe/open_safe_book.png")
@@ -2029,7 +2043,7 @@ def safe():
                                 i.image_load()
                     if not keys[list_keys[0]]:
                         presed_f_last = False
-                    text_presed_f.font_content = [dict_laungues_save[config["language"]],"  чтоб остановить"]
+                    text_presed_f.font_content = dict_laungues_save[config["language"]]
                     red_zone_safe_minigame.show_image(screen)
                     green_zone_safe_minigame.show_image(screen)
                     arrow_safe_minigame.show_image(screen)
@@ -2038,6 +2052,7 @@ def safe():
         if dict_argument["flag_book"]:
             if not book():
                 dict_spawn_and_finish_point["lvl2_location_2"][1][0] = Rect(0,0,0,0)
+                dict_argument["list_flag_room"][0] = True
                 run = False
         for event1 in event.get():
             if event1.type == MOUSEBUTTONDOWN:
@@ -2064,9 +2079,12 @@ def flappy_bird():
     change_not_run_move_bird = 5
     angle = 0
     flappy_bird.image_load()
+    text_record = Font("font/pixel_font.ttf",SCREEN_W//30,"yellow",str(dict_argument["record_flappy_bird"]),SCREEN_W//2,SCREEN_H//6)
     text = Font("font/pixel_font.ttf",SCREEN_W//30,"black",str(number_point),SCREEN_W//2,SCREEN_H//4)
     list_music_name[dict_argument["index_music"]].load_music()
     while run:
+        if number_point > int(text_record.font_content[0]):
+            text_record.font_content[0] = str(number_point)
         if not list_music_name[dict_argument["index_music"]].music_play():
             list_music_name[dict_argument["index_music"]].play_music()
         
@@ -2096,7 +2114,10 @@ def flappy_bird():
                         list_pipe.pop(list_pipe.index(l))
                         break
                     if Rect.colliderect(obj.RECT,flappy_bird.RECT):
+                        if dict_argument["record_flappy_bird"] < number_point:
+                            dict_argument["record_flappy_bird"] = number_point
                         return number_point
+                        
         for event1 in event.get():
             if event1.type == MOUSEBUTTONDOWN:
                 use_sound.play_sound()
@@ -2149,8 +2170,11 @@ def flappy_bird():
         change_not_run_move_bird -= 1
         
         if flappy_bird.Y+ flappy_bird.HEIGHT > SCREEN_H:
+            if dict_argument["record_flappy_bird"] < number_point:
+                dict_argument["record_flappy_bird"] = number_point
             return number_point
         text.show_text(screen)
+        text_record.show_text(screen)
         clock.tick(30)
         border.show_image(screen)
         display.update()

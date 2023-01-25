@@ -1,22 +1,22 @@
 {
     "SCREEN_WIDTH": "1280",
     "SCREEN_HEIGHT": "720",
-    "SOUNDS_VOLUME": "100",
+    "SOUNDS_VOLUME": "20",
     "FULLSCREEN": false,
-    "MUSIC_VOLUME": "100",
+    "MUSIC_VOLUME": "10",
     "list_text_button_control": [
         "f",
-        "w",
-        "s",
-        "a",
-        "d"
+        "up",
+        "down",
+        "left",
+        "right"
     ],
     "keys": [
         102,
-        119,
-        115,
-        97,
-        100
+        1073741906,
+        1073741905,
+        1073741904,
+        1073741903
     ],
-    "language": "ua"
+    "language": "uk"
 }

@@ -20,12 +20,10 @@ MUSIC_VOLUME = int(config["MUSIC_VOLUME"])
 SOUNDS_VOLUME = int(config["SOUNDS_VOLUME"])
 
 #Индексы уровней
-index_lvl = 1
-index_location = 2
-if index_lvl == 0:
-    BLOCK_SIZE = round(SCREEN_W/20)
-if index_lvl == 1:
-    BLOCK_SIZE = round(SCREEN_W/30)
+index_lvl = 0
+index_location = 3
+
+
 FPS = 30
 
 
@@ -113,14 +111,17 @@ dict_spawn_and_finish_point = {
 }
 
 
-with open('saves/config.json','r') as file:
-    config = json.load(file)
 with open('saves/saves.json','r') as file:
     dict_argument = json.load(file)
 
-
+if dict_argument["defolt"] != "true":
+    if dict_argument["index_lvl"] == 0:
+        BLOCK_SIZE = round(SCREEN_W/20)
+    if dict_argument["index_lvl"] == 1:
+        BLOCK_SIZE = round(SCREEN_W/30)
+else:
+    BLOCK_SIZE = round(SCREEN_W/20)
 if dict_argument["defolt"] == "true":
-    print(dict_argument["defolt"])
     #Словарь аргументов
     dict_argument = {
         "defolt":"False",
@@ -160,6 +161,8 @@ if dict_argument["defolt"] == "true":
         "sprite_y":(dict_spawn_and_finish_point["lvl"+str(index_lvl+1)+"_location_"+str(index_location+1)][0][1])//BLOCK_SIZE,
         "count_change_bg":0,
         "complexity":None,
+        "list_flag_room":[False,False],
+        "record_flappy_bird":0,
         # настройки на средней сложности
         "DOUBLE_JUMP":None,
         "max_count_spike":150,
@@ -196,9 +199,9 @@ dict_list_border = {
     "list_flag":list_flag
 }
 dict_languages_mission = {
-    "1":{"ua":["Ви приїхали на місце злочину"," знайдіть зачіпки ",""," Натисніть кнопку [F] "," щоб з'явилися нові платформи "],"uk":["You have arrived at the scene of the crime","find the clues","","Press the [F] button ","for new platforms to appear"]},
+    "1":{"ua":["Ви приїхали на місце злочину"," знайдіть зачіпки ",""," Натисніть кнопку [F] "," щоб з'явилися нові платформи "],"uk":["You have arrived", "at the scene of the crime","find the clues","","Press the [F] button ","for new platforms to appear"]},
     "2":{"ua":["Ви приїхали в будинок до вбивці", "огляньте всі кімнати"],"uk":["You have arrived at the killer's houke", "look around all the rooms"]},
-    "3":{"ua":["Ви приїхали на рейс до вбивці", "Дізнайтеся хто вбивця", "Вбивця міг змінити свою зовнішність"],"uk":["You're on a flight to see a killer","Find out who the killer is","The killer could have changed his appearance"]}
+    "3":{"ua":["Ви приїхали на рейс до вбивці", "Дізнайтеся хто вбивця", "Вбивця міг змінити свою зовнішність"],"uk":["You're on a flight to see a killer","Find out who the killer is","The killer could have", "changed his appearance"]}
 }
 
 dict_mision_lvl_1 = {
@@ -208,16 +211,16 @@ dict_mision_lvl_1 = {
 }
 
 dict_languages_drimming = {
-    "1":{"ua":["Ви не змогли утримати свою душу", " повертайтеся на початок рівня "],"uk":["     You couldn't hold your soul     ", "go back to the beginning of the level"]},
-    "2":{'ua':["Преступнику вдалося скрити","        Ви програли        "],'uk':["The killer managed to escape", "          You lost          "]},
-    "3":{'ua':["Вам вдалося затримати злочинця", "        Ви пройшли гру        "],"uk":["You managed to apprehend the killer", "       You completed the game      "]},
-    "4":{"ua":["   Ви правильно вибрали злочинця   ","І він почав тікати підстреліть його"],"uk":["     You chose the right criminal    ","And he started to run away, shoot him"]},
-    "5":{'ua':["    Ви вибрали неправильно   ", "У тебе залишилася одна спроба", "           до рейсу          "],"uk":["   You chose wrong   ","You have one try left","   until the flight  "]},
-    "6":{'ua':["Ви не пройшли академію", "   спробуйте ще раз   "],"uk":["You didn't pass the academy", "         try again         "]},
-    "7":{"ua":["Ви померли під час розкриття справи","          спробуйте ще раз         "],"uk":["You died while solving the case", "           try again           "]},
-    "8":{'ua':["Ви прибули до поліцейської академії", "         Пройдіть навчання         ", "     щоб переступити до роботи     "],'uk':["You have arrived at the police academy", "   Get your training to go to work    "]},
-    "9":{"ua":["Ви практично закінчили", "навчання в академії"," залишилося перевірити вашу влучність "],"uk":["You are almost done","training at the academy"," to test your marksmanship "]},
-    "10":{'ua':["Ви пройшли перший рівень стрілянини","наступний буде складніше"],"uk":["You have passed the first shooting level", "     the next one will be harder     "]},
+    "1":{"ua":["Ви не змогли утримати свою душу","повертайтеся на початок рівня"],"uk":["You couldn't hold your soul", "go back to the beginning of the level"]},
+    "2":{'ua':["Преступнику вдалося скрити","Ви програли"],'uk':["The killer managed to escape", "You lost"]},
+    "3":{'ua':["Вам вдалося затримати злочинця", "Ви пройшли гру"],"uk":["You managed to apprehend the killer", "You completed the game"]},
+    "4":{"ua":["Ви правильно вибрали злочинця","І він почав тікати підстреліть його"],"uk":["You chose the right criminal","And he started to run away, shoot him"]},
+    "5":{'ua':["Ви вибрали неправильно", "У тебе залишилася одна спроба", "до рейсу"],"uk":["You chose wrong","You have one try left","until the flight"]},
+    "6":{'ua':["Ви не пройшли академію", "спробуйте ще раз"],"uk":["You didn't pass the academy", "try again"]},
+    "7":{"ua":["Ви померли під час розкриття справи","спробуйте ще раз"],"uk":["You died while solving the case", "try again"]},
+    "8":{'ua':["Ви прибули до поліцейської академії", "Пройдіть навчання", "щоб переступити до роботи"],'uk':["You have arrived", "at the police academy", "Get your training to go to work"]},
+    "9":{"ua":["Ви практично закінчили", "навчання в академії"," залишилося перевірити вашу влучність "],"uk":["You are almost done","training at the academy","to test your marksmanship"]},
+    "10":{'ua':["Ви пройшли перший рівень стрілянини","наступний буде складніше"],"uk":["You have passed", "the first shooting level", "the next one will be harder"]},
     "11":{'ua':["У тебе не вийшло пройти рівень ","Спробуй знову"],"uk":["You failed the level ","Try again"]}
 }
 
@@ -252,6 +255,7 @@ dict_languages_book = {
     "1":{"ua":"Сьогодні я зроблю;;свою останню справу;;після якої я влечу;;до себе на батьківщину;;Нарешті я побачу;;свою дочку;;у неї через 3 міцяться;;день народженя. ","uk":"Today I will do;;my last thing;;after which I drag;;to my homeland;;Finally I will see;;my daughter;;her birthday will change in 3."},
     "2":{"ua":"Вона напевно скучила;;за мною.","uk":"She mukt have;;missed me."},
 }
+
 dict_laungues_save = {
     'ua':["Натисніть кнопку ["+str(config["list_text_button_control"][0])+"]"," щоб зупинити"],
     "uk":["Press button ["+str(config["list_text_button_control"][0])+"]"," to stop"]
