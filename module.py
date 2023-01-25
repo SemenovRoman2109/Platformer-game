@@ -1066,8 +1066,8 @@ def shooting_lvl(screen,min_count_point,ammo_count,barriers):
     
 
     count_gun = 0
-    gun = Sounds("sounds/gun.wav",int(config["SOUNDS_VOLUME"])//100)
-    coin = Sounds("sounds/coins.wav",int(config["SOUNDS_VOLUME"])//100)
+    gun = Sounds("sounds/gun.wav",int(config["SOUNDS_VOLUME"])/100)
+    coin = Sounds("sounds/coins.wav",int(config["SOUNDS_VOLUME"])/100)
     statstic = Font("font/pixel_font.ttf",SCREEN_W//30,"black",str(count_point) +"/" + str(min_count_point),SCREEN_W-SCREEN_W//7,0,1,True)
     ammo_statistic = Font('font/pixel_font.ttf',SCREEN_W//30,"black",str(ammo_count),0 + SCREEN_W//15,SCREEN_W//100,1,True)
     list_music_name[dict_argument["index_music"]].load_music()
@@ -1819,8 +1819,8 @@ def finish_shooting():
     count_change_direction_criminal = 15
     falg_motion = False
     health_criminal = 2
-    gun = Sounds("sounds/gun.wav",int(config["SOUNDS_VOLUME"])//100)
-    coin = Sounds("sounds/coins.wav",int(config["SOUNDS_VOLUME"])//100)
+    gun = Sounds("sounds/gun.wav",int(config["SOUNDS_VOLUME"])/100)
+    coin = Sounds("sounds/coins.wav",int(config["SOUNDS_VOLUME"])/100)
     count_gun = 0
     list_music_name[dict_argument["index_music"]].load_music()
     while game:

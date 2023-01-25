@@ -70,7 +70,7 @@ list_music_name = [
     Music("sounds/bg_6.wav",int(config["MUSIC_VOLUME"])/1000),
     Music("sounds/bg_7.wav",int(config["MUSIC_VOLUME"])/1000)
     ] 
-use_sound = Sounds("sounds/use.wav",int(config["SOUNDS_VOLUME"])//100)
+use_sound = Sounds("sounds/use.wav",int(config["SOUNDS_VOLUME"])/100)
 #Создаем список графических елементов шипов
 list_spikes = []
 #Создаем словарь графических елементов
