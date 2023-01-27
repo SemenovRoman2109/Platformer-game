@@ -1064,7 +1064,9 @@ def shooting_lvl(screen,min_count_point,ammo_count,barriers):
             for i in range(random.randint(1,barriers)):
                 obj[-1].append(copy.deepcopy(random.choice(list_variations_barriers)))
     
-
+    count_shoot_barrier = 0
+    count_shoot_head = 0
+    count_slip = ammo_count
     count_gun = 0
     gun = Sounds("sounds/gun.wav",int(config["SOUNDS_VOLUME"])/100)
     coin = Sounds("sounds/coins.wav",int(config["SOUNDS_VOLUME"])/100)
@@ -1235,6 +1237,7 @@ def shooting_lvl(screen,min_count_point,ammo_count,barriers):
                             
                                 if SCREEN_W//2 > rect_barier.x and SCREEN_W//2 < rect_barier.x + rect_barier.width and SCREEN_H//2 > rect_barier.y and SCREEN_H//2 < rect_barier.y + rect_barier.height:
                                     flag_barier = True
+                                    count_shoot_barrier += 1
                                     break
                                 
                             for obj in l_s[-2]:
@@ -1245,14 +1248,21 @@ def shooting_lvl(screen,min_count_point,ammo_count,barriers):
                                             if obj[-1].index(i) % 2:
                                                 if SCREEN_W//2 > i.x and SCREEN_W//2 < i.x + i.width and SCREEN_H//2 > i.y and SCREEN_H//2 < i.y + i.height:
                                                     factor_zone = 3
+                                                    if obj[-1].index(i) in [0,1]:
+                                                        count_shoot_head += 1
+                                                        factor_zone = 6
                                                     break
                                             else:
                                                 if SCREEN_W//2 > i.x and SCREEN_W//2 < i.x + i.width and SCREEN_H//2 > i.y and SCREEN_H//2 < i.y + i.height:
                                                     factor_zone = 2
+                                                    if obj[-1].index(i) in [0,1]:
+                                                        count_shoot_head += 1
+                                                        factor_zone = 4
                                         coin.play_sound()
                                         count_point += factor_zone * int(obj[0].NAME//(SCREEN_W//400))
                                         statstic.font_content = [str(count_point) +"/" + str(min_count_point)]
                                         print("Ты попал! На тебе", factor_zone * int(obj[0].NAME//(SCREEN_W//400)), "монет!")
+                                        count_slip -= 1
                                         obj[2].append(Graphic_elements(SCREEN_W//2-obj[0].X-obj[0].WIDTH//11,SCREEN_H//2-obj[0].Y-obj[0].WIDTH//11,obj[0].WIDTH//5.5,obj[0].WIDTH//5.5,"image/hit_"+str(random.randint(1,5))+".png"))
                                         break
         if count_gun > 0:
@@ -1268,14 +1278,25 @@ def shooting_lvl(screen,min_count_point,ammo_count,barriers):
         ammo_statistic.show_text(screen)
         statstic.show_text(screen)
         clock.tick(FPS*2)
+        if count_shoot_barrier >= 5:
+            if not dict_argument["dict_achievement_boling"]["barrier"]:
+                dict_argument["dict_achievement_boling"]["barrier"] = True
+                dict_argument["list_flag_achievement"].append("barrier")
+                
+        if count_shoot_head >= 5:
+            if not dict_argument["dict_achievement_boling"]["sniper"]:
+                dict_argument["dict_achievement_boling"]["sniper"] = True
+                dict_argument["list_flag_achievement"].append("sniper")
+                
         if ammo_count <= 0:
             mouse.set_visible(True)
             save_game()
-            return count_point
+            
+            return[ count_point,count_slip]
         function_dimming()
         display.update()
     mouse.set_visible(True)
-
+puzzle_time = 0
 list_part_puzzle = []
 background = Graphic_elements(SCREEN_W//6.6,SCREEN_H//4,SCREEN_W//1.5,SCREEN_H//2,"image/puzzle/background.png")
 for i in range(6):
@@ -1293,7 +1314,7 @@ for i in range(6):
     list_part_puzzle.append(element)
 def puzzle(event):
     
-    
+    puzzle_time += 1
     background.show_image(screen)
     
 
@@ -1357,6 +1378,11 @@ def puzzle(event):
             dict_argument["count_final_puzzle"] -= 1
         if dict_argument["count_final_puzzle"] <= 0:
             dict_argument["flag_puzzle_location"] = False
+            if puzzle_time <= 30 * 5:
+                if not dict_argument["dict_achievement_boling"]["puzzle_lower"]:
+                    dict_argument["dict_achievement_boling"]["puzzle_lower"] = True
+                    dict_argument["list_flag_achievement"].append("puzzle_lower")
+                    
             
 def slider(sound_power, flag_mouse_volume_sound, rect_volume_sound, mouse_volume_sound, mouse_cor, text, win, divider = 1 , plus = 0):
     sound_power.show_text(win)
@@ -1713,7 +1739,83 @@ def menu(run_game):
             pygame.display.flip()
 
     def achievement():
-        pass
+        rgb_platinum = [random.randint(0,255),random.randint(0,255),random.randint(0,255)]
+        bg_achievement = Graphic_elements(0, 0, SCREEN_W, SCREEN_H, 'image/achivement/bg_'+config["language"]+'.png')
+        list_achievement = []
+        for key_achievemen in list(dict_argument["dict_achievement_boling"].keys()):
+            list_obj = [Graphic_elements(SCREEN_W//2-SCREEN_W//3.78,SCREEN_H//11,SCREEN_W//1.89,SCREEN_H//8,"image/achivement/slot.png"),
+                        Graphic_elements(0,0,SCREEN_W//18,SCREEN_W//18,"image/achivement/"+key_achievemen+"_bw.png"),
+                        Font("font/pixel_font.ttf",SCREEN_W//50,"white",dict_laungues_achievement[key_achievemen][0][config["language"]],0,0),
+                        Font("font/pixel_font.ttf",SCREEN_W//75,(219, 219, 219),dict_laungues_achievement[key_achievemen][1][config["language"]],0,0,index=2,bold=False)
+            ]
+            if dict_argument["dict_achievement_boling"][key_achievemen]:
+                list_obj[1].path = "image/achivement/"+key_achievemen+"_rgb.png"
+                list_achievement.insert(0,list_obj)
+            else:
+                list_achievement.append(list_obj)
+        for obj in list_achievement:
+            obj[0].Y += (SCREEN_H//7) * list_achievement.index(obj)
+            obj[1].X = obj[0].X + SCREEN_W//120
+            obj[1].Y = obj[0].Y + SCREEN_W//120
+            obj[2].font_x = obj[0].X + SCREEN_W//15
+            obj[2].font_y = obj[0].Y + SCREEN_W//120
+            obj[2].start_y = obj[2].font_y
+            obj[3].font_x = obj[0].X + SCREEN_W//15
+            obj[3].font_y = obj[0].Y + SCREEN_W//30
+            obj[3].start_y = obj[3].font_y
+        run = True
+        while run:
+            clock.tick(FPS)
+            win.fill((69, 69, 69))
+            for ach_img in list_achievement:
+                if ach_img[1].path.split("/")[-1].split("_rgb")[0] == "platinum":
+                    for i in range(3):
+                        rgb_platinum[i] += random.randint(-20,20)*2
+                        if rgb_platinum[i] > 255:
+                            rgb_platinum[i] = 255
+                        if rgb_platinum[i] < 0:
+                            rgb_platinum[i] = 0
+                        
+                    ach_img[2].font_color = (rgb_platinum[0],rgb_platinum[1],rgb_platinum[2])
+                if ach_img[0].Y + ach_img[0].HEIGHT > 0:
+                    if ach_img[0].Y < SCREEN_H:
+                        ach_img[0].show_image(win)
+                        ach_img[1].show_image(win)
+                        ach_img[2].show_text(win)
+                        ach_img[3].show_text(win)
+            bg_achievement.show_image(win)
+            for event in pygame.event.get():
+                #Услове выхода из игры
+                if event.type == pygame.MOUSEWHEEL:
+                    if event.y < 0:
+                        if list_achievement[-1][0].Y >= SCREEN_H - SCREEN_H//7:
+                            for obj in list_achievement:
+                                obj[0].Y -= SCREEN_W//20
+                                obj[1].Y -= SCREEN_W//20
+                                obj[3].font_y = obj[0].Y + SCREEN_W//30
+                                obj[3].start_y = obj[3].font_y
+                                obj[2].font_y = obj[0].Y + SCREEN_W//120
+                                obj[2].start_y = obj[2].font_y
+                    else:   
+                        if list_achievement[0][0].Y <= list_achievement[0][0].start_y:
+                            for obj in list_achievement:
+                                obj[0].Y += SCREEN_W//20
+                                obj[1].Y += SCREEN_W//20
+                                obj[3].font_y = obj[0].Y + SCREEN_W//30
+                                obj[3].start_y = obj[3].font_y
+                                obj[2].font_y = obj[0].Y + SCREEN_W//120
+                                obj[2].start_y = obj[2].font_y
+                mouse_cor = pygame.mouse.get_pos() 
+
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                    
+                    obj_back = pygame.Rect(SCREEN_W//91.4, SCREEN_H//130, SCREEN_W//10.24, SCREEN_H//20.571)
+                    if obj_back.collidepoint(mouse_cor[0],mouse_cor[1]) :
+                        use_sound.play_sound()
+                        run = False
+            display.update()
     bg = Graphic_elements(0, 0, SCREEN_W, SCREEN_H, 'image/menu/bg.png')
     task_board =  Graphic_elements(SCREEN_W//3,SCREEN_H//3,SCREEN_W//3,SCREEN_H//3,"image/menu/task_board.png")
     task_board.image_load()
@@ -1763,7 +1865,7 @@ def menu(run_game):
         button_option.show_image(win)
         button_exit.show_image(win)
         task_board.show_image(win)
-        
+        get_achievement()
         
         if button_play.check_mouse_cor(mouse_cor):
             button_play.X = button_play.start_x
@@ -1813,7 +1915,9 @@ def finish_shooting():
     game = True
     list_music_name[dict_argument["index_music"]].stop_music()
     mouse.set_visible(False)
-    criminal = Graphic_elements(Background_shooting.WIDTH //2 ,Background_shooting.HEIGHT-dict_argument["BLOCK_SIZE"]*6.64,dict_argument["BLOCK_SIZE"]*5,dict_argument["BLOCK_SIZE"]*8.3,"image/criminal/1.png")
+    Background_finish_shooting = Graphic_elements(-SCREEN_W//2,-SCREEN_H,SCREEN_W*2,SCREEN_H*2,"image/finish_shooting_bg.png")
+    Background_finish_shooting.image_load()
+    criminal = Graphic_elements(Background_finish_shooting.WIDTH //2 ,Background_finish_shooting.HEIGHT-dict_argument["BLOCK_SIZE"]*6.64,dict_argument["BLOCK_SIZE"]*5,dict_argument["BLOCK_SIZE"]*8.3,"image/criminal/1.png")
     direction_move_criminal = None
     count_move_criminal = 0 
     count_change_direction_criminal = 15
@@ -1826,11 +1930,11 @@ def finish_shooting():
     while game:
         if not list_music_name[dict_argument["index_music"]].music_play():
             list_music_name[dict_argument["index_music"]].play_music()
-        Background_shooting.show_image(screen)
+        Background_finish_shooting.show_image(screen)
         mouse_cor = mouse.get_pos()
         
-        criminal.X = Background_shooting.X + criminal.start_x
-        criminal.Y = Background_shooting.Y + criminal.start_y
+        criminal.X = Background_finish_shooting.X + criminal.start_x
+        criminal.Y = Background_finish_shooting.Y + criminal.start_y
         
         criminal.start_y -= dict_argument["criminal_speed"]
         criminal.WIDTH -= SCREEN_W/(1706*1.5)
@@ -1839,9 +1943,11 @@ def finish_shooting():
             criminal.image_load()
         if direction_move_criminal != None and count_move_criminal > 0:
             if direction_move_criminal == "R":
-                criminal.start_x += SCREEN_W//200
+                if criminal.X < Background_finish_shooting.X + Background_finish_shooting.WIDTH - SCREEN_W//1.6:
+                    criminal.start_x += SCREEN_W//200
             else:
-                criminal.start_x -= SCREEN_W//200
+                if criminal.X > Background_finish_shooting.X + SCREEN_W//1.6:
+                    criminal.start_x -= SCREEN_W//200
             count_move_criminal -= 1
         for event1 in event.get(): # Получаем значение события из "списка событий" 
             
@@ -1849,17 +1955,17 @@ def finish_shooting():
                 pygame.quit()
             if event1.type == MOUSEMOTION:
                 
-                Background_shooting.X += int(event1.rel[0]) * -1
-                Background_shooting.Y += int(event1.rel[1]) * -1
+                Background_finish_shooting.X += int(event1.rel[0]) * -1
+                Background_finish_shooting.Y += int(event1.rel[1]) * -1
                 falg_motion = True
-                if Background_shooting.X > 0:
-                    Background_shooting.X = 0
-                if Background_shooting.Y > 0:
-                    Background_shooting.Y = 0
-                if Background_shooting.X < SCREEN_W - Background_shooting.WIDTH:
-                    Background_shooting.X = SCREEN_W - Background_shooting.WIDTH
-                if Background_shooting.Y < SCREEN_H - Background_shooting.HEIGHT:
-                    Background_shooting.Y = SCREEN_H - Background_shooting.HEIGHT
+                if Background_finish_shooting.X > 0:
+                    Background_finish_shooting.X = 0
+                if Background_finish_shooting.Y > 0:
+                    Background_finish_shooting.Y = 0
+                if Background_finish_shooting.X < SCREEN_W - Background_finish_shooting.WIDTH:
+                    Background_finish_shooting.X = SCREEN_W - Background_finish_shooting.WIDTH
+                if Background_finish_shooting.Y < SCREEN_H - Background_finish_shooting.HEIGHT:
+                    Background_finish_shooting.Y = SCREEN_H - Background_finish_shooting.HEIGHT
             if event1.type == MOUSEBUTTONDOWN and event1.button == 1:
                 if count_gun == 0:
                     count_gun = 60
@@ -1867,6 +1973,13 @@ def finish_shooting():
                     if criminal.check_mouse_cor((SCREEN_W//2,SCREEN_H//2)):
                         coin.play_sound()
                         health_criminal -= 1
+                        head_criminal = Graphic_elements(criminal.X,criminal.Y,criminal.WIDTH,criminal.HEIGHT//2,None)
+                        if criminal.check_mouse_cor((SCREEN_W//2,SCREEN_H//2)):
+                            if not dict_argument["dict_achievement_boling"]["criminal_hit"]:
+                                dict_argument["dict_achievement_boling"]["criminal_hit"] = True
+                                dict_argument["list_flag_achievement"].append("criminal_hit")
+                                
+
                 
 
         if mouse_cor[0]<= SCREEN_W//4 or mouse_cor[0]>= SCREEN_W - SCREEN_W//4 or mouse_cor[1]<= SCREEN_H//4 or mouse_cor[1]>= SCREEN_H - SCREEN_H//4:
@@ -1878,10 +1991,10 @@ def finish_shooting():
         if count_change_direction_criminal >= 20:
 
             count_change_direction_criminal = 0 
-            direction_move_criminal = random.choice(["L","L","L","R","R","R",None])
+            direction_move_criminal = random.choice(["R","R","R","L","L","L",None])
             count_move_criminal = 60 
             
-        if criminal.start_y < -criminal.HEIGHT:
+        if criminal.Y < Background_finish_shooting.Y + SCREEN_H//1.5:
 
             mouse.set_visible(True)
             return False
@@ -1914,6 +2027,7 @@ def safe():
     direction_green_zone_safe_minigame = "R"
     flag_safe = False
     number_completed_lvl_safe = 0
+    
     comleted_safe = 0 
     list_red_led = []
     for i in range(5):
@@ -1957,11 +2071,21 @@ def safe():
             if comleted_safe == 1:
                 flag_safe = False
                 dict_argument["flag_book"] = True
+                if dict_argument["speed_safe"] - int(text_time.font_content) <= 25:
+                    if not dict_argument["dict_achievement_boling"]["cracker"]:
+                        dict_argument["dict_achievement_boling"]["cracker"] = True
+                        dict_argument["list_flag_achievement"].append("cracker")
+                        
 
             if comleted_safe == 0:
                 time_count += 1
                 if int(text_time.font_content[0]) <= 0:
                     text_time.font_content = [str(dict_argument["speed_safe"])]
+                    if dict_argument["complexity"] == "easy":
+                        if not dict_argument["dict_achievement_boling"]["piferer"]:
+                            dict_argument["dict_achievement_boling"]["piferer"] = True
+                            dict_argument["list_flag_achievement"].append("piferer")
+                            
                     number_completed_lvl_safe = 0
                     for i in list_red_led:
                         i.path = "image/safe/red_led_off.png"
@@ -1970,8 +2094,8 @@ def safe():
                     time_count = 0
                     text_time.font_content = [str(int(text_time.font_content[0]) - 1)]
                 if number_completed_lvl_safe <= 2:
-                 
-                    if keys[list_keys[4]]:
+                    text_presed_f.font_content = dict_laungues_save[config["language"]][0]
+                    if keys[list_keys[4]]:  
                         angle_safe +=2
                     if keys[list_keys[3]]:
                         angle_safe -=2
@@ -2037,6 +2161,11 @@ def safe():
 
                         else:
                             text_time.font_content = [str(dict_argument["speed_safe"])]
+                            if dict_argument["complexity"] == "easy":
+                                if not dict_argument["dict_achievement_boling"]["piferer"]:
+                                    dict_argument["dict_achievement_boling"]["piferer"] = True
+                                    dict_argument["list_flag_achievement"].append("piferer")
+                                     
                             number_completed_lvl_safe = 0
                             for i in list_red_led:
                                 i.path = "image/safe/red_led_off.png"
@@ -2172,6 +2301,8 @@ def flappy_bird():
         if flappy_bird.Y+ flappy_bird.HEIGHT > SCREEN_H:
             if dict_argument["record_flappy_bird"] < number_point:
                 dict_argument["record_flappy_bird"] = number_point
+
+            list_music_name[dict_argument["index_music"]].stop_music()
             return number_point
         text.show_text(screen)
         text_record.show_text(screen)
@@ -2184,3 +2315,37 @@ def save_game():
     dict_argument["sprite_y"] = sprite1.image_sprite.Y//dict_argument["BLOCK_SIZE"]
     with open('saves/saves.json','w') as file:
         json.dump(dict_argument,file,indent=4,ensure_ascii=True)
+
+
+def get_achievement():
+    if len(dict_argument["list_flag_achievement"]) > 0:
+        achievement_img.path = "image/achivement/"+dict_argument["list_flag_achievement"][0]+"_rgb.png"
+    if achievement_img.path != None:
+        if achievement_img.X > SCREEN_W//2:
+            achievement_img.X -= SCREEN_W//70
+            achievement_img.Y -= SCREEN_H//70
+            achievement_img.path = "image/achivement/"+dict_argument["list_flag_achievement"][0]+"_rgb.png"
+            achievement_img.image_load()
+            achievement_img.NAME = str(int(achievement_img.NAME) + 20)
+            achievement_img_copy = transform.rotate(achievement_img.IMG,int(achievement_img.NAME))
+            screen.blit(achievement_img_copy, (achievement_img.X - int(achievement_img_copy.get_width() / 2), achievement_img.Y - int(achievement_img_copy.get_height() / 2)))
+        elif achievement_img.WIDTH < SCREEN_W//5:
+            achievement_img.X = SCREEN_W//2 - achievement_img.WIDTH//2
+            achievement_img.Y = SCREEN_H//2 - achievement_img.HEIGHT//2
+            achievement_img.WIDTH += SCREEN_W//80
+            achievement_img.HEIGHT += SCREEN_W//80
+            achievement_img.image_load()
+            achievement_img.show_image(screen)
+            achievement_img.NAME = "400"
+        elif int(achievement_img.NAME) > 0:
+            achievement_img.NAME = str(int(achievement_img.NAME) - 5)
+            achievement_img.IMG.set_alpha(int(achievement_img.NAME))
+            achievement_img.show_image(screen)
+        else:
+            dict_argument["list_flag_achievement"].pop(0)
+            achievement_img.X = SCREEN_W
+            achievement_img.Y = SCREEN_H
+            achievement_img.WIDTH = achievement_img.start_width
+            achievement_img.HEIGHT = achievement_img.start_height
+            achievement_img.path = None
+        

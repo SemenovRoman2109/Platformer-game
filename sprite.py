@@ -50,14 +50,12 @@ class Sprite:
         self.shield_img = Graphic_elements(0,0,self.image_sprite.WIDTH * 1.68,self.image_sprite.HEIGHT * 1.50,"image/shield.png")
         self.count_duration_shield = dict_argument["duration_shield"]
         self.can_move = True
+        self.squat_time = 0
         self.change_img_ghost = [0,5]
         with open('saves/config.json','r') as file:
             config = json.load(file)
         self.list_keys = config["keys"]
-        self.jump_sound = Sounds("sounds/jump.wav",int(config["SOUNDS_VOLUME"])//100)
-
-
-
+        self.jump_sound = Sounds("sounds/jump.wav",int(config["SOUNDS_VOLUME"])/100)
 
 
     # Отображает статистику персонажа
@@ -67,14 +65,22 @@ class Sprite:
             dict_argument["flag_puzzle_location"] = True
             self.collected_paper.clear()     
         if len(self.collected_paper) > 0:
-            paper_img = Graphic_elements(0,SCREEN_H-dict_argument["BLOCK_SIZE"],dict_argument["BLOCK_SIZE"],dict_argument["BLOCK_SIZE"],"image/paper.png")
+            paper_img = Graphic_elements(SCREEN_W//2,SCREEN_H-dict_argument["BLOCK_SIZE"],dict_argument["BLOCK_SIZE"],dict_argument["BLOCK_SIZE"],"image/paper.png")
             paper_img.show_image(screen)
-            number_paper = Font("font/pixel_font.ttf",dict_argument["BLOCK_SIZE"],(255,0,0),"X"+str(len(self.collected_paper)),dict_argument["BLOCK_SIZE"],SCREEN_H-dict_argument["BLOCK_SIZE"],1)
+            number_paper = Font("font/pixel_font.ttf",dict_argument["BLOCK_SIZE"],(255,0,0),"X"+str(len(self.collected_paper)),dict_argument["BLOCK_SIZE"]+SCREEN_W//2,SCREEN_H-dict_argument["BLOCK_SIZE"],1)
             number_paper.show_text(screen)
  
     # Функция приседания
     def squat(self,win):
-        
+        if self.squat_time >= 30 * 15:
+            if not dict_argument["dict_achievement_boling"]["goose"]:
+                dict_argument["dict_achievement_boling"]["goose"] = True
+                dict_argument["list_flag_achievement"].append("goose")
+                
+        if self.flag_squat == 1:
+            self.squat_time += 1
+        else:
+            self.squat_time = 0
         for block in dict_list_border["list_border_cor"]:
             block_rect = Rect(block[4]+(block[5]-block[4])//5,block[0]+(block[1]-block[0])//1.5,(block[5]-block[4])-(block[5]-block[4])//2.5,1)
             rect_sprite = Rect(self.image_sprite.X,self.image_sprite.Y,self.image_sprite.WIDTH,self.image_sprite.HEIGHT)
@@ -413,10 +419,16 @@ class Sprite:
         if dict_argument["ghost"]:
             self.ghost_img.show_image(screen)
             if self.count_pressing_ghost == dict_argument["count_click_on_ghost"]:
+                dict_argument["count_reborn"] +=1
                 self.count_duration_shield = dict_argument["duration_shield"] - 1
                 dict_argument["ghost"] = False
                 self.can_move = True
                 self.count_pressing_ghost = 0 
+                if dict_argument["count_reborn"] == 5:
+                    if not dict_argument["dict_achievement_boling"]["how_many_times_did_you_revive"]:
+                        dict_argument["dict_achievement_boling"]["how_many_times_did_you_revive"] = True
+                        dict_argument["list_flag_achievement"].append("how_many_times_did_you_revive")
+                        
             self.ghost_img.Y -= SCREEN_H//100
             if self.random_direction_ghost_number == "L":
                 if self.ghost_img.X > 0 + SCREEN_H//200:
@@ -428,11 +440,27 @@ class Sprite:
                 dict_argument["ghost"] = False
                 self.image_sprite.X = dict_spawn_and_finish_point["lvl"+str(dict_argument["index_lvl"]+1)+"_location_"+str(dict_argument["index_location"]+1)][0][0]
                 self.image_sprite.Y = dict_spawn_and_finish_point["lvl"+str(dict_argument["index_lvl"]+1)+"_location_"+str(dict_argument["index_location"]+1)][0][1]
+                if self.count_pressing_ghost == dict_argument["count_click_on_ghost"] - 1:
+                    if not dict_argument["dict_achievement_boling"]["it_was_close_but_he_flew_away"]:
+                        dict_argument["dict_achievement_boling"]["it_was_close_but_he_flew_away"] = True
+                        dict_argument["list_flag_achievement"].append("it_was_close_but_he_flew_away")
+                        
                 self.count_pressing_ghost = 0 
                 self.can_move = True
                 self.count_duration_shield = 0
                 dict_argument["screen_dimming_flag"] = "+"
                 dict_argument["index_text_drimming"] = "dead"
+                dict_argument["count_dead"] += 1
+                if dict_argument["count_dead"] == 10:
+                    if not dict_argument["dict_achievement_boling"]["walking_dead"]:
+                        dict_argument["dict_achievement_boling"]["walking_dead"] = True
+                        dict_argument["list_flag_achievement"].append("walking_dead")
+                        
+                    if dict_argument["complexity"] == "easy":
+                        if not dict_argument["dict_achievement_boling"]["newbie"]:
+                            dict_argument["dict_achievement_boling"]["newbie"] = True
+                            dict_argument["list_flag_achievement"].append("newbie")
+                            
                 
 
             if self.random_direction_ghost_count[0] == self.random_direction_ghost_count[1]:
@@ -577,29 +605,49 @@ class Sprite:
                 if Rect.colliderect(dict_spawn_and_finish_point[key1][1],self.image_sprite.RECT):
                     dict_argument["screen_dimming_flag"] = "+"
                     dict_argument["index_text_drimming"] = "first_shooting"
-                    flag_first_shooting_lvl_point = shooting_lvl(screen,dict_argument["count_point_hit"],dict_argument["count_ammo"],False)
+                    list_first_shooting_lvl_point_slip = shooting_lvl(screen,dict_argument["count_point_hit"],dict_argument["count_ammo"],False)
                     
                     while True:
                         
-                        if flag_first_shooting_lvl_point >= dict_argument["count_point_hit"]:
+                        if list_first_shooting_lvl_point_slip[0] >= dict_argument["count_point_hit"]:
+                            if list_first_shooting_lvl_point_slip[1] == 0:
+                                if not dict_argument["dict_achievement_boling"]["direct_hit"]:
+                                    dict_argument["dict_achievement_boling"]["direct_hit"] = True
+                                    dict_argument["list_flag_achievement"].append("direct_hit")
+                                    
                             break
                         
                         else:
+                            if list_first_shooting_lvl_point_slip[0] == 0:
+                                if not dict_argument["dict_achievement_boling"]["and_where_is_ammunition"]:
+                                    dict_argument["dict_achievement_boling"]["and_where_is_ammunition"] = True
+                                    dict_argument["list_flag_achievement"].append("and_where_is_ammunition")
+                                    
                             dict_argument["screen_dimming_flag"] = "+"
                             dict_argument["index_text_drimming"] = "lose_shooting"
-                            flag_first_shooting_lvl_point = shooting_lvl(screen,dict_argument["count_point_hit"],dict_argument["count_ammo"],False)
+                            list_first_shooting_lvl_point_slip = shooting_lvl(screen,dict_argument["count_point_hit"],dict_argument["count_ammo"],False)
                     dict_argument["screen_dimming_flag"] = "+"
                     dict_argument["index_text_drimming"] = "second_shooting"
-                    flag_second_shooting_lvl_point = shooting_lvl(screen,int(dict_argument["count_point_hit"]*1.5),int(dict_argument["count_ammo"]*1.5),dict_argument["count_fences"])
+                    list_second_shooting_lvl_point_slip = shooting_lvl(screen,int(dict_argument["count_point_hit"]*1.5),int(dict_argument["count_ammo"]*1.5),dict_argument["count_fences"])
                     while True:
                         
-                        if flag_second_shooting_lvl_point >= int(dict_argument["count_point_hit"]*1.5):
+                        if list_second_shooting_lvl_point_slip[0] >= int(dict_argument["count_point_hit"]*1.5):
+                            if list_second_shooting_lvl_point_slip[1] == 0:
+                                if not dict_argument["dict_achievement_boling"]["direct_hit"]:
+                                    dict_argument["dict_achievement_boling"]["direct_hit"] = True
+                                    dict_argument["list_flag_achievement"].append("direct_hit")
+                                    
                             break
                         
                         else:
+                            if list_second_shooting_lvl_point_slip[0] == 0:
+                                if not dict_argument["dict_achievement_boling"]["and_where_is_ammunition"]:
+                                    dict_argument["dict_achievement_boling"]["and_where_is_ammunition"] = True
+                                    dict_argument["list_flag_achievement"].append("and_where_is_ammunition")
+                                    
                             dict_argument["screen_dimming_flag"] = "+"
                             dict_argument["index_text_drimming"] = "lose_shooting"
-                            flag_second_shooting_lvl_point = shooting_lvl(screen,int(dict_argument["count_point_hit"]*1.5),int(dict_argument["count_ammo"]*1.5),dict_argument["count_fences"])
+                            list_second_shooting_lvl_point_slip = shooting_lvl(screen,int(dict_argument["count_point_hit"]*1.5),int(dict_argument["count_ammo"]*1.5),dict_argument["count_fences"])
                     return "finish_lvl"
                 
         return "False"

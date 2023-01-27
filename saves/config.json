@@ -1,9 +1,9 @@
 {
-    "SCREEN_WIDTH": "1280",
-    "SCREEN_HEIGHT": "720",
+    "SCREEN_WIDTH": 0,
+    "SCREEN_HEIGHT": 0,
     "SOUNDS_VOLUME": "100",
-    "FULLSCREEN": false,
-    "MUSIC_VOLUME": "0",
+    "FULLSCREEN": true,
+    "MUSIC_VOLUME": "100",
     "list_text_button_control": [
         "f",
         "up",
@@ -18,5 +18,5 @@
         1073741904,
         1073741903
     ],
-    "language": "uk"
+    "language": "ua"
 }

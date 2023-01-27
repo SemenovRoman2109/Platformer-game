@@ -21,7 +21,7 @@ SOUNDS_VOLUME = int(config["SOUNDS_VOLUME"])
 
 #Индексы уровней
 index_lvl = 0
-index_location = 3
+index_location = 0
 
 
 FPS = 30
@@ -109,6 +109,71 @@ dict_spawn_and_finish_point = {
     "lvl2_location_2":[[SCREEN_W//80,SCREEN_H-round(SCREEN_W/30)*3.5],[Rect(SCREEN_W//80,round(SCREEN_W/30)*4,round(SCREEN_W/30),round(SCREEN_W/30)*1.8),Rect(SCREEN_W-round(SCREEN_W/30),0,round(SCREEN_W/30),round(SCREEN_W/30)*1.8)],"right"],
     "lvl2_location_3":[[round(SCREEN_W/30)*14,SCREEN_H-round(SCREEN_W/30)*3.5],Rect(0,0,0,0),None],
 }
+dict_achievement_boling = {
+    "stay_in_body":False,# ГОТОВООООООО
+    "and_where_is_ammunition":False,# ГОТОВООООООО
+    "criminal_hit":False,# ГОТОВООООООО
+    "it_was_close_but_he_flew_away":False,# ГОТОВООООООО
+    "how_many_times_did_you_revive":False,# ГОТОВООООООО
+    "walking_dead":False,# ГОТОВООООООО
+    "direct_hit":False,# ГОТОВООООООО
+    "newbie":False,# ГОТОВООООООО
+    "godlike":False,# ГОТОВООООООО
+    "music_player":False,# ГОТОВООООООО
+    "goose":False,# ГОТОВООООООО
+    "sniper":False,# ГОТОВООООООО
+    "barrier":False,# ГОТОВООООООО
+    "puzzle_lower":False,# ГОТОВООООООО
+    "cracker":False,# ГОТОВООООООО
+    "piferer":False,# ГОТОВООООООО
+    "record_holder":False,# ГОТОВООООООО
+    "detective":False,# ГОТОВООООООО
+    "where_is_the_sound":False,# ГОТОВООООООО
+    "platinum":False,# ГОТОВООООООО
+}
+dict_laungues_achievement = {
+    "stay_in_body":[{"ua":"Залишайтеся в тілі","uk":"Stay in body"},
+                    {"ua":"Пройти гру не разу не померши","uk":"Complete the game without dying"}],
+    "and_where_is_ammunition":[{"ua":"А де боєприпаси?","uk":"And where is ammunition?"},
+                               {"ua":"Витратити всі набої не влучивши в жоден манекен","uk":"Spend all your ammo without hitting more than one dummy"}],
+    "criminal_hit":[{"ua":"Злочинне влучення","uk":"Criminal hit"},
+                    {"ua":"Влучити в голову злочинця","uk":"Shoot the criminal in the head"}],
+    "it_was_close_but_he_flew_away":[{"ua":"Було близько, але він вiдлетів","uk":"It was close but he flew away"},
+                                     {"ua":"Привид полетів коли залишилося одне натискання на нього","uk":"The ghost flew away when there was one click left on it."}],
+    "how_many_times_did_you_revive":[{"ua":"Скільки разів відродився?","uk":"How many times have you been revived?"},
+                                     {"ua":"П'ять разів відродитись","uk":"be reborn five times"}],
+    "walking_dead":[{"ua":"Ходячі мерці","uk":"Walking dead"},
+                    {"ua":"Десять разів померти","uk":"Die ten times"}],
+    "direct_hit":[{"ua":"Пряме влучення","uk":"Direct hit"},
+                  {"ua":"Жодного разу не промазати на стрільбі по манекенах","uk":"Never get smacked on shooting dummies"}],
+    "newbie":[{"ua":"Новачок","uk":"Newbie"},
+              {"ua":"Десять разів померти на легкій складності","uk":"Die ten times on easy difficulty"}],
+    "godlike":[{"ua":"Богоподібний","uk":"Godlike"},
+               {"ua":"Пройти гру жодного разу не померши на складній складності","uk":"Complete the game without dying on hard difficulty"}],
+    "music_player":[{"ua":"Любитель музики","uk":"Musician"},
+                    {"ua":"Зібрати всі платівки","uk":"Collect all records"}],
+    "goose":[{"ua":"Гусак","uk":"Goose"},
+             {"ua":"Провести п'ятнадцять секунд у присіді без перерви","uk":"Spend fifteen seconds in a squat without a break"}],
+    "sniper":[{"ua":"Снайпер","uk":"Sniper"},
+              {"ua":"П'ять разів потрапити в голову манекена","uk":"Hit the head of a mannequin five times"}],
+    "barrier":[{"ua":"Перешкода","uk":"Barrier"},
+               {"ua":"П'ять разів потрапити у перешкоду","uk":"Hit the barrier five times"}],
+    "puzzle_lower":[{"ua":"Любитель пазлів","uk":"Puzzle lover"},
+                    {"ua":"Зібрати пазл за п'ять секунд","uk":"Solve the puzzle in five seconds"}],
+    "cracker":[{"ua":"Зломщик","uk":"Cracker"},
+               {"ua":"Відкрити сейф за двадцять п'ять секунд","uk":"Open the safe in twenty-five seconds"}],
+    "piferer":[{"ua":"Злодюжка","uk":"Thief"},
+               {"ua":"Помилитися у відкритті сейфа","uk":"Make a mistake opening the safe"}],
+    "record_holder":[{"ua":"Рекордсмен","uk":"Record holder"},
+                     {"ua":"Пройти двадцять рівнів у флаппі берд","uk":"Complete twenty levels in a flappy bird"}],
+    "detective":[{"ua":"Детектив","uk":"Detective"},
+                 {"ua":"Виявити злочинця з першої спроби","uk":"Find the culprit on the first try"}],
+    "where_is_the_sound":[{"ua":"Де звук?","uk":"Where is the sound?"},
+                          {"ua":"Грати з повністю вимкненим звуком","uk":"Play with the sound completely muted"}],
+    "platinum":[{"ua":"Платина","uk":"Platinum"},
+               {"ua":"Отримати всі досягнення у грі","uk":"Get all the achievements in the game"}]
+}
+
 
 
 with open('saves/saves.json','r') as file:
@@ -129,6 +194,10 @@ if dict_argument["defolt"] == "true":
         "ded": True,    
         "game": True,
         "scene":"complexity",
+        "list_flag_achievement":[],
+        "count_dead":0,
+        "count_reborn":0,
+        "dict_achievement_boling":dict_achievement_boling,
         "full_surface":list_surface,
         "list_surface":list_surface[index_lvl][index_location],
         "max_number_beard":max_number_beard,
@@ -209,7 +278,7 @@ dict_mision_lvl_1 = {
     "location_1":dict_languages_mission["2"][config["language"]],
     "location_2":dict_languages_mission["3"][config["language"]],
 }
-
+# Добавить перед последней стрельбой текст : Вы правельно нашли преступника но он начал убегать вам хватит одного попадания в голову или 2-ух в тело
 dict_languages_drimming = {
     "1":{"ua":["Ви не змогли утримати свою душу","повертайтеся на початок рівня"],"uk":["You couldn't hold your soul", "go back to the beginning of the level"]},
     "2":{'ua':["Преступнику вдалося скрити","Ви програли"],'uk':["The killer managed to escape", "You lost"]},
@@ -261,6 +330,7 @@ dict_laungues_save = {
     "uk":["Press button ["+str(config["list_text_button_control"][0])+"]"," to stop"]
 
 }
+
 dict_direction_door = dict()
 #Словари аргументов и ломания платформ
 broken_cracking_platform = dict()
