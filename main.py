@@ -112,23 +112,26 @@ def run_game():
                             if list_NPC[dict_argument["index_npc_collid"]].path == "image/criminal/model.png":
                                 if i.font_content == ["Да"]:
                                     if dict_argument["number_click_npc"] == 0:
-                                        if not dict_argument["dict_achievement_boling"]["detective"]:
-                                            dict_argument["dict_achievement_boling"]["detective"] = True
+                                        if not dict_achievement_boling["detective"]:
+                                            dict_achievement_boling["detective"] = True
                                             dict_argument["list_flag_achievement"].append("detective")
-                                             
+
+
                                     if finish_shooting():
                                         dict_argument["screen_dimming_flag"] =  "+"
                                         dict_argument["index_text_drimming"] = "win_game"
                                         if dict_argument["count_dead"] == 0:
-                                            if not dict_argument["dict_achievement_boling"]["stay_in_body"]:
-                                                dict_argument["dict_achievement_boling"]["stay_in_body"] = True
+                                            if not dict_achievement_boling["stay_in_body"]:
+                                                dict_achievement_boling["stay_in_body"] = True
                                                 dict_argument["list_flag_achievement"].append("stay_in_body")
                                                 
+
                                             if dict_argument["complexity"] == "hard":
-                                                if not dict_argument["dict_achievement_boling"]["godlike"]:
-                                                    dict_argument["dict_achievement_boling"]["godlike"] = True
+                                                if not dict_achievement_boling["godlike"]:
+                                                    dict_achievement_boling["godlike"] = True
                                                     dict_argument["list_flag_achievement"].append("godlike")
                                                     
+
                                     else:
                                         dict_argument["screen_dimming_flag"] =  "+"
                                         dict_argument["index_text_drimming"] = "lose_game" 
@@ -178,32 +181,36 @@ def run_game():
                 obj.show_text(screen)
         if dict_argument["scene"] == "game": #Сцена игры
             if config["SOUNDS_VOLUME"] == "0" and config["MUSIC_VOLUME"] == "0":
-                if not dict_argument["dict_achievement_boling"]["where_is_the_sound"]:
-                    dict_argument["dict_achievement_boling"]["where_is_the_sound"] = True
+                if not dict_achievement_boling["where_is_the_sound"]:
+                    dict_achievement_boling["where_is_the_sound"] = True
                     dict_argument["list_flag_achievement"].append("where_is_the_sound")
                     
+
             if dict_argument["record_flappy_bird"] >= 20:
-                if not dict_argument["dict_achievement_boling"]["record_holder"]:
-                    dict_argument["dict_achievement_boling"]["record_holder"] = True
+                if not dict_achievement_boling["record_holder"]:
+                    dict_achievement_boling["record_holder"] = True
                     dict_argument["list_flag_achievement"].append("record_holder")
                     
+
             if len(list_music_name) >= 7:
-                if not dict_argument["dict_achievement_boling"]["music_player"]:
-                    dict_argument["dict_achievement_boling"]["music_player"] = True
+                if not dict_achievement_boling["music_player"]:
+                    dict_achievement_boling["music_player"] = True
                     dict_argument["list_flag_achievement"].append("music_player")
                     
+
             
             flag_stop_achievemen = False
-            for key_achievemen in list(dict_argument["dict_achievement_boling"].keys()):
+            for key_achievemen in list(dict_achievement_boling.keys()):
                 if key_achievemen != "platinum":
-                    if not dict_argument["dict_achievement_boling"][key_achievemen]:
+                    if not dict_achievement_boling[key_achievemen]:
                         flag_stop_achievemen = True
                         break
             if flag_stop_achievemen == False:
-                if not dict_argument["dict_achievement_boling"]["platinum"]:
-                    dict_argument["dict_achievement_boling"]["platinum"] = True
+                if not dict_achievement_boling["platinum"]:
+                    dict_achievement_boling["platinum"] = True
                     dict_argument["list_flag_achievement"].append("platinum")
                     
+
             
             dict_Graphic_elements_obj["Fon"].show_image(screen) #Отображаем фон 
             # move_cloud() #Функция передвежения облоков

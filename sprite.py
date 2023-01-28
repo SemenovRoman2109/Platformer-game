@@ -73,8 +73,8 @@ class Sprite:
     # Функция приседания
     def squat(self,win):
         if self.squat_time >= 30 * 15:
-            if not dict_argument["dict_achievement_boling"]["goose"]:
-                dict_argument["dict_achievement_boling"]["goose"] = True
+            if not dict_achievement_boling["goose"]:
+                dict_achievement_boling["goose"] = True
                 dict_argument["list_flag_achievement"].append("goose")
                 
         if self.flag_squat == 1:
@@ -425,8 +425,8 @@ class Sprite:
                 self.can_move = True
                 self.count_pressing_ghost = 0 
                 if dict_argument["count_reborn"] == 5:
-                    if not dict_argument["dict_achievement_boling"]["how_many_times_did_you_revive"]:
-                        dict_argument["dict_achievement_boling"]["how_many_times_did_you_revive"] = True
+                    if not dict_achievement_boling["how_many_times_did_you_revive"]:
+                        dict_achievement_boling["how_many_times_did_you_revive"] = True
                         dict_argument["list_flag_achievement"].append("how_many_times_did_you_revive")
                         
             self.ghost_img.Y -= SCREEN_H//100
@@ -441,8 +441,8 @@ class Sprite:
                 self.image_sprite.X = dict_spawn_and_finish_point["lvl"+str(dict_argument["index_lvl"]+1)+"_location_"+str(dict_argument["index_location"]+1)][0][0]
                 self.image_sprite.Y = dict_spawn_and_finish_point["lvl"+str(dict_argument["index_lvl"]+1)+"_location_"+str(dict_argument["index_location"]+1)][0][1]
                 if self.count_pressing_ghost == dict_argument["count_click_on_ghost"] - 1:
-                    if not dict_argument["dict_achievement_boling"]["it_was_close_but_he_flew_away"]:
-                        dict_argument["dict_achievement_boling"]["it_was_close_but_he_flew_away"] = True
+                    if not dict_achievement_boling["it_was_close_but_he_flew_away"]:
+                        dict_achievement_boling["it_was_close_but_he_flew_away"] = True
                         dict_argument["list_flag_achievement"].append("it_was_close_but_he_flew_away")
                         
                 self.count_pressing_ghost = 0 
@@ -452,16 +452,15 @@ class Sprite:
                 dict_argument["index_text_drimming"] = "dead"
                 dict_argument["count_dead"] += 1
                 if dict_argument["count_dead"] == 10:
-                    if not dict_argument["dict_achievement_boling"]["walking_dead"]:
-                        dict_argument["dict_achievement_boling"]["walking_dead"] = True
+                    if not dict_achievement_boling["walking_dead"]:
+                        dict_achievement_boling["walking_dead"] = True
                         dict_argument["list_flag_achievement"].append("walking_dead")
                         
                     if dict_argument["complexity"] == "easy":
-                        if not dict_argument["dict_achievement_boling"]["newbie"]:
-                            dict_argument["dict_achievement_boling"]["newbie"] = True
+                        if not dict_achievement_boling["newbie"]:
+                            dict_achievement_boling["newbie"] = True
                             dict_argument["list_flag_achievement"].append("newbie")
                             
-                
 
             if self.random_direction_ghost_count[0] == self.random_direction_ghost_count[1]:
                 self.random_direction_ghost_count[0] = 0 
@@ -611,16 +610,16 @@ class Sprite:
                         
                         if list_first_shooting_lvl_point_slip[0] >= dict_argument["count_point_hit"]:
                             if list_first_shooting_lvl_point_slip[1] == 0:
-                                if not dict_argument["dict_achievement_boling"]["direct_hit"]:
-                                    dict_argument["dict_achievement_boling"]["direct_hit"] = True
+                                if not dict_achievement_boling["direct_hit"]:
+                                    dict_achievement_boling["direct_hit"] = True
                                     dict_argument["list_flag_achievement"].append("direct_hit")
                                     
                             break
                         
                         else:
                             if list_first_shooting_lvl_point_slip[0] == 0:
-                                if not dict_argument["dict_achievement_boling"]["and_where_is_ammunition"]:
-                                    dict_argument["dict_achievement_boling"]["and_where_is_ammunition"] = True
+                                if not dict_achievement_boling["and_where_is_ammunition"]:
+                                    dict_achievement_boling["and_where_is_ammunition"] = True
                                     dict_argument["list_flag_achievement"].append("and_where_is_ammunition")
                                     
                             dict_argument["screen_dimming_flag"] = "+"
@@ -633,16 +632,16 @@ class Sprite:
                         
                         if list_second_shooting_lvl_point_slip[0] >= int(dict_argument["count_point_hit"]*1.5):
                             if list_second_shooting_lvl_point_slip[1] == 0:
-                                if not dict_argument["dict_achievement_boling"]["direct_hit"]:
-                                    dict_argument["dict_achievement_boling"]["direct_hit"] = True
+                                if not dict_achievement_boling["direct_hit"]:
+                                    dict_achievement_boling["direct_hit"] = True
                                     dict_argument["list_flag_achievement"].append("direct_hit")
                                     
                             break
                         
                         else:
                             if list_second_shooting_lvl_point_slip[0] == 0:
-                                if not dict_argument["dict_achievement_boling"]["and_where_is_ammunition"]:
-                                    dict_argument["dict_achievement_boling"]["and_where_is_ammunition"] = True
+                                if not dict_achievement_boling["and_where_is_ammunition"]:
+                                    dict_achievement_boling["and_where_is_ammunition"] = True
                                     dict_argument["list_flag_achievement"].append("and_where_is_ammunition")
                                     
                             dict_argument["screen_dimming_flag"] = "+"

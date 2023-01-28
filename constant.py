@@ -174,8 +174,9 @@ dict_laungues_achievement = {
                {"ua":"Отримати всі досягнення у грі","uk":"Get all the achievements in the game"}]
 }
 
-
-
+with open('saves/achievement.json','r') as file:
+    dict_achievement_boling = json.load(file)
+# 
 with open('saves/saves.json','r') as file:
     dict_argument = json.load(file)
 
@@ -197,7 +198,6 @@ if dict_argument["defolt"] == "true":
         "list_flag_achievement":[],
         "count_dead":0,
         "count_reborn":0,
-        "dict_achievement_boling":dict_achievement_boling,
         "full_surface":list_surface,
         "list_surface":list_surface[index_lvl][index_location],
         "max_number_beard":max_number_beard,
@@ -207,6 +207,7 @@ if dict_argument["defolt"] == "true":
         "index_location":index_location,
         "X_MAP":0,
         "Y_MAP":0,
+        "dict_argument":0,
         "duration_shield":100,
         "list_spikes_outside":list_spikes_outside,
         "screen_dimming_flag": "+",
@@ -325,7 +326,7 @@ dict_languages_book = {
     "2":{"ua":"Вона напевно скучила;;за мною.","uk":"She mukt have;;missed me."},
 }
 
-dict_laungues_save = {
+dict_laungues_safe = {
     'ua':["Натисніть кнопку ["+str(config["list_text_button_control"][0])+"]"," щоб зупинити"],
     "uk":["Press button ["+str(config["list_text_button_control"][0])+"]"," to stop"]
 

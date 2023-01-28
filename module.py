@@ -1279,13 +1279,13 @@ def shooting_lvl(screen,min_count_point,ammo_count,barriers):
         statstic.show_text(screen)
         clock.tick(FPS*2)
         if count_shoot_barrier >= 5:
-            if not dict_argument["dict_achievement_boling"]["barrier"]:
-                dict_argument["dict_achievement_boling"]["barrier"] = True
+            if not dict_achievement_boling["barrier"]:
+                dict_achievement_boling["barrier"] = True
                 dict_argument["list_flag_achievement"].append("barrier")
                 
         if count_shoot_head >= 5:
-            if not dict_argument["dict_achievement_boling"]["sniper"]:
-                dict_argument["dict_achievement_boling"]["sniper"] = True
+            if not dict_achievement_boling["sniper"]:
+                dict_achievement_boling["sniper"] = True
                 dict_argument["list_flag_achievement"].append("sniper")
                 
         if ammo_count <= 0:
@@ -1296,7 +1296,8 @@ def shooting_lvl(screen,min_count_point,ammo_count,barriers):
         function_dimming()
         display.update()
     mouse.set_visible(True)
-puzzle_time = 0
+
+dict_argument["puzzle_time"] = 0
 list_part_puzzle = []
 background = Graphic_elements(SCREEN_W//6.6,SCREEN_H//4,SCREEN_W//1.5,SCREEN_H//2,"image/puzzle/background.png")
 for i in range(6):
@@ -1314,7 +1315,7 @@ for i in range(6):
     list_part_puzzle.append(element)
 def puzzle(event):
     
-    puzzle_time += 1
+    dict_argument["puzzle_time"] += 1
     background.show_image(screen)
     
 
@@ -1378,9 +1379,9 @@ def puzzle(event):
             dict_argument["count_final_puzzle"] -= 1
         if dict_argument["count_final_puzzle"] <= 0:
             dict_argument["flag_puzzle_location"] = False
-            if puzzle_time <= 30 * 5:
-                if not dict_argument["dict_achievement_boling"]["puzzle_lower"]:
-                    dict_argument["dict_achievement_boling"]["puzzle_lower"] = True
+            if dict_argument["puzzle_time"] <= 30 * 5:
+                if not dict_achievement_boling["puzzle_lower"]:
+                    dict_achievement_boling["puzzle_lower"] = True
                     dict_argument["list_flag_achievement"].append("puzzle_lower")
                     
             
@@ -1742,13 +1743,13 @@ def menu(run_game):
         rgb_platinum = [random.randint(0,255),random.randint(0,255),random.randint(0,255)]
         bg_achievement = Graphic_elements(0, 0, SCREEN_W, SCREEN_H, 'image/achivement/bg_'+config["language"]+'.png')
         list_achievement = []
-        for key_achievemen in list(dict_argument["dict_achievement_boling"].keys()):
+        for key_achievemen in list(dict_achievement_boling.keys()):
             list_obj = [Graphic_elements(SCREEN_W//2-SCREEN_W//3.78,SCREEN_H//11,SCREEN_W//1.89,SCREEN_H//8,"image/achivement/slot.png"),
                         Graphic_elements(0,0,SCREEN_W//18,SCREEN_W//18,"image/achivement/"+key_achievemen+"_bw.png"),
                         Font("font/pixel_font.ttf",SCREEN_W//50,"white",dict_laungues_achievement[key_achievemen][0][config["language"]],0,0),
                         Font("font/pixel_font.ttf",SCREEN_W//75,(219, 219, 219),dict_laungues_achievement[key_achievemen][1][config["language"]],0,0,index=2,bold=False)
             ]
-            if dict_argument["dict_achievement_boling"][key_achievemen]:
+            if dict_achievement_boling[key_achievemen]:
                 list_obj[1].path = "image/achivement/"+key_achievemen+"_rgb.png"
                 list_achievement.insert(0,list_obj)
             else:
@@ -1975,8 +1976,8 @@ def finish_shooting():
                         health_criminal -= 1
                         head_criminal = Graphic_elements(criminal.X,criminal.Y,criminal.WIDTH,criminal.HEIGHT//2,None)
                         if criminal.check_mouse_cor((SCREEN_W//2,SCREEN_H//2)):
-                            if not dict_argument["dict_achievement_boling"]["criminal_hit"]:
-                                dict_argument["dict_achievement_boling"]["criminal_hit"] = True
+                            if not dict_achievement_boling["criminal_hit"]:
+                                dict_achievement_boling["criminal_hit"] = True
                                 dict_argument["list_flag_achievement"].append("criminal_hit")
                                 
 
@@ -2037,7 +2038,7 @@ def safe():
     for i in list_angle_safe:
         if i % 2:
             list_angle_safe[list_angle_safe.index(i)] += 1
-    text_presed_f = Font("font/pixel_font.ttf",SCREEN_W//40,"black",dict_laungues_save[config["language"]][0],big_part_minigame_safe.X - SCREEN_W//20,big_part_minigame_safe.Y + SCREEN_W//5)
+    text_presed_f = Font("font/pixel_font.ttf",SCREEN_W//40,"black",dict_laungues_safe[config["language"]][0],big_part_minigame_safe.X - SCREEN_W//20,big_part_minigame_safe.Y + SCREEN_W//5)
     run = True
     presed_f_last = False
     open_safe = Graphic_elements(bg_safe.X + bg_safe.WIDTH//3,bg_safe.Y + bg_safe.HEIGHT//3,bg_safe.WIDTH//3,bg_safe.WIDTH//3//1.5,"image/safe/open_safe_book.png")
@@ -2071,9 +2072,9 @@ def safe():
             if comleted_safe == 1:
                 flag_safe = False
                 dict_argument["flag_book"] = True
-                if dict_argument["speed_safe"] - int(text_time.font_content) <= 25:
-                    if not dict_argument["dict_achievement_boling"]["cracker"]:
-                        dict_argument["dict_achievement_boling"]["cracker"] = True
+                if dict_argument["speed_safe"] - int(text_time.font_content[0]) <= 25:
+                    if not dict_achievement_boling["cracker"]:
+                        dict_achievement_boling["cracker"] = True
                         dict_argument["list_flag_achievement"].append("cracker")
                         
 
@@ -2082,8 +2083,8 @@ def safe():
                 if int(text_time.font_content[0]) <= 0:
                     text_time.font_content = [str(dict_argument["speed_safe"])]
                     if dict_argument["complexity"] == "easy":
-                        if not dict_argument["dict_achievement_boling"]["piferer"]:
-                            dict_argument["dict_achievement_boling"]["piferer"] = True
+                        if not dict_achievement_boling["piferer"]:
+                            dict_achievement_boling["piferer"] = True
                             dict_argument["list_flag_achievement"].append("piferer")
                             
                     number_completed_lvl_safe = 0
@@ -2094,7 +2095,7 @@ def safe():
                     time_count = 0
                     text_time.font_content = [str(int(text_time.font_content[0]) - 1)]
                 if number_completed_lvl_safe <= 2:
-                    text_presed_f.font_content = dict_laungues_save[config["language"]][0]
+                    text_presed_f.font_content = dict_laungues_safe[config["language"]][0]
                     if keys[list_keys[4]]:  
                         angle_safe +=2
                     if keys[list_keys[3]]:
@@ -2162,8 +2163,8 @@ def safe():
                         else:
                             text_time.font_content = [str(dict_argument["speed_safe"])]
                             if dict_argument["complexity"] == "easy":
-                                if not dict_argument["dict_achievement_boling"]["piferer"]:
-                                    dict_argument["dict_achievement_boling"]["piferer"] = True
+                                if not dict_achievement_boling["piferer"]:
+                                    dict_achievement_boling["piferer"] = True
                                     dict_argument["list_flag_achievement"].append("piferer")
                                      
                             number_completed_lvl_safe = 0
@@ -2172,7 +2173,7 @@ def safe():
                                 i.image_load()
                     if not keys[list_keys[0]]:
                         presed_f_last = False
-                    text_presed_f.font_content = dict_laungues_save[config["language"]]
+                    text_presed_f.font_content = dict_laungues_safe[config["language"]]
                     red_zone_safe_minigame.show_image(screen)
                     green_zone_safe_minigame.show_image(screen)
                     arrow_safe_minigame.show_image(screen)
@@ -2311,10 +2312,12 @@ def flappy_bird():
         display.update()
 
 def save_game(): 
-    dict_argument["sprite_x"] = sprite1.image_sprite.X//dict_argument["BLOCK_SIZE"]
-    dict_argument["sprite_y"] = sprite1.image_sprite.Y//dict_argument["BLOCK_SIZE"]
+    dict_argument["sprite_x"] = sprite1.image_sprite.X/dict_argument["BLOCK_SIZE"]
+    dict_argument["sprite_y"] = sprite1.image_sprite.Y/dict_argument["BLOCK_SIZE"]
     with open('saves/saves.json','w') as file:
         json.dump(dict_argument,file,indent=4,ensure_ascii=True)
+    with open('saves/achievement.json','w') as file:
+        json.dump(dict_achievement_boling,file,indent=4,ensure_ascii=True)
 
 
 def get_achievement():

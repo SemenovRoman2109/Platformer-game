@@ -6,17 +6,17 @@
     "MUSIC_VOLUME": "100",
     "list_text_button_control": [
         "f",
-        "up",
-        "down",
-        "left",
-        "right"
+        "space",
+        "shift",
+        "a",
+        "d"
     ],
     "keys": [
         102,
-        1073741906,
-        1073741905,
-        1073741904,
-        1073741903
+        32,
+        1073742049,
+        97,
+        100
     ],
     "language": "ua"
 }
