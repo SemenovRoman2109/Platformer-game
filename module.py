@@ -679,7 +679,7 @@ def cracking_platform(sprite):
 #Функция невидимой платформы
 def invisibility_block(element_door,element_door_empty,sprite1):
     keys = key.get_pressed() 
-    with open('saves/config.json','r') as file:
+    with open(os.path.join(os.path.abspath(__file__ + "/.."),'saves/config.json'),'r') as file:
             config = json.load(file)
     list_keys = config["keys"]
     if keys[list_keys[0]]:
@@ -875,7 +875,7 @@ def function_dimming():
                 dict_argument["screen_dimming_flag"] = "-"
                 if dict_argument["index_text_drimming"] in ["lose_game","win_game"]:
                     dict_argument["game"] = False
-                    with open('saves/saves.json','w') as file:
+                    with open(os.path.join(os.path.abspath(__file__ + "/.."),'saves/saves.json'),'w') as file:
                         json.dump({"defolt": "true"},file,indent=4,ensure_ascii=True)
         if dict_argument["screen_dimming_flag"] == "-":
             dict_argument["screen_dimming_count"] -= 3
@@ -1416,12 +1416,12 @@ def slider(sound_power, flag_mouse_volume_sound, rect_volume_sound, mouse_volume
         pygame.draw.rect(win,"white",mouse_volume_sound)
   
 def menu(run_game):
-    with open('saves/config.json','r') as file:
+    with open(os.path.join(os.path.abspath(__file__ + "/.."),'saves/config.json'),'r') as file:
         config = json.load(file)
     win = pygame.display.set_mode((SCREEN_W, SCREEN_H))
     def option():
         
-        with open('saves/saves.json','r') as file:
+        with open(os.path.join(os.path.abspath(__file__ + "/.."),'saves/saves.json'),'r') as file:
             saves = json.load(file)
         MUSIC_VOLUME = int(config["MUSIC_VOLUME"])
         SOUNDS_VOLUME = int(config["SOUNDS_VOLUME"])
@@ -1605,12 +1605,12 @@ def menu(run_game):
                             for obj in config.keys():
                                 if settings[obj] != config[obj]:
                                     run_option = False
-                                    with open('saves/config.json','w') as file:
+                                    with open(os.path.join(os.path.abspath(__file__ + "/.."),'saves/config.json'),'w') as file:
                                         json.dump(settings,file,indent=4,ensure_ascii=True)
                                     return "stop"
                             
                             run_option = False
-                            with open('saves/config.json','w') as file:
+                            with open(os.path.join(os.path.abspath(__file__ + "/.."),'saves/config.json'),'w') as file:
                                 json.dump(settings,file,indent=4,ensure_ascii=True)
                             if flag_delete_saves:
                                 return "stop"
@@ -1629,7 +1629,7 @@ def menu(run_game):
                             
                             
                             flag_delete_saves = True
-                            with open('saves/saves.json','w') as file:                                
+                            with open(os.path.join(os.path.abspath(__file__ + "/.."),'saves/saves.json'),'w') as file:                                
                                 json.dump({"defolt":"true"},file,indent=4,ensure_ascii=True)
                             
 
@@ -1885,7 +1885,7 @@ def menu(run_game):
         pygame.display.flip()
   
 def book():
-    with open('saves/config.json','r') as file:
+    with open(os.path.join(os.path.abspath(__file__ + "/.."),'saves/config.json'),'r') as file:
         config = json.load(file)
     dict_argument["count_animation_book"] += 1
     
@@ -1913,7 +1913,7 @@ def book():
     return True
     
 def finish_shooting():
-    with open('saves/config.json','r') as file:
+    with open(os.path.join(os.path.abspath(__file__ + "/.."),'saves/config.json'),'r') as file:
         config = json.load(file)
     game = True
     list_music_name[dict_argument["index_music"]].stop_music()
@@ -2014,9 +2014,9 @@ def finish_shooting():
 def safe():
     dict_argument["sprite_x"] = sprite1.image_sprite.X//dict_argument["BLOCK_SIZE"]
     dict_argument["sprite_y"] = sprite1.image_sprite.Y//dict_argument["BLOCK_SIZE"]
-    with open('saves/saves.json','w') as file:
+    with open(os.path.join(os.path.abspath(__file__ + "/.."),'saves/saves.json'),'w') as file:
         json.dump(dict_argument,file,indent=4,ensure_ascii=True)
-    with open('saves/config.json','r') as file:
+    with open(os.path.join(os.path.abspath(__file__ + "/.."),'saves/config.json'),'r') as file:
         config = json.load(file)
     bk = Graphic_elements(0,0,SCREEN_W,SCREEN_H,"image/room_1.png")
     rect = Rect(SCREEN_W//6.71,SCREEN_H//5,SCREEN_W//8.28,SCREEN_H//6)
@@ -2046,7 +2046,7 @@ def safe():
     open_safe = Graphic_elements(bg_safe.X + bg_safe.WIDTH//3,bg_safe.Y + bg_safe.HEIGHT//3,bg_safe.WIDTH//3,bg_safe.WIDTH//3//1.5,"image/safe/open_safe_book.png")
     time_count = 0
     text_time = Font("font/pixel_font.ttf",SCREEN_W//40,"red",str(dict_argument["speed_safe"]),bg_safe.X + SCREEN_W//30,bg_safe.Y + SCREEN_W//30)
-    with open('saves/config.json','r') as file:
+    with open(os.path.join(os.path.abspath(__file__ + "/.."),'saves/config.json'),'r') as file:
             config = json.load(file)
     list_keys = config["keys"]
     list_music_name[dict_argument["index_music"]].stop_music()
@@ -2316,9 +2316,9 @@ def flappy_bird():
 def save_game(): 
     dict_argument["sprite_x"] = sprite1.image_sprite.X/dict_argument["BLOCK_SIZE"]
     dict_argument["sprite_y"] = sprite1.image_sprite.Y/dict_argument["BLOCK_SIZE"]
-    with open('saves/saves.json','w') as file:
+    with open(os.path.join(os.path.abspath(__file__ + "/.."),'saves/saves.json'),'w') as file:
         json.dump(dict_argument,file,indent=4,ensure_ascii=True)
-    with open('saves/achievement.json','w') as file:
+    with open(os.path.join(os.path.abspath(__file__ + "/.."),'saves/achievement.json'),'w') as file:
         json.dump(dict_achievement_boling,file,indent=4,ensure_ascii=True)
 
 

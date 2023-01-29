@@ -52,7 +52,7 @@ class Sprite:
         self.can_move = True
         self.squat_time = 0
         self.change_img_ghost = [0,5]
-        with open('saves/config.json','r') as file:
+        with open(os.path.join(os.path.abspath(__file__ + "/.."),'saves/config.json'),'r') as file:
             config = json.load(file)
         self.list_keys = config["keys"]
         self.jump_sound = Sounds("sounds/jump.wav",int(config["SOUNDS_VOLUME"])/100)
@@ -562,7 +562,7 @@ class Sprite:
                 if Rect.colliderect(dict_spawn_and_finish_point["lvl2_location_2"][1][1],self.image_sprite.RECT):
                     dict_argument["sprite_x"] = dict_argument["BLOCK_SIZE"]*self.image_sprite.X
                     dict_argument["sprite_y"] = dict_argument["BLOCK_SIZE"]*self.image_sprite.Y
-                    with open('saves/saves.json','w') as file:
+                    with open(os.path.join(os.path.abspath(__file__ + "/.."),'saves/saves.json'),'w') as file:
                         json.dump(dict_argument,file,indent=4,ensure_ascii=True)
                     bk = Graphic_elements(0,0,SCREEN_W,SCREEN_H,"image/room_2.png")
                     rect = Rect(SCREEN_W//1.4,SCREEN_H//3.46,SCREEN_W//10.6,SCREEN_W//10.6)

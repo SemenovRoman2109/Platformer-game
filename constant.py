@@ -3,11 +3,12 @@ from pygame import*
 import random
 import json
 import copy
+import os
 #Подключаем модули нашего проекта
 from surface import *
 init() #Инициализируем pygame
 #Настраиваем разрешение и ограничение кадров
-with open('saves/config.json','r') as file:
+with open(os.path.join(os.path.abspath(__file__ + "/.."),'saves/config.json'),'r') as file:
     config = json.load(file)
 
 if config["FULLSCREEN"]:
@@ -174,10 +175,11 @@ dict_laungues_achievement = {
                {"ua":"Отримати всі досягнення у грі","uk":"Get all the achievements in the game"}]
 }
 
-with open('saves/achievement.json','r') as file:
+with open(os.path.join(os.path.abspath(__file__ + "/.."),'saves/achievement.json'),'r') as file:
     dict_achievement_boling = json.load(file)
 # 
-with open('saves/saves.json','r') as file:
+
+with open(os.path.join(os.path.abspath(__file__ + "/.."),'saves/saves.json'),'r') as file:
     dict_argument = json.load(file)
 
 if dict_argument["defolt"] != "true":

@@ -1,10 +1,11 @@
 from module import * #Подключаем модуль с модулями
 from sprite import Sprite
-init() #Инициализируем pygame
+from pygame import *
+pygame.init() #Инициализируем pygame
 #Создаем функцию запуска игры
 
 def run_game():    
-    with open('saves/config.json','r') as file:
+    with open(os.path.join(os.path.abspath(__file__ + "/.."),'saves/config.json'),'r') as file:
         config = json.load(file)
     #Рисуем поверхности
     drawSurfaces()
@@ -28,14 +29,14 @@ def run_game():
             if dict_argument["flag_puzzle_location"]:
                 puzzle(event1)
 
-            if event1.type == KEYDOWN:
-                if event1.key == K_ESCAPE:
+            if event1.type == pygame.KEYDOWN:
+                if event1.key == pygame.K_ESCAPE:
                     list_music_name[dict_argument["index_music"]].stop_music()
                     dict_argument["game"] = False
                     save_game()
 
 
-            if event1.type == MOUSEBUTTONDOWN and event1.button == 1:
+            if event1.type == pygame.MOUSEBUTTONDOWN and event1.button == 1:
                 if rect_music_left.collidepoint(mouse_cor[0],mouse_cor[1]): 
                     use_sound.play_sound()
                     list_music_name[dict_argument["index_music"]].stop_music()
