@@ -875,6 +875,8 @@ def function_dimming():
                 dict_argument["screen_dimming_flag"] = "-"
                 if dict_argument["index_text_drimming"] in ["lose_game","win_game"]:
                     dict_argument["game"] = False
+                    with open('saves/saves.json','w') as file:
+                        json.dump({"defolt": "true"},file,indent=4,ensure_ascii=True)
         if dict_argument["screen_dimming_flag"] == "-":
             dict_argument["screen_dimming_count"] -= 3
             if dict_argument["screen_dimming_count"] == 0:
