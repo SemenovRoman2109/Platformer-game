@@ -2095,7 +2095,7 @@ def safe():
                     time_count = 0
                     text_time.font_content = [str(int(text_time.font_content[0]) - 1)]
                 if number_completed_lvl_safe <= 2:
-                    text_presed_f.font_content = dict_laungues_safe[config["language"]][0]
+                    text_presed_f.font_content = [dict_laungues_safe[config["language"]][0]]
                     if keys[list_keys[4]]:  
                         angle_safe +=2
                     if keys[list_keys[3]]:
