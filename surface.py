@@ -25,7 +25,7 @@ list_surface_lvl1_location_1 = [
                 list('bbb00ccc00Д000000000'),
                 list('00000000000000000000'),
                 list('00000000000s00000cc0'),
-                list('0000000PPppppppp0000'),
+                list('0000000PPpppppppp000'),
                 list('00bbb000000000000000'),
                 list('000000000000000шшшшш'),
                 list('bbbbbbbbbbbbbbbbbbbb'),
