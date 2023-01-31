@@ -164,7 +164,7 @@ dict_laungues_achievement = {
     "cracker":[{"ua":"Зломщик","uk":"Cracker"},
                {"ua":"Відкрити сейф за двадцять п'ять секунд","uk":"Open the safe in twenty-five seconds"}],
     "piferer":[{"ua":"Злодюжка","uk":"Thief"},
-               {"ua":"Помилитися у відкритті сейфа","uk":"Make a mistake opening the safe"}],
+               {"ua":"Помилитися у відкритті сейфа на легкiй складностi","uk":"Make a mistake opening the safe on easy difficulty"}],
     "record_holder":[{"ua":"Рекордсмен","uk":"Record holder"},
                      {"ua":"Пройти двадцять рівнів у флаппі берд","uk":"Complete twenty levels in a flappy bird"}],
     "detective":[{"ua":"Детектив","uk":"Detective"},
