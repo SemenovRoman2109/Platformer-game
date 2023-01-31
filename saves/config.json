@@ -6,15 +6,15 @@
     "MUSIC_VOLUME": "100",
     "list_text_button_control": [
         "f",
-        "space",
-        "shift",
+        "w",
+        "s",
         "a",
         "d"
     ],
     "keys": [
         102,
-        32,
-        1073742049,
+        119,
+        115,
         97,
         100
     ],

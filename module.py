@@ -112,6 +112,11 @@ def drawSurfaces():
                 HEIGHT = dict_argument["BLOCK_SIZE"]//3.55
                 NAME_LIST = "list_border_cor_cracking"
                 number_cracking += 1
+            elif dict_argument["list_surface"][i][j] == "M":
+                PATH = "image/plate.png"
+                WIDTH = dict_argument["BLOCK_SIZE"] // 2
+                HEIGHT = dict_argument["BLOCK_SIZE"] // 2
+                list_noot_colision_platphorm.append(Graphic_elements(X+dict_argument["BLOCK_SIZE"] // 4,Y+dict_argument["BLOCK_SIZE"] // 4,WIDTH,HEIGHT,PATH))
             elif dict_argument["list_surface"][i][j] == "Т":
                 PATH = "image/corpse.png"
                 WIDTH = dict_argument["BLOCK_SIZE"] * 2
@@ -2324,12 +2329,14 @@ def save_game():
 
 def get_achievement():
     if len(dict_argument["list_flag_achievement"]) > 0:
-        achievement_img.path = "image/achivement/"+dict_argument["list_flag_achievement"][0]+"_rgb.png"
+        if achievement_img.path == None:
+            achievement_img.path = "image/achivement/"+dict_argument["list_flag_achievement"][0]+"_rgb.png"
     if achievement_img.path != None:
         if achievement_img.X > SCREEN_W//2:
             achievement_img.X -= SCREEN_W//70
             achievement_img.Y -= SCREEN_H//70
-            achievement_img.path = "image/achivement/"+dict_argument["list_flag_achievement"][0]+"_rgb.png"
+            if achievement_img.path != "image/plate.png":
+                achievement_img.path = "image/achivement/"+dict_argument["list_flag_achievement"][0]+"_rgb.png"
             achievement_img.image_load()
             achievement_img.NAME = str(int(achievement_img.NAME) + 20)
             achievement_img_copy = transform.rotate(achievement_img.IMG,int(achievement_img.NAME))
@@ -2347,7 +2354,8 @@ def get_achievement():
             achievement_img.IMG.set_alpha(int(achievement_img.NAME))
             achievement_img.show_image(screen)
         else:
-            dict_argument["list_flag_achievement"].pop(0)
+            if achievement_img.path != "image/plate.png":
+                dict_argument["list_flag_achievement"].pop(0)
             achievement_img.X = SCREEN_W
             achievement_img.Y = SCREEN_H
             achievement_img.WIDTH = achievement_img.start_width

@@ -235,6 +235,7 @@ if dict_argument["defolt"] == "true":
         "complexity":None,
         "list_flag_room":[False,False],
         "record_flappy_bird":0,
+        "count_music":2,
         # настройки на средней сложности
         "DOUBLE_JUMP":None,
         "max_count_spike":150,

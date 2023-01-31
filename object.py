@@ -62,15 +62,9 @@ if dict_argument["flag_pause"]:
 rect_music_left = Rect(img_music_player.X,img_music_player.Y,img_music_player.WIDTH//5,img_music_player.HEIGHT) 
 rect_music_right = Rect(img_music_player.X+img_music_player.WIDTH-img_music_player.WIDTH//5,img_music_player.Y,img_music_player.WIDTH//5,img_music_player.HEIGHT) 
 rect_music_pause = Rect(img_music_player.X+img_music_player.WIDTH//2.32,img_music_player.Y,img_music_player.WIDTH//7,img_music_player.HEIGHT) 
-list_music_name = [
-    Music("sounds/bg_1.wav",int(config["MUSIC_VOLUME"])/1000),
-    Music("sounds/bg_2.wav",int(config["MUSIC_VOLUME"])/1000),
-    Music("sounds/bg_3.wav",int(config["MUSIC_VOLUME"])/1000),
-    Music("sounds/bg_4.wav",int(config["MUSIC_VOLUME"])/1000),
-    Music("sounds/bg_5.wav",int(config["MUSIC_VOLUME"])/1000),
-    Music("sounds/bg_6.wav",int(config["MUSIC_VOLUME"])/1000),
-    Music("sounds/bg_7.wav",int(config["MUSIC_VOLUME"])/1000)
-    ] 
+list_music_name = list()
+for i in range(dict_argument["count_music"]):
+    list_music_name.append(Music("sounds/bg_"+str(i+1)+".wav",int(config["MUSIC_VOLUME"])/500))
 use_sound = Sounds("sounds/use.wav",int(config["SOUNDS_VOLUME"])/100)
 #Создаем список графических елементов шипов
 list_spikes = []

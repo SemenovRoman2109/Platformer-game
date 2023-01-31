@@ -1,6 +1,7 @@
 from module import * #Подключаем модуль с модулями
 from sprite import Sprite
 from pygame import *
+import pygame
 pygame.init() #Инициализируем pygame
 #Создаем функцию запуска игры
 
@@ -181,6 +182,13 @@ def run_game():
                     obj.font_color = "white"     
                 obj.show_text(screen)
         if dict_argument["scene"] == "game": #Сцена игры
+            list_music_name.clear()
+            for i in range(dict_argument["count_music"]):
+                list_music_name.append(Music("sounds/bg_"+str(i+1)+".wav",int(config["MUSIC_VOLUME"])/500))
+                    
+                
+            
+            
             if config["SOUNDS_VOLUME"] == "0" and config["MUSIC_VOLUME"] == "0":
                 if not dict_achievement_boling["where_is_the_sound"]:
                     dict_achievement_boling["where_is_the_sound"] = True
@@ -238,6 +246,11 @@ def run_game():
 
                     else:
                         dict_argument["flag_colision_game_machine"] = False
+                if p.path == "image/plate.png":
+                    if Rect.colliderect(sprite1.image_sprite.RECT,p.RECT):
+                        achievement_img.path = "image/plate.png"
+                        dict_argument["list_surface"][p.Y//dict_argument["BLOCK_SIZE"]][p.X//dict_argument["BLOCK_SIZE"]] = "0"
+                        dict_argument["count_music"] += 1
 
             for i in list_NPC:
                 i.show_image(screen)
