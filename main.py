@@ -284,7 +284,7 @@ def run_game():
             sprite1.image_sprite.show_image(screen)  #Показ картинки
             if sprite1.can_move and dict_argument["screen_dimming_flag"] == None and not dict_argument["flag_puzzle_location"]:
                 
-                sprite1.squat(screen)
+                sprite1.squat()
                 
                 sprite1.sprite_move() #Анимации
                 if sprite1.flag_squat == 0: 

@@ -1056,7 +1056,7 @@ def shooting_lvl(screen,min_count_point,ammo_count,barriers):
     
     left_side_stand_for_manniquens = Graphic_elements(0,0,dict_argument["BLOCK_SIZE"],dict_argument["BLOCK_SIZE"]*2.269,"image/left_side_stand_for_mannequins.png")
     right_side_stand_for_manniquens = Graphic_elements(0,0,dict_argument["BLOCK_SIZE"],dict_argument["BLOCK_SIZE"]*2.269,"image/right_side_stand_for_mannequins.png")
-    middle_stand_for_manniquens = Graphic_elements(0,0,0,right_side_stand_for_manniquens.HEIGHT//9.83,"image/middle_stand_for_mannequins.png")
+    middle_stand_for_manniquens = Graphic_elements(0,0,0,dict_argument["BLOCK_SIZE"]*2.269,"image/middle_stand_for_mannequins.png")
     
     list_down_stand_for_manniquens = [left_side_stand_for_manniquens,right_side_stand_for_manniquens,middle_stand_for_manniquens,[[Graphic_elements(None,0,SCREEN_W//10,SCREEN_W//10*1.693,None),"right",[],[]],[Graphic_elements(None,0,SCREEN_W//10,SCREEN_W//10*1.693,None),"right",[],[]]],[]]                 
     list_midle_stand_for_manniquens = copy.deepcopy(list_down_stand_for_manniquens)
@@ -1091,21 +1091,21 @@ def shooting_lvl(screen,min_count_point,ammo_count,barriers):
         list_y_stand = [Background_shooting.Y + Background_shooting.HEIGHT - SCREEN_H//1.5,Background_shooting.Y + Background_shooting.HEIGHT//2,Background_shooting.Y + SCREEN_H//1.5] 
         for obj in range(len(list_stand)):
             list_s = list_stand[obj]
-            list_s[0].X = Background_shooting.X + SCREEN_W//2
-            list_s[1].X = Background_shooting.X + Background_shooting.WIDTH - SCREEN_W//2 - list_s[1].WIDTH
+            list_s[0].X = Background_shooting.X + SCREEN_W//2 + SCREEN_W//9.5 + SCREEN_W//14 * obj
+            list_s[1].X = Background_shooting.X + Background_shooting.WIDTH - SCREEN_W//2 - SCREEN_W//9.5 - SCREEN_W//14 * obj - list_s[1].WIDTH
             list_s[2].X = list_s[0].X + list_s[0].WIDTH 
             
             list_s[2].WIDTH = -1 * ((list_s[0].X + list_s[0].WIDTH) - list_s[1].X)
             list_s[2].image_load()
+            
 
             
             
             list_s[0].Y = list_y_stand[obj]
             list_s[1].Y = list_s[0].Y
             list_s[2].Y = list_s[0].Y
-            for i in list_s:
-                if type(i) != type([]):
-                    i.show_image(screen)
+            list_s[2].show_image(screen)
+            
             if barriers != False:
                 if obj_barier_position_flag:
                     for obj_barier in list_s[-1]:

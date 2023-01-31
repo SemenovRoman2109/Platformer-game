@@ -71,7 +71,7 @@ class Sprite:
             number_paper.show_text(screen)
  
     # Функция приседания
-    def squat(self,win):
+    def squat(self):
         if self.squat_time >= 30 * 15:
             if not dict_achievement_boling["goose"]:
                 dict_achievement_boling["goose"] = True

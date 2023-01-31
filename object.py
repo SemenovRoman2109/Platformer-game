@@ -34,7 +34,7 @@ Rope_with_saw = Graphic_elements(SCREEN_W//2,SCREEN_H//15,int(dict_argument["BLO
 Hook = Graphic_elements(SCREEN_W//2,SCREEN_H//15,SCREEN_W//30,dict_argument["BLOCK_SIZE"]*10,"image/Hook.png")
 button = Graphic_elements(0,0,dict_argument["BLOCK_SIZE"],dict_argument["BLOCK_SIZE"]//3.3846,"image/button.png")
 achievement_img = Graphic_elements(SCREEN_W,SCREEN_H,SCREEN_W//15,SCREEN_W//15,None,"0")
-Background_shooting = Graphic_elements(-SCREEN_W,-SCREEN_H,SCREEN_W*3,SCREEN_H*2,"image/Fon_shooting.jpg")
+Background_shooting = Graphic_elements(-SCREEN_W,-SCREEN_H,SCREEN_W*3,SCREEN_H*2,"image/Fon_shooting.png")
 dimming = Graphic_elements(0,0,SCREEN_W,SCREEN_H,"image/black.png")
 dimming.image_load()
 dimming.IMG.set_alpha(round(dict_argument["screen_dimming_count"]))
