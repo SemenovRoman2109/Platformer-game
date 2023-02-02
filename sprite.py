@@ -540,7 +540,7 @@ class Sprite:
                 return "paper_true"
 
     # Функция колизии с финишом 
-    def finish_lvl(self,shooting_lvl,move_cloud,safe):
+    def finish_lvl(self,shooting_lvl,move_cloud,safe,save_game):
         index_lvl = dict_argument["index_lvl"]
         index_location = dict_argument["index_location"]
         
@@ -602,6 +602,7 @@ class Sprite:
                     return dict_spawn_and_finish_point[key1][2]
             else:
                 if Rect.colliderect(dict_spawn_and_finish_point[key1][1],self.image_sprite.RECT):
+                    save_game()
                     dict_argument["screen_dimming_flag"] = "+"
                     dict_argument["index_text_drimming"] = "first_shooting"
                     list_first_shooting_lvl_point_slip = shooting_lvl(screen,dict_argument["count_point_hit"],dict_argument["count_ammo"],False)

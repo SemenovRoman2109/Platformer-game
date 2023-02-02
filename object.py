@@ -43,8 +43,8 @@ aim = Graphic_elements(SCREEN_W//2-SCREEN_W//40,SCREEN_H//2-SCREEN_W//40,dict_ar
 text_transition_new_lvl = Font("font/pixel_font.ttf",SCREEN_W//22,"white",None,0,0,None)
 text_select_complexity = Font("font/pixel_font.ttf",SCREEN_W//20,"white","Выберите уровень сложности:",SCREEN_W//20,SCREEN_W//20)
 list_button_collid = [
-    Font("font/pixel_font.ttf",SCREEN_W//20,"darkgrey","Да",SCREEN_W//1.6,SCREEN_H-SCREEN_W//18),
-    Font("font/pixel_font.ttf",SCREEN_W//20,"darkgrey","Нет",SCREEN_W//1.4,SCREEN_H-SCREEN_W//18)
+    Font("font/pixel_font.ttf",SCREEN_W//20,"darkgrey",dict_languages_settings["7"][config["language"]],SCREEN_W//1.6,SCREEN_H-SCREEN_W//18),
+    Font("font/pixel_font.ttf",SCREEN_W//20,"darkgrey",dict_languages_settings["8"][config["language"]],SCREEN_W//1.4,SCREEN_H-SCREEN_W//18)
 ]
 list_emodji = [
     Graphic_elements(SCREEN_W//20,SCREEN_W//6,SCREEN_W//12,SCREEN_W//12,path="image/Green_emoji.png"),

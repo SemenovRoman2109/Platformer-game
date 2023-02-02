@@ -258,7 +258,7 @@ def run_game():
                     if not dict_argument["flag_false_criminal_selected"]:
                         dict_argument["flag_collid_npc"] = True
                         dict_argument["index_npc_collid"] = list_NPC.index(i)
-                        text_collid = Font("font/pixel_font.ttf",SCREEN_W//20,"red","Он преступник?",SCREEN_W//5,SCREEN_H-SCREEN_W//18)
+                        text_collid = Font("font/pixel_font.ttf",SCREEN_W//20,"red",dict_laungues_criminal[config["language"]],SCREEN_W//5,SCREEN_H-SCREEN_W//18)
                         text_collid.show_text(screen)
                         for i in list_button_collid:
                             i.show_text(screen)
@@ -299,7 +299,7 @@ def run_game():
                 sprite1.fly_up = False
             sprite1.spring()
             sprite1.shield(screen)
-            direction_move_map = sprite1.finish_lvl(shooting_lvl,move_cloud,safe)
+            direction_move_map = sprite1.finish_lvl(shooting_lvl,move_cloud,safe,save_game)
             if direction_move_map != "False" and direction_move_map != "finish_lvl":
                 dict_argument["index_location"] += 1
                 move_map(direction_move_map)

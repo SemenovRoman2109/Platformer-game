@@ -334,7 +334,10 @@ dict_laungues_safe = {
     "uk":["Press button ["+str(config["list_text_button_control"][0])+"]"," to stop"]
 
 }
-
+dict_laungues_criminal = {
+    'ua':"Він злочинець?",
+    "uk":"Is he a criminal?"
+}
 dict_direction_door = dict()
 #Словари аргументов и ломания платформ
 broken_cracking_platform = dict()
