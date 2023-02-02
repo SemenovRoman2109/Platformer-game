@@ -112,7 +112,7 @@ def run_game():
                         if i.check_mouse_cor_font(mouse_cor):
                             use_sound.play_sound()
                             if list_NPC[dict_argument["index_npc_collid"]].path == "image/criminal/model.png":
-                                if i.font_content == ["Да"]:
+                                if i.font_content == list_button_collid[0].font_content:
                                     if dict_argument["number_click_npc"] == 0:
                                         if not dict_achievement_boling["detective"]:
                                             dict_achievement_boling["detective"] = True
@@ -140,7 +140,7 @@ def run_game():
                                 else:
                                     dict_argument["flag_false_criminal_selected"] = True
                             else:
-                                if i.font_content == ["Да"]:
+                                if i.font_content == list_button_collid[0].font_content:
                                     if dict_argument["number_click_npc"] == 0:
                                         dict_argument["screen_dimming_flag"] = "+"
                                         dict_argument["index_text_drimming"] = "incorrectly_selected_criminal"
