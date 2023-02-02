@@ -1989,7 +1989,7 @@ def finish_shooting():
                                 
 
                 
-        clock.tick(FPS)
+
         if mouse_cor[0]<= SCREEN_W//4 or mouse_cor[0]>= SCREEN_W - SCREEN_W//4 or mouse_cor[1]<= SCREEN_H//4 or mouse_cor[1]>= SCREEN_H - SCREEN_H//4:
             mouse.set_pos([SCREEN_W//2,SCREEN_H//2])
         if not falg_motion:
